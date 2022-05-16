@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import VuexPersist from 'vuex-persist'
+import getters from './getters'
 Vue.use(Vuex);
 
 const vuexLocal = new VuexPersist({
@@ -10,8 +11,15 @@ const vuexLocal = new VuexPersist({
 
 export default new Vuex.Store({
   state: {},
-  mutations: {},
+  mutations: {
+  },
   actions: {},
-  modules: {},
-  plugins: [vuexLocal.plugin]
+  getters,
+  modules: {
+    layout: require('./modules/layout')['default'],
+    simpleList: require('./modules/simple-list')['default']
+  },
+  plugins: [
+    // vuexLocal.plugin
+  ]
 });

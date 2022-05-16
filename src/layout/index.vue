@@ -1,49 +1,52 @@
 <template>
-  <div id="app">
-    <el-scrollbar ref="scroll" style="height: 100vh">
-      <el-header style="height: 61px; border-bottom: solid 1px #e6e6e6">
-        <el-menu
-          :default-active="activeIndex"
-          router
-          class="el-menu-demo"
-          mode="horizontal"
-          @select="handleSelect"
-          style="border-bottom: unset"
-        >
-          <el-menu-item index="/">首页</el-menu-item>
-          <el-submenu index="list">
-            <template slot="title">列表</template>
-            <el-menu-item index="list">清单列表</el-menu-item>
-            <el-menu-item index="todolist">代办事项列表</el-menu-item>
-          </el-submenu>
-          <el-submenu index="5">
-            <template slot="title">
-              <el-avatar size="large"></el-avatar>
-            </template>
-            <el-menu-item index="login">登录</el-menu-item>
-            <el-menu-item index="admin">后台管理</el-menu-item>
-            <el-menu-item index="logout">登出</el-menu-item>
-          </el-submenu>
-        </el-menu>
-      </el-header>
-      <el-main>
-        <router-view> </router-view>
+  <el-container id="app">
+    <el-header style="height: 61px; border-bottom: solid 1px #e6e6e6">
+      <el-menu v-if="layout.menu.visible" :default-active="layout.menu.active" router class="el-menu-demo" mode="horizontal" :style="{borderBottom: 'unset',display:'inline-block'}">
+        <el-menu-item index="/">首页</el-menu-item>
+        <el-menu-item index="/simple-list">SimpleList</el-menu-item>
+      </el-menu>
+      <span v-if="layout.toolbar.visible" :style="{ 
+            float: 'right' ,
+            height:'60px',
+            lineHeight:'60px',
+            marginLeft:'20px'
+          }">
+        <el-button type="primary">Sign Up</el-button>
+        <el-button type="primary">Sign In</el-button>
+      </span>
+    </el-header>
+    <el-scrollbar ref="scroll" style="height: calc(100vh - 61px)">
+      <el-main :style="{
+        padding:'10px'
+      }">
+        <LayoutRouterView />
       </el-main>
     </el-scrollbar>
-  </div>
+  </el-container>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import LayoutRouterView from "./router-view.vue";
 export default {
+  name: "Layout",
+  components: {
+    LayoutRouterView,
+  },
   data() {
     return {
       activeIndex: "/",
+      searchInputValue: ''
     };
   },
+  computed: {
+    ...mapState({
+      layout: 'layout'
+    })
+  },
+  created() {
+  },
   methods: {
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
-    },
   },
 };
 </script>
@@ -60,12 +63,12 @@ a {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
+  // text-align: center;
   color: #2c3e50;
 }
 .el-header {
   .el-menu.el-menu--horizontal {
-    float: right;
+    // float: right;
     .el-avatar + .el-submenu__icon-arrow {
       display: none;
     }
