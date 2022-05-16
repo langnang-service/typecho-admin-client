@@ -24,10 +24,18 @@
       <el-col class="simple-list-item" v-if="!simpleList.list.some(v=>v.name.indexOf(inputSearchValue)>-1)">
         <el-empty />
       </el-col>
-      <el-col class="simple-list-item" :span="24" v-for="(item,index) in simpleList.list.filter(v=>v.name.indexOf(inputSearchValue)>-1)" :key="item.id">
-        <el-card shadow="hover" :style="{marginBottom:'10px'}" :body-style="{ padding: '10px' }">
-          <el-checkbox v-model="selection" :label="item" :style="{width:'19px',marginRight:'10px',overflow:'hidden',verticalAlign:'top'}">&nbsp;</el-checkbox>
-          <el-row :style="{display:'inline-block',width:'calc(100% - 30px)'}">{{('000'+(index+1)).substr(-2)}}. {{item.name}}</el-row>
+      <el-col class="simple-list-item" :span="24" v-for="(item) in simpleList.list.filter(v=>v.name.indexOf(inputSearchValue)>-1)" :key="item.id">
+        <el-card shadow="hover" :style="{marginBottom:'10px',cursor:'pointer'}" :body-style="{ padding: '10px' }">
+          <el-row :gutter="10">
+            <el-col :style="{width:'20px',textAlign:'center'}">
+              <el-checkbox v-model="selection" :label="item" :style="{width:'19px',overflow:'hidden',verticalAlign:'top'}">&nbsp;</el-checkbox>
+            </el-col>
+            <el-col :style="{width:'26px',textAlign:'center'}">
+              <font-awesome-icon v-if="item.file" icon="fa-solid fa-file" />
+              <font-awesome-icon v-else icon="fa-solid fa-folder" />
+            </el-col>
+            <el-col :style="{width:'calc(100% - 50px)'}">{{item.name}}</el-col>
+          </el-row>
         </el-card>
       </el-col>
     </el-row>

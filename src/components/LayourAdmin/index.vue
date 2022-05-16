@@ -16,6 +16,9 @@
         </el-scrollbar>
       </el-card>
     </el-main>
+    <el-footer v-if="footer">
+      <slot name="footer"></slot>
+    </el-footer>
     <!-- 插槽：附加 -->
     <slot name="append"></slot>
   </el-container>
@@ -27,6 +30,10 @@ export default {
   components: {},
   props: {
     loading: {
+      type: Boolean,
+      default: false
+    },
+    footer: {
       type: Boolean,
       default: false
     }
@@ -44,3 +51,11 @@ export default {
   },
 };
 </script>
+<style lang="scss" scoped>
+::v-deep {
+  .el-footer {
+    border: 1px solid #ebeef5;
+    border-radius: 4px;
+  }
+}
+</style>

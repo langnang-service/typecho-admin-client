@@ -13,7 +13,8 @@ export const select_simple_list_list = () => {
           "array|20": [
             {
               id: () => Mock.Random.id(),
-              name: () => Mock.Random.sentence()
+              name: () => Mock.Random.sentence(),
+              file: () => Mock.Random.boolean(),
             }
           ]
         })['array'],
