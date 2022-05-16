@@ -2,23 +2,37 @@
   <LayoutAdmin class="simple-list" :loading="simpleList.loading">
     <template #toolbar>
       <el-input v-model="inputSearchValue" size="mini" circle clearable prefix-icon="el-icon-search" :style="{display:'inline-block',marginRight:'10px',width:'180px'}" />
-      <el-button size="mini" circle icon="el-icon-refresh" @click="handleRefresh"></el-button>
-      <el-button size="mini" circle type="primary" icon="el-icon-plus" @click="handleInsert"></el-button>
-      <el-button size="mini" circle type="danger" icon="el-icon-delete" :disabled="selection.length === 0" @click="handleDelete"></el-button>
-      <el-upload action="#" accept=".xls, .xlsx" :show-file-list="false" :http-request="handleUpload" :style="{display:'inline-block',margin:'0 10px'}">
+      <el-tooltip class="item" effect="dark" content="刷新" placement="bottom">
+        <el-button size="mini" circle icon="el-icon-refresh" @click="handleRefresh"></el-button>
+      </el-tooltip>
+      <el-tooltip class="item" effect="dark" content="新增" placement="bottom">
+        <el-button size="mini" circle type="primary" icon="el-icon-plus" @click="handleInsert"></el-button>
+      </el-tooltip>
+      <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
+        <el-button size="mini" circle type="danger" icon="el-icon-delete" :disabled="selection.length === 0" @click="handleDelete"></el-button>
+      </el-tooltip>
+      <el-tooltip class="item" effect="dark" content="上传" placement="bottom">
+        <el-upload action="#" accept=".xls, .xlsx" :show-file-list="false" :http-request="handleUpload" :style="{display:'inline-block',margin:'0 10px'}">
+          <el-button size="mini" circle type="primary">
+            <font-awesome-icon icon="fa-solid fa-upload" />
+          </el-button>
+        </el-upload>
+      </el-tooltip>
+      <el-tooltip class="item" effect="dark" content="下载" placement="bottom">
         <el-button size="mini" circle type="primary">
-          <font-awesome-icon icon="fa-solid fa-upload" />
+          <font-awesome-icon icon="fa-solid fa-download" />
         </el-button>
-      </el-upload>
-      <el-button size="mini" circle type="primary">
-        <font-awesome-icon icon="fa-solid fa-download" />
-      </el-button>
-      <el-button size="mini" circle type="primary">
-        <font-awesome-icon icon="fa-solid fa-clock-rotate-left" />
-      </el-button>
-      <el-button size="mini" circle type="primary">
-        <font-awesome-icon icon="fa-solid fa-recycle" />
-      </el-button>
+      </el-tooltip>
+      <el-tooltip class="item" effect="dark" content="记录" placement="bottom">
+        <el-button size="mini" circle type="primary">
+          <font-awesome-icon icon="fa-solid fa-clock-rotate-left" />
+        </el-button>
+      </el-tooltip>
+      <el-tooltip class="item" effect="dark" content="回收站" placement="bottom">
+        <el-button size="mini" circle type="primary">
+          <font-awesome-icon icon="fa-solid fa-recycle" />
+        </el-button>
+      </el-tooltip>
     </template>
     <el-row class="simple-list">
       <el-col class="simple-list-item" v-if="!simpleList.list.some(v=>v.name.indexOf(inputSearchValue)>-1)">
