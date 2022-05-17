@@ -4,6 +4,8 @@
       <el-menu v-if="layout.menu.visible" :default-active="layout.menu.active" router class="el-menu-demo" mode="horizontal" :style="{borderBottom: 'unset',display:'inline-block'}">
         <el-menu-item index="/">首页</el-menu-item>
         <el-menu-item index="/entry">Entry</el-menu-item>
+        <el-menu-item>理论</el-menu-item>
+        <el-menu-item>实践</el-menu-item>
       </el-menu>
       <span v-if="layout.toolbar.visible" :style="{ 
             float: 'right' ,
@@ -74,7 +76,10 @@ a {
     }
   }
 }
-.el-scrollbar__wrap {
+#app .el-scrollbar__wrap {
   overflow-x: hidden !important;
+}
+.el-select {
+  width: 100%;
 }
 </style>

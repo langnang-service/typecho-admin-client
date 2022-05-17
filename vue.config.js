@@ -7,6 +7,15 @@ module.exports = {
   devServer: {
     // 设置是否自动打开浏览器
     open: true,
+    proxy: {
+      "/api": {
+        target: 'http://localhost:9090',
+        changeOrigin: true,
+        pathRewrite: {
+          "^/api": "http://localhost:9090/?/api"
+        }
+      }
+    }
   },
   // 接收一个基于 webpack-chain 的 ChainableConfig 实例。
   // 允许对内部的 webpack 配置进行更细粒度的修改。

@@ -15,7 +15,16 @@ export const mutations = {
   },
   SET_INFO(state, payload) {
     state.info = payload
-  }
+  },
+  SET_TOTAL(state, payload) {
+    state.total = payload
+  },
+  SET_PAGE(state, payload) {
+    state.page = payload
+  },
+  SET_SIZE(state, payload) {
+    state.size = payload
+  },
 }
 
 export const actions = {
@@ -30,13 +39,18 @@ export const actions = {
     this._vm.$confirm("确定要删除所选数据？", "提示", { type: 'warning' }).then(() => {
       commit('SET_LOADING', true)
       payload.request(payload.data).then(res => {
-        commit('SET_LIST', state.list.filter(item => !payload.data.map(v => v.id).includes(item.id)))
         dispatch('selectList')
-      }).finally(() => {
       })
     })
   },
-  _updateItem() { },
+  _updateItem({ state, commit, dispatch }, payload) {
+    commit('SET_LOADING', true)
+    payload.request(payload.data).then(res => {
+      commit('SET_INFO', res.row)
+    }).finally(() => {
+      commit('SET_LOADING', false)
+    })
+  },
   _selectList({ state, commit, dispatch }, payload) {
     commit('SET_LOADING', true)
     payload.request(payload.data).then(res => {
@@ -45,6 +59,20 @@ export const actions = {
       commit('SET_LOADING', false)
     })
   },
-  _selectItem() { },
-
+  _selectItem({ state, commit, dispatch }, payload) {
+    commit('SET_LOADING', true)
+    payload.request(payload.data).then(res => {
+      commit('SET_INFO', res.row)
+    }).finally(() => {
+      commit('SET_LOADING', false)
+    })
+  },
+  _submitItem({ state, commit, dispatch }, payload) {
+    commit('SET_LOADING', true)
+    return payload.request(payload.data).then(res => {
+      commit('SET_INFO', res.row)
+    }).finally(() => {
+      commit('SET_LOADING', false)
+    })
+  },
 }

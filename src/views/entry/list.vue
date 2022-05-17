@@ -1,7 +1,7 @@
 <template>
-  <LayoutAdmin class="simple-list" :loading="entry.loading">
+  <LayoutAdmin class="entry-list" v-loading="$store.state.entry.loading">
     <template #toolbar>
-      <el-input v-model="inputFilterNameValue" size="mini" circle clearable placeholder="name" :style="{display:'inline-block',marginRight:'10px',width:'120px'}">
+      <el-input v-model="inputFilterNameValue" size="mini" circle clearable placeholder="title" :style="{display:'inline-block',marginRight:'10px',width:'120px'}">
         <template #prefix>
           <font-awesome-icon icon="fa-solid fa-filter" />
         </template>
@@ -15,7 +15,7 @@
         <el-button size="mini" circle type="info" icon="el-icon-refresh" @click="handleRefresh"></el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="新增" placement="bottom">
-        <el-button size="mini" circle type="primary" icon="el-icon-plus" @click="handleInsert"></el-button>
+        <el-button size="mini" circle type="primary" icon="el-icon-plus" @click="$router.push({path:'/entry/insert'})"></el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="模板" placement="bottom">
         <el-button size="mini" circle type="info">
@@ -49,10 +49,10 @@
       </el-tooltip>
     </template>
     <el-row class="simple-list">
-      <el-col class="simple-list-item" v-if="!entry.list.some(v=>v.name.indexOf(inputFilterNameValue)>-1)">
+      <el-col class="simple-list-item" v-if="!entry.list.some(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)">
         <el-empty />
       </el-col>
-      <el-col class="simple-list-item" :span="24" v-for="(item) in entry.list.filter(v=>v.name.indexOf(inputFilterNameValue)>-1)" :key="item.id">
+      <el-col class="simple-list-item" :span="24" v-for="(item) in entry.list.filter(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" :key="item.id">
         <el-card shadow="hover" :style="{marginBottom:'10px',cursor:'pointer'}" :body-style="{ padding: '10px' }">
           <el-row :gutter="10">
             <el-col :style="{width:'20px',textAlign:'center'}">
@@ -62,7 +62,9 @@
               <font-awesome-icon v-if="item.file" icon="fa-solid fa-file" />
               <font-awesome-icon v-else icon="fa-solid fa-folder" />
             </el-col>
-            <el-col :style="{width:'calc(100% - 50px)'}">{{item.name}}</el-col>
+            <el-col :style="{width:'calc(100% - 50px)'}">
+              <router-link :to="'/entry/'+item.id">{{item.title}}</router-link>
+            </el-col>
           </el-row>
         </el-card>
       </el-col>
@@ -71,7 +73,7 @@
       <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :before-close="handleCancelDialog">
         <el-form :ref="dialog.form.ref" :model="dialog.form">
           <el-form-item>
-            <el-input v-model="dialog.form.name"></el-input>
+            <el-input v-model="dialog.form.title"></el-input>
           </el-form-item>
         </el-form>
         <span slot="footer">
@@ -99,7 +101,7 @@ export default {
         visible: false,
         form: {
           ref: 'dialog-form',
-          name: ''
+          title: ''
         }
       }
     };
@@ -109,7 +111,6 @@ export default {
     ...mapState(["entry"])
   },
   created() {
-    this.handleRefresh()
   },
   methods: {
     ...mapActions({
@@ -123,7 +124,7 @@ export default {
       this.dialog.visible = true
     },
     handleCancelDialog() {
-      this.dialog.form.name = ''
+      this.dialog.form.title = ''
       this.dialog.visible = false
     },
     handleSubmitDialog() {
@@ -131,6 +132,11 @@ export default {
       this.handleCancelDialog();
     },
     handleUpload() { },
+    handleClickRow(item) {
+      console.log('handleClickRow', arguments)
+      this.$store.commit('entry/SET_INFO', item);
+      // this.$router.push({ path: '/entry/info' })
+    }
   },
 };
 </script>

@@ -2,7 +2,7 @@
   <el-container class="simple-list-admin">
     <el-header>
       <el-breadcrumb separator-class="el-icon-arrow-right" :style="{display:'inline-block'}">
-        <el-breadcrumb-item>Entry</el-breadcrumb-item>
+        <el-breadcrumb-item v-for="(route, index) in $route.matched" :key="route.path">{{index===0?route.name:route.name.substr(0,route.name.length - $route.matched[0].name.length - 3)}}</el-breadcrumb-item>
       </el-breadcrumb>
       <span :style="{float:'right',marginTop:'-1px',display:'inline-block'}">
         <!-- 插槽：右侧工具栏 -->
@@ -51,7 +51,6 @@ export default {
   },
   data() {
     return {
-
     };
   },
   computed: {
