@@ -10,55 +10,19 @@ const routes = [
     component: () => import("../views/home"),
   },
   {
-    path: '/form-list',
-    name: "FormList",
+    path: '/entry',
+    name: "Entry",
     component: LayoutRouterView,
     children: [
       {
         path: '',
-        component: () => import('@/views/simple-list'),
+        component: () => import('@/views/entry'),
       },
       {
         path: 'admin',
-        name: "Admin - FormList",
-        component: () => import('@/views/simple-list/admin.vue'),
+        name: "Admin - Entry",
+        component: () => import('@/views/entry/admin.vue'),
       },
-      {
-        path: 'admin1',
-        name: "Admin1 - FormList",
-        component: () => import('@/views/simple-list/admin.vue'),
-      },
-      {
-        path: 'admin2',
-        name: "Admin2 - FormList",
-        component: () => import('@/views/simple-list/admin.vue'),
-      }
-    ]
-  },
-  {
-    path: '/simple-list',
-    name: "SimpleList",
-    component: LayoutRouterView,
-    children: [
-      {
-        path: '',
-        component: () => import('@/views/simple-list'),
-      },
-      {
-        path: 'admin',
-        name: "Admin - SimpleList",
-        component: () => import('@/views/simple-list/admin.vue'),
-      },
-      {
-        path: 'admin1',
-        name: "Admin1 - SimpleList",
-        component: () => import('@/views/simple-list/admin.vue'),
-      },
-      {
-        path: 'admin2',
-        name: "Admin2 - SimpleList",
-        component: () => import('@/views/simple-list/admin.vue'),
-      }
     ]
   }
 ];

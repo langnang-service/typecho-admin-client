@@ -1,6 +1,6 @@
 <template>
-  <div class="simple-list">
-    <Jumbotron route="/simple-list/admin" title="Simple List" />
+  <div class="entry">
+    <Jumbotron route="/entry/admin" title="Entry" />
   </div>
 </template>
 

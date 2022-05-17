@@ -1,12 +1,26 @@
 <template>
-  <LayoutAdmin class="simple-list" :loading="simpleList.loading">
+  <LayoutAdmin class="simple-list" :loading="entry.loading">
     <template #toolbar>
-      <el-input v-model="inputSearchValue" size="mini" circle clearable prefix-icon="el-icon-search" :style="{display:'inline-block',marginRight:'10px',width:'180px'}" />
+      <el-input v-model="inputFilterNameValue" size="mini" circle clearable placeholder="name" :style="{display:'inline-block',marginRight:'10px',width:'120px'}">
+        <template #prefix>
+          <font-awesome-icon icon="fa-solid fa-filter" />
+        </template>
+      </el-input>
+      <el-input v-model="inputFilterTagValue" size="mini" circle clearable placeholder="tag" :style="{display:'inline-block',marginRight:'10px',width:'120px'}">
+        <template #prefix>
+          <font-awesome-icon icon="fa-solid fa-filter" />
+        </template>
+      </el-input>
       <el-tooltip class="item" effect="dark" content="刷新" placement="bottom">
-        <el-button size="mini" circle icon="el-icon-refresh" @click="handleRefresh"></el-button>
+        <el-button size="mini" circle type="info" icon="el-icon-refresh" @click="handleRefresh"></el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="新增" placement="bottom">
         <el-button size="mini" circle type="primary" icon="el-icon-plus" @click="handleInsert"></el-button>
+      </el-tooltip>
+      <el-tooltip class="item" effect="dark" content="模板" placement="bottom">
+        <el-button size="mini" circle type="info">
+          <font-awesome-icon icon="fa-solid fa-stamp" />
+        </el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
         <el-button size="mini" circle type="danger" icon="el-icon-delete" :disabled="selection.length === 0" @click="handleDelete"></el-button>
@@ -24,21 +38,21 @@
         </el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="记录" placement="bottom">
-        <el-button size="mini" circle type="primary">
+        <el-button size="mini" circle type="info">
           <font-awesome-icon icon="fa-solid fa-clock-rotate-left" />
         </el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="回收站" placement="bottom">
-        <el-button size="mini" circle type="primary">
+        <el-button size="mini" circle type="info">
           <font-awesome-icon icon="fa-solid fa-recycle" />
         </el-button>
       </el-tooltip>
     </template>
     <el-row class="simple-list">
-      <el-col class="simple-list-item" v-if="!simpleList.list.some(v=>v.name.indexOf(inputSearchValue)>-1)">
+      <el-col class="simple-list-item" v-if="!entry.list.some(v=>v.name.indexOf(inputFilterNameValue)>-1)">
         <el-empty />
       </el-col>
-      <el-col class="simple-list-item" :span="24" v-for="(item) in simpleList.list.filter(v=>v.name.indexOf(inputSearchValue)>-1)" :key="item.id">
+      <el-col class="simple-list-item" :span="24" v-for="(item) in entry.list.filter(v=>v.name.indexOf(inputFilterNameValue)>-1)" :key="item.id">
         <el-card shadow="hover" :style="{marginBottom:'10px',cursor:'pointer'}" :body-style="{ padding: '10px' }">
           <el-row :gutter="10">
             <el-col :style="{width:'20px',textAlign:'center'}">
@@ -75,7 +89,8 @@ export default {
   components: {},
   data() {
     return {
-      inputSearchValue: '',
+      inputFilterNameValue: '',
+      inputFilterTagValue: '',
       // 已选列表
       selection: [],
       activeMenu: '/simple-list/admin',
@@ -90,18 +105,18 @@ export default {
     };
   },
   computed: {
-    // ...mapGetters(["simpleList"]),
-    ...mapState(["simpleList"])
+    // ...mapGetters(["entry"]),
+    ...mapState(["entry"])
   },
   created() {
     this.handleRefresh()
   },
   methods: {
     ...mapActions({
-      handleRefresh: "simpleList/selectList"
+      handleRefresh: "entry/selectList"
     }),
     handleDelete() {
-      this.$store.dispatch('simpleList/deleteList', this.selection)
+      this.$store.dispatch('entry/deleteList', this.selection)
     },
     handleInsert() {
       this.dialog.title = 'Insert'
@@ -112,7 +127,7 @@ export default {
       this.dialog.visible = false
     },
     handleSubmitDialog() {
-      this.$store.dispatch('simpleList/insertItem', this.dialog.form)
+      this.$store.dispatch('entry/insertItem', this.dialog.form)
       this.handleCancelDialog();
     },
     handleUpload() { },

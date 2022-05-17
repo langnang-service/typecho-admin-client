@@ -17,7 +17,7 @@ export default new Vuex.Store({
   getters,
   modules: {
     layout: require('./modules/layout')['default'],
-    simpleList: require('./modules/simple-list')['default']
+    entry: require('./modules/entry')['default']
   },
   plugins: [
     // vuexLocal.plugin

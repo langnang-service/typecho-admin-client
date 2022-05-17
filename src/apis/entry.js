@@ -1,11 +1,11 @@
 import Mock from 'mockjs'
 const TIME_DELAY = 1500
-export const insert_simple_list_item = () => {
+export const insert_entry_item = () => {
   return new Promise(resolve => {
     resolve()
   })
 }
-export const select_simple_list_list = () => {
+export const select_entry_list = () => {
   return new Promise(resolve => {
     setTimeout(() => {
       resolve({
@@ -28,7 +28,7 @@ export const select_simple_list_list = () => {
 
 }
 
-export const delete_simple_list_list = () => {
+export const delete_entry_list = () => {
   return new Promise(resolve => {
     resolve()
   })
