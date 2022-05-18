@@ -1,18 +1,10 @@
 <template>
-  <LayoutAdmin class="entry-list" v-loading="$store.state.entry.loading">
+  <LayoutAdmin class="entry-list" v-loading="$store.state.entry.loading" footer pagination pagination-module="entry">
     <template #toolbar>
-      <el-input v-model="inputFilterNameValue" size="mini" circle clearable placeholder="title" :style="{display:'inline-block',marginRight:'10px',width:'120px'}">
-        <template #prefix>
+      <el-tooltip class="item" effect="dark" content="查询" placement="bottom">
+        <el-button size="mini" circle type="info" @click="handleRefresh">
           <font-awesome-icon icon="fa-solid fa-filter" />
-        </template>
-      </el-input>
-      <el-input v-model="inputFilterTagValue" size="mini" circle clearable placeholder="tag" :style="{display:'inline-block',marginRight:'10px',width:'120px'}">
-        <template #prefix>
-          <font-awesome-icon icon="fa-solid fa-filter" />
-        </template>
-      </el-input>
-      <el-tooltip class="item" effect="dark" content="刷新" placement="bottom">
-        <el-button size="mini" circle type="info" icon="el-icon-refresh" @click="handleRefresh"></el-button>
+        </el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="新增" placement="bottom">
         <el-button size="mini" circle type="primary" icon="el-icon-plus" @click="$router.push({path:'/entry/insert'})"></el-button>

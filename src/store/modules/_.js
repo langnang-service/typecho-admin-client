@@ -53,8 +53,15 @@ export const actions = {
   },
   _selectList({ state, commit, dispatch }, payload) {
     commit('SET_LOADING', true)
-    payload.request(payload.data).then(res => {
+    payload.request({
+      ...payload.data,
+      page: state.page,
+      size: state.size
+    }).then(res => {
       commit('SET_LIST', res.rows)
+      commit('SET_TOTAL', res.total)
+      commit('SET_PAGE', res.page)
+      commit('SET_SIZE', res.size)
     }).finally(() => {
       commit('SET_LOADING', false)
     })
