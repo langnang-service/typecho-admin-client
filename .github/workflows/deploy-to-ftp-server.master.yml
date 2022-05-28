@@ -34,4 +34,4 @@ jobs:
           # Folder to upload from, must end with trailing slash /
           local-dir: ./dist/
           # Path to upload to on the server. Must end with trailing slash /
-          server-dir: /service.langnang.ml/htdocs/src/views/${{ github.repository }}/../
+          server-dir: /service.langnang.ml/htdocs/src/views/vue-element/
