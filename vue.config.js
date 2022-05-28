@@ -21,7 +21,7 @@ module.exports = {
   // 允许对内部的 webpack 配置进行更细粒度的修改。
   chainWebpack: function (config) {
     config.plugin("html").tap(function (args) {
-      args[0].title = "Vue Element - Langnang Template"; // 自定义标题
+      args[0].title = "Vue Element - Langnang Service"; // 自定义标题
       return args;
     });
   }
