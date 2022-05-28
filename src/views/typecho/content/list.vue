@@ -1,13 +1,13 @@
 <template>
-  <LayoutAdmin class="entry-list" v-loading="$store.state.entry.loading" footer pagination pagination-module="entry">
+  <LayoutAdmin class="typecho-content-list" v-loading="$store.state.typecho.content.loading" v-bind="$route.meta">
     <template #toolbar>
       <el-tooltip class="item" effect="dark" content="查询" placement="bottom">
-        <el-button size="mini" circle type="info" @click="handleRefresh">
-          <font-awesome-icon icon="fa-solid fa-filter" />
+        <el-button size="mini" circle type="info" @click="handleSelect">
+          <font-awesome-icon icon="fa-solid fa-search" />
         </el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="新增" placement="bottom">
-        <el-button size="mini" circle type="primary" icon="el-icon-plus" @click="$router.push({path:'/entry/insert'})"></el-button>
+        <el-button size="mini" circle type="primary" icon="el-icon-plus" @click="$router.push({path:'/typecho/content/insert'})"></el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="模板" placement="bottom">
         <el-button size="mini" circle type="info">
@@ -40,27 +40,7 @@
         </el-button>
       </el-tooltip>
     </template>
-    <el-row class="simple-list">
-      <el-col class="simple-list-item" v-if="!entry.list.some(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)">
-        <el-empty />
-      </el-col>
-      <el-col class="simple-list-item" :span="24" v-for="(item) in entry.list.filter(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" :key="item.id">
-        <el-card shadow="hover" :style="{marginBottom:'10px',cursor:'pointer'}" :body-style="{ padding: '10px' }">
-          <el-row :gutter="10">
-            <el-col :style="{width:'20px',textAlign:'center'}">
-              <el-checkbox v-model="selection" :label="item" :style="{width:'19px',overflow:'hidden',verticalAlign:'top'}">&nbsp;</el-checkbox>
-            </el-col>
-            <el-col :style="{width:'26px',textAlign:'center'}">
-              <font-awesome-icon v-if="item.file" icon="fa-solid fa-file" />
-              <font-awesome-icon v-else icon="fa-solid fa-folder" />
-            </el-col>
-            <el-col :style="{width:'calc(100% - 50px)'}">
-              <router-link :to="'/entry/'+item.id">{{item.title}}</router-link>
-            </el-col>
-          </el-row>
-        </el-card>
-      </el-col>
-    </el-row>
+    <Item type="table" ref="table" :form="$store.state.typecho.content.info" @select="(form)=>handleSelect(form)" :data="typecho.content.list.filter(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" @selection-change="handleTableSelectionChange" />
     <template #append>
       <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :before-close="handleCancelDialog">
         <el-form :ref="dialog.form.ref" :model="dialog.form">
@@ -79,10 +59,15 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
+import Item from './item.vue'
+import { readExcel } from '@/utils/fileReader'
 export default {
-  components: {},
+  components: {
+    Item
+  },
   data() {
     return {
+      searchVisible: false,
       inputFilterNameValue: '',
       inputFilterTagValue: '',
       // 已选列表
@@ -97,19 +82,19 @@ export default {
         }
       }
     };
+
   },
   computed: {
-    // ...mapGetters(["entry"]),
-    ...mapState(["entry"])
+    ...mapState(["typecho"])
   },
   created() {
   },
   methods: {
     ...mapActions({
-      handleRefresh: "entry/selectList"
+      handleSelect: "typecho/content/selectList",
     }),
     handleDelete() {
-      this.$store.dispatch('entry/deleteList', this.selection)
+      this.$store.dispatch('typecho/content/deleteList', this.selection.slice(0))
       this.selection = [];
     },
     handleInsert() {
@@ -121,14 +106,20 @@ export default {
       this.dialog.visible = false
     },
     handleSubmitDialog() {
-      this.$store.dispatch('entry/insertItem', this.dialog.form)
+      this.$store.dispatch('typecho.content/insertItem', this.dialog.form)
       this.handleCancelDialog();
     },
-    handleUpload() { },
+    handleUpload(data) {
+      console.log('handleUpload', data)
+      readExcel(data.file)
+    },
     handleClickRow(item) {
       console.log('handleClickRow', arguments)
-      this.$store.commit('entry/SET_INFO', item);
-      // this.$router.push({ path: '/entry/info' })
+      this.$store.commit('typecho.content/SET_INFO', item);
+      // this.$router.push({ path: '/typecho.content/info' })
+    },
+    handleTableSelectionChange(val) {
+      this.selection = val
     }
   },
 };

@@ -4,8 +4,12 @@
       <el-menu v-if="layout.menu.visible" :default-active="layout.menu.active" router class="el-menu-demo" mode="horizontal" :style="{borderBottom: 'unset',display:'inline-block'}">
         <el-menu-item index="/">首页</el-menu-item>
         <el-menu-item index="/entry">Entry</el-menu-item>
+        <el-menu-item index="/typecho">Typecho</el-menu-item>
+        <el-menu-item index="/novel">Novel</el-menu-item>
         <el-menu-item>理论</el-menu-item>
         <el-menu-item>实践</el-menu-item>
+        <el-menu-item>工具</el-menu-item>
+        <el-menu-item>资源</el-menu-item>
       </el-menu>
       <span v-if="layout.toolbar.visible" :style="{ 
             float: 'right' ,

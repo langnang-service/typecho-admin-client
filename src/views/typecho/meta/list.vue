@@ -1,13 +1,13 @@
 <template>
-  <LayoutAdmin class="entry-list" v-loading="$store.state.entry.loading" footer pagination pagination-module="entry">
+  <LayoutAdmin class="typecho-meta-list" v-loading="$store.state.typecho.meta.loading" v-bind="$route.meta">
     <template #toolbar>
       <el-tooltip class="item" effect="dark" content="查询" placement="bottom">
-        <el-button size="mini" circle type="info" @click="handleRefresh">
-          <font-awesome-icon icon="fa-solid fa-filter" />
+        <el-button size="mini" circle type="info" @click="$store.dispatch('typecho/meta/selectList')">
+          <font-awesome-icon icon="fa-solid fa-search" />
         </el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="新增" placement="bottom">
-        <el-button size="mini" circle type="primary" icon="el-icon-plus" @click="$router.push({path:'/entry/insert'})"></el-button>
+        <el-button size="mini" circle type="primary" icon="el-icon-plus" @click="$router.push({path:'/typecho/meta/insert'})"></el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="模板" placement="bottom">
         <el-button size="mini" circle type="info">
@@ -41,10 +41,10 @@
       </el-tooltip>
     </template>
     <el-row class="simple-list">
-      <el-col class="simple-list-item" v-if="!entry.list.some(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)">
+      <el-col class="simple-list-item" v-if="!typecho.meta.list.some(v=>(v.name||'').indexOf(inputFilterNameValue)>-1)">
         <el-empty />
       </el-col>
-      <el-col class="simple-list-item" :span="24" v-for="(item) in entry.list.filter(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" :key="item.id">
+      <el-col class="simple-list-item" :span="24" v-for="(item) in typecho.meta.list.filter(v=>(v.name||'').indexOf(inputFilterNameValue)>-1)" :key="item.id">
         <el-card shadow="hover" :style="{marginBottom:'10px',cursor:'pointer'}" :body-style="{ padding: '10px' }">
           <el-row :gutter="10">
             <el-col :style="{width:'20px',textAlign:'center'}">
@@ -54,9 +54,7 @@
               <font-awesome-icon v-if="item.file" icon="fa-solid fa-file" />
               <font-awesome-icon v-else icon="fa-solid fa-folder" />
             </el-col>
-            <el-col :style="{width:'calc(100% - 50px)'}">
-              <router-link :to="'/entry/'+item.id">{{item.title}}</router-link>
-            </el-col>
+            <el-col :style="{width:'calc(100% - 50px)'}" @click.native="handleClickRow(item)">{{item.name}}</el-col>
           </el-row>
         </el-card>
       </el-col>
@@ -97,19 +95,17 @@ export default {
         }
       }
     };
+
   },
   computed: {
-    // ...mapGetters(["entry"]),
-    ...mapState(["entry"])
+    ...mapState(["typecho"])
   },
   created() {
   },
   methods: {
-    ...mapActions({
-      handleRefresh: "entry/selectList"
-    }),
+    ...mapActions({}),
     handleDelete() {
-      this.$store.dispatch('entry/deleteList', this.selection)
+      this.$store.dispatch('typecho/meta/deleteList', this.selection)
       this.selection = [];
     },
     handleInsert() {
@@ -121,14 +117,13 @@ export default {
       this.dialog.visible = false
     },
     handleSubmitDialog() {
-      this.$store.dispatch('entry/insertItem', this.dialog.form)
+      this.$store.dispatch('typecho/meta/insertItem', this.dialog.form)
       this.handleCancelDialog();
     },
     handleUpload() { },
     handleClickRow(item) {
-      console.log('handleClickRow', arguments)
-      this.$store.commit('entry/SET_INFO', item);
-      // this.$router.push({ path: '/entry/info' })
+      // console.log('handleClickRow', arguments)
+      // this.$store.commit('typecho/meta/SET_INFO', item);
     }
   },
 };

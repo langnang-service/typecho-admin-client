@@ -2,6 +2,7 @@ import Vue from "vue";
 import App from "./layout";
 import router from "./router";
 import store from "./store";
+import "./style/index.scss"
 import './components'
 import './plugins'
 import './directives'
