@@ -9,10 +9,11 @@ import axios from "axios";
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 // console.log(process.env);
 let config = {
-  baseURL: process.env.VUE_APP_API_URL || process.env.BASE_URL || "../"
-  // timeout: 60 * 1000, // Timeout
+  baseURL: process.env.VUE_APP_API_URL || (process.env.NODE_ENV === "production" ? '/?/' : process.env.BASE_URL),
+  timeout: 60 * 1000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };
+console.log(process.env.VUE_APP_API_URL, process.env.BASE_URL);
 // Success Status
 const successStatus = 200;
 
@@ -21,6 +22,7 @@ const _axios = axios.create(config);
 _axios.interceptors.request.use(
   function (config) {
     // Do something before request is sent
+    console.log(config);
     return config;
   },
   function (error) {
@@ -32,6 +34,7 @@ _axios.interceptors.request.use(
 // Add a response interceptor
 _axios.interceptors.response.use(
   function (response) {
+    console.log(response);
     // Do something with response data
     if (response.status == successStatus && response.data.status == successStatus) {
       return response.data.data;

@@ -47,12 +47,12 @@
     </el-table>
     <el-form v-if="type==='form'" ref="form" :model="form" :rules="rules" label-width="80px">
       <el-row :gutter="16">
-        <el-col :span="12">
+        <el-col :span="24">
           <el-form-item prop="title" label="title">
             <el-input v-model="form.title" />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="8">
           <el-form-item prop="slug" label="slug">
             <el-input v-model="form.slug" />
           </el-form-item>
@@ -69,11 +69,6 @@
             <el-select v-model="form.status" filterable allow-create @focus="handleFormStatusFocus">
               <el-option v-for="opt in statusOptions" :key="opt.value" :value="opt.value" />
             </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item prop="parent" label="parent">
-            <el-select v-model="form.parent" />
           </el-form-item>
         </el-col>
         <el-col :span="24">
@@ -139,7 +134,6 @@ export default {
     handleFormTypeFocus() {
       select_typecho_content_type_list().then(res => {
         this.typeOptions = res.rows;
-        console.log(this.typeOptions)
       })
     },
     handleFormStatusFocus() {
