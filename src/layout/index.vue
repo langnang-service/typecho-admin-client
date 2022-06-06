@@ -5,7 +5,32 @@
         <el-menu-item index="/">首页</el-menu-item>
         <el-menu-item index="/entry">Entry</el-menu-item>
         <el-menu-item index="/typecho">Typecho</el-menu-item>
+        <el-menu-item index="/todo">To Do</el-menu-item>
+        <el-menu-item index="/navigation">Navigation</el-menu-item>
         <el-menu-item index="/novel">Novel</el-menu-item>
+        <el-menu-item index="/public-api">Public APIs</el-menu-item>
+        <el-submenu index="langnang">
+          <template slot="title">Langnang</template>
+
+          <el-menu-item
+            v-for="(href,key) in {
+              Home:'https://langnang.github.io/',
+              VuePress:'https://langnang.github.io/langnang/',
+              Toolkit:'https://langnang.github.io/toolkit/',
+              'Typecho Web':'https://langnang.github.io/typecho-web/',
+              Card:'https://langnang.github.io/card/',
+              'Audio Player':'https://langnang.github.io/simple-audio-player/',
+              Bookmark:'https://langnang.github.io/simple-bookmark/',
+              Question:'https://langnang.github.io/QuestionAwesome/',
+              ToDoList:'https://langnang.github.io/ToDoList/',
+              Palette:'https://langnang.github.io/Palette/',
+            }"
+            :key="key"
+            :index="key"
+          >
+            <el-link target="_blank" :href="href">{{key}}</el-link>
+          </el-menu-item>
+        </el-submenu>
         <el-menu-item>理论</el-menu-item>
         <el-menu-item>实践</el-menu-item>
         <el-menu-item>工具</el-menu-item>

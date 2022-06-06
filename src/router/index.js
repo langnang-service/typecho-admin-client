@@ -11,6 +11,8 @@ const routes = [
   require('./modules/entry')['default'],
   require('./modules/typecho')['default'],
   require('./modules/novel')['default'],
+  require('./modules/public-api')['default'],
+  require('./modules/todo')['default'],
 ];
 
 const router = new VueRouter({

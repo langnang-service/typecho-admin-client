@@ -8,6 +8,13 @@ export const insert_typecho_content_item = data => {
     data,
   })
 }
+export const delete_typecho_content_item = data => {
+  return request({
+    url: '/api/typecho/content/item/delete',
+    method: "post",
+    data,
+  })
+}
 export const delete_typecho_content_list = data => {
   return request({
     url: '/api/typecho/content/list/delete',

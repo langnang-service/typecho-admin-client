@@ -33,7 +33,7 @@ export default {
       })
     },
     selectList({ state, commit, dispatch }, payload) {
-      dispatch('_selectList', {
+      return dispatch('_selectList', {
         NAMESPACE,
         request: select_typecho_meta_list,
         data: payload,
@@ -42,7 +42,7 @@ export default {
       })
     },
     selectItem({ state, commit, dispatch }, payload) {
-      dispatch('_selectItem', {
+      return dispatch('_selectItem', {
         NAMESPACE,
         request: select_typecho_meta_item,
         data: payload

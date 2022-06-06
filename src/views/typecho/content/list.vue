@@ -29,6 +29,11 @@
           <font-awesome-icon icon="fa-solid fa-download" />
         </el-button>
       </el-tooltip>
+      <el-tooltip class="item" effect="dark" content="模板" placement="bottom">
+        <el-button size="mini" circle type="primary">
+          <font-awesome-icon icon="fa-solid fa-file-excel" />
+        </el-button>
+      </el-tooltip>
       <el-tooltip class="item" effect="dark" content="记录" placement="bottom">
         <el-button size="mini" circle type="info">
           <font-awesome-icon icon="fa-solid fa-clock-rotate-left" />

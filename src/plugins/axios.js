@@ -36,6 +36,7 @@ _axios.interceptors.response.use(
     if (response.status == successStatus && response.data.status == successStatus) {
       return response.data.data;
     } else {
+      Vue.$message('操作失败');
       return Promise.reject(response);
     }
   },

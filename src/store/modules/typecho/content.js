@@ -1,4 +1,4 @@
-import { select_typecho_content_list, delete_typecho_content_list, insert_typecho_content_item, select_typecho_content_item, update_typecho_content_item } from '@/apis/typecho/content'
+import { select_typecho_content_list, delete_typecho_content_list, delete_typecho_content_item, insert_typecho_content_item, select_typecho_content_item, update_typecho_content_item } from '@/apis/typecho/content'
 import { state, mutations, actions } from '@/store/modules/_';
 import Mock from 'mockjs'
 const MOCK_KEY = 'mock'
@@ -33,7 +33,6 @@ export default {
       })
     },
     selectList({ dispatch }, payload) {
-      console.log(this)
       return dispatch('_selectList', {
         NAMESPACE,
         request: select_typecho_content_list,
@@ -60,11 +59,20 @@ export default {
         root: true
       })
     },
-    updateItem({ state, commit, dispatch }, payload) {
+    deleteItem({ state, commit, dispatch }, payload) {
+      return dispatch('_deleteItem', {
+        NAMESPACE,
+        request: delete_typecho_content_item,
+        data: { ...state.info, ...payload }
+      }, {
+        root: true
+      })
+    },
+    updateItem({ state, commit, dispatch }, payload = {}) {
       return dispatch('_updateItem', {
         NAMESPACE,
         request: update_typecho_content_item,
-        data: state.info
+        data: { ...state.info, ...payload }
       }, {
         root: true
       })
