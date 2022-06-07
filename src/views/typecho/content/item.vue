@@ -78,6 +78,7 @@
         </el-col>
       </el-row>
     </el-form>
+    <div ref="monaco" :style="{height:'360px',width:'100%'}"></div>
   </el-card>
 </template>
 
@@ -85,6 +86,7 @@
 import { TypechoMeta } from '@/store/modules/typecho/meta'
 import { mapActions, mapGetters, mapState } from "vuex";
 import { select_typecho_content_type_list, select_typecho_content_status_list } from '@/apis/typecho/content'
+import * as monaco from 'monaco-editor'
 export default {
   props: {
     readonly: {
@@ -123,12 +125,21 @@ export default {
         type: [
           { required: true, message: '请至少选择一个性质', trigger: 'change' }
         ],
-      }
+      },
+      monacoEditor: {}
     }
   },
   computed: {
   },
   created() {
+  },
+  mounted() {
+    this.monacoEditor = monaco.editor.create(this.$refs.monaco, {
+      value: '',
+      readOnly: true,
+      language: 'markdonw',
+      theme: 'vs-dark',
+    })
   },
   methods: {
     handleFormTypeFocus() {
