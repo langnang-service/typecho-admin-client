@@ -62,10 +62,11 @@ export default {
             breadcrumbOptions,
             paginationModule: "typecho.content"
           },
-          component: () => import('@/views/typecho/content/info'),
+          component: () => import('@/views/blog/info'),
           beforeEnter: (to, from, next) => {
-            $store.dispatch('typecho/content/selectItem', to.params)
-            next()
+            $store.dispatch('typecho/content/selectItem', to.params).then(() => {
+              next()
+            })
           }
         }
       ]

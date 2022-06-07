@@ -115,11 +115,9 @@ export default {
       this.handleCancelDialog();
     },
     handleUpload(data) {
-      console.log('handleUpload', data)
       readExcel(data.file)
     },
     handleClickRow(item) {
-      console.log('handleClickRow', arguments)
       this.$store.commit('typecho.content/SET_INFO', item);
       // this.$router.push({ path: '/typecho.content/info' })
     },

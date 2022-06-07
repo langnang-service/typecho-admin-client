@@ -1,12 +1,12 @@
 <template>
-  <div class="typecho">
+  <div class="blog">
     <el-col class="simple-list-item" v-if="!list.some(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)">
       <el-empty />
     </el-col>
     <el-card shadow="hover" v-for="(item) in list.filter(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" :key="item.id" :style="{marginBottom:'10px',cursor:'pointer',opacity:item.type=='done'?'0.5':'1'}">
       <div slot="header" class="clearfix">
         <strong>{{item.title}}</strong>
-        <el-button style="float: right; padding: 3px 0" type="text">阅读全文</el-button>
+        <el-button style="float: right; padding: 3px 0" type="text" @click="$router.push({path:'/blog/content/'+item.cid})">阅读全文</el-button>
       </div>
       {{item.text_content}}
     </el-card>
