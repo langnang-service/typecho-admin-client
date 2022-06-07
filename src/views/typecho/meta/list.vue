@@ -1,5 +1,8 @@
 <template>
   <LayoutAdmin class="typecho-meta-list" v-loading="$store.state.typecho.meta.loading" v-bind="$route.meta">
+    <template #prefix>
+      <span>【{{$store.state.typecho.meta.root.slug}}】</span>
+    </template>
     <template #toolbar>
       <el-tooltip class="item" effect="dark" content="查询" placement="bottom">
         <el-button size="mini" circle type="info" @click="$store.dispatch('typecho/meta/selectList')">
@@ -40,25 +43,8 @@
         </el-button>
       </el-tooltip>
     </template>
-    <el-row class="simple-list">
-      <el-col class="simple-list-item" v-if="!typecho.meta.list.some(v=>(v.name||'').indexOf(inputFilterNameValue)>-1)">
-        <el-empty />
-      </el-col>
-      <el-col class="simple-list-item" :span="24" v-for="(item) in typecho.meta.list.filter(v=>(v.name||'').indexOf(inputFilterNameValue)>-1)" :key="item.id">
-        <el-card shadow="hover" :style="{marginBottom:'10px',cursor:'pointer'}" :body-style="{ padding: '10px' }">
-          <el-row :gutter="10">
-            <el-col :style="{width:'20px',textAlign:'center'}">
-              <el-checkbox v-model="selection" :label="item" :style="{width:'19px',overflow:'hidden',verticalAlign:'top'}">&nbsp;</el-checkbox>
-            </el-col>
-            <el-col :style="{width:'26px',textAlign:'center'}">
-              <font-awesome-icon v-if="item.file" icon="fa-solid fa-file" />
-              <font-awesome-icon v-else icon="fa-solid fa-folder" />
-            </el-col>
-            <el-col :style="{width:'calc(100% - 50px)'}" @click.native="handleClickRow(item)">{{item.name}}</el-col>
-          </el-row>
-        </el-card>
-      </el-col>
-    </el-row>
+    <Item type="table" ref="table" :form="typecho.meta.info" @select="(form)=>handleSelect(form)" :data="typecho.meta.list.filter(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" @selection-change="handleTableSelectionChange" />
+
     <template #append>
       <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :before-close="handleCancelDialog">
         <el-form :ref="dialog.form.ref" :model="dialog.form">
@@ -77,8 +63,9 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
+import Item from './item.vue'
 export default {
-  components: {},
+  components: { Item },
   data() {
     return {
       inputFilterNameValue: '',
@@ -124,6 +111,9 @@ export default {
     handleClickRow(item) {
       // console.log('handleClickRow', arguments)
       // this.$store.commit('typecho/meta/SET_INFO', item);
+    },
+    handleTableSelectionChange(val) {
+      this.selection = val
     }
   },
 };

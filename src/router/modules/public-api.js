@@ -23,12 +23,12 @@ export default {
     },
     {
       path: 'content',
-      name: "Content - Typecho",
+      name: "Content - Public APIs",
       component: LayoutRouterView,
       children: [
         {
           path: 'list',
-          name: 'List - Typecho Content',
+          name: 'List - Public APIs Content',
           meta: {
             breadcrumbOptions,
             footer: true,
@@ -44,7 +44,7 @@ export default {
         },
         {
           path: 'insert',
-          name: "Insert - Typecho Content",
+          name: "Insert - Public APIs Content",
           meta: {
             breadcrumbOptions,
             paginationModule: "typecho.content"
@@ -57,7 +57,7 @@ export default {
         },
         {
           path: ':cid',
-          name: 'Info - Typecho Content',
+          name: 'Info - Public APIs Content',
           meta: {
             breadcrumbOptions,
             paginationModule: "typecho.content"
@@ -73,12 +73,12 @@ export default {
     },
     {
       path: 'meta',
-      name: "Meta - Typecho",
+      name: "Meta - Public APIs",
       component: LayoutRouterView,
       children: [
         {
           path: 'list',
-          name: 'List - Typecho Meta',
+          name: 'List - Public APIs Meta',
           meta: {
             breadcrumbOptions,
             footer: true,
@@ -94,7 +94,7 @@ export default {
         },
         {
           path: 'insert',
-          name: "Insert - Typecho Meta",
+          name: "Insert - Public APIs Meta",
           meta: {
             breadcrumbOptions,
             paginationModule: "typecho.meta"
@@ -108,7 +108,7 @@ export default {
         },
         {
           path: ':mid',
-          name: 'Info - Typecho Meta',
+          name: 'Info - Public APIs Meta',
           meta: {
             breadcrumbOptions,
             paginationModule: "typecho.meta"

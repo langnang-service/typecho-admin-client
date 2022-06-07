@@ -1,8 +1,5 @@
 <template>
   <LayoutAdmin class="typecho-content-list" v-loading="$store.state.typecho.content.loading" v-bind="$route.meta">
-    <template #prefix>
-      <span>【{{$store.state.typecho.content.root.slug}}】</span>
-    </template>
     <template #toolbar>
       <el-tooltip class="item" effect="dark" content="查询" placement="bottom">
         <el-button size="mini" circle type="info" @click="handleSelect">
@@ -10,7 +7,7 @@
         </el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="新增" placement="bottom">
-        <el-button size="mini" circle type="primary" icon="el-icon-plus" @click="$router.push({path:'/typecho/content/insert'})"></el-button>
+        <el-button size="mini" circle type="primary" icon="el-icon-plus" @click="$router.push({path:'/typecho/branch/insert'})"></el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="模板" placement="bottom">
         <el-button size="mini" circle type="info">
@@ -48,20 +45,7 @@
         </el-button>
       </el-tooltip>
     </template>
-    <Item type="table" ref="table" :form="$store.state.typecho.content.info" @select="(form)=>handleSelect(form)" :data="typecho.content.list.filter(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" @selection-change="handleTableSelectionChange" />
-    <template #append>
-      <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :before-close="handleCancelDialog">
-        <el-form :ref="dialog.form.ref" :model="dialog.form">
-          <el-form-item>
-            <el-input v-model="dialog.form.title"></el-input>
-          </el-form-item>
-        </el-form>
-        <span slot="footer">
-          <el-button @click="handleCancelDialog">Cancel</el-button>
-          <el-button type="primary" @click="handleSubmitDialog">Submit</el-button>
-        </span>
-      </el-dialog>
-    </template>
+    <Item type="table" ref="table" :form="$store.state.typecho.branch.info" @select="(form)=>handleSelect(form)" :data="typecho.branch.list.filter(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" @selection-change="handleTableSelectionChange" />
   </LayoutAdmin>
 </template>
 
@@ -99,10 +83,10 @@ export default {
   },
   methods: {
     ...mapActions({
-      handleSelect: "typecho/content/selectList",
+      handleSelect: "typecho/branch/selectList",
     }),
     handleDelete() {
-      this.$store.dispatch('typecho/content/deleteList', this.selection.slice(0))
+      this.$store.dispatch('typecho/branch/deleteList', this.selection.slice(0))
       this.selection = [];
     },
     handleInsert() {
@@ -122,6 +106,7 @@ export default {
     },
     handleClickRow(item) {
       this.$store.commit('typecho.content/SET_INFO', item);
+      // this.$router.push({ path: '/typecho.content/info' })
     },
     handleTableSelectionChange(val) {
       this.selection = val

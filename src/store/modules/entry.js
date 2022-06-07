@@ -1,5 +1,5 @@
 import { select_entry_list, delete_entry_list, insert_entry_item, select_entry_item, update_entry_item } from '@/apis/entry'
-import { state, mutations, actions } from '@/store/modules/_';
+import { state, mutations, actions } from '@/store';
 import Mock from 'mockjs'
 const MOCK_KEY = 'mock'
 export class Entry {

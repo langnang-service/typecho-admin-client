@@ -23,12 +23,12 @@ export default {
     },
     {
       path: 'content',
-      name: "Content - Typecho",
+      name: "Content - ToDo",
       component: LayoutRouterView,
       children: [
         {
           path: 'list',
-          name: 'List - Typecho Content',
+          name: 'List - ToDo Content',
           meta: {
             breadcrumbOptions,
             footer: true,
@@ -44,7 +44,7 @@ export default {
         },
         {
           path: 'insert',
-          name: "Insert - Typecho Content",
+          name: "Insert - ToDo Content",
           meta: {
             breadcrumbOptions,
             paginationModule: "typecho.content"
@@ -57,7 +57,7 @@ export default {
         },
         {
           path: ':cid',
-          name: 'Info - Typecho Content',
+          name: 'Info - ToDo Content',
           meta: {
             breadcrumbOptions,
             paginationModule: "typecho.content"
@@ -73,12 +73,12 @@ export default {
     },
     {
       path: 'meta',
-      name: "Meta - Typecho",
+      name: "Meta - ToDo",
       component: LayoutRouterView,
       children: [
         {
           path: 'list',
-          name: 'List - Typecho Meta',
+          name: 'List - ToDo Meta',
           meta: {
             breadcrumbOptions,
             footer: true,
@@ -94,7 +94,7 @@ export default {
         },
         {
           path: 'insert',
-          name: "Insert - Typecho Meta",
+          name: "Insert - ToDo Meta",
           meta: {
             breadcrumbOptions,
             paginationModule: "typecho.meta"
@@ -108,7 +108,7 @@ export default {
         },
         {
           path: ':mid',
-          name: 'Info - Typecho Meta',
+          name: 'Info - ToDo Meta',
           meta: {
             breadcrumbOptions,
             paginationModule: "typecho.meta"

@@ -1,7 +1,7 @@
 <template>
-  <el-card :class="'typecho-content-'+type+'-item'" :shadow="type==='list'?'hover':'never'">
+  <el-card :class="'typecho-branch-'+type+'-item'" :shadow="type==='list'?'hover':'never'">
     <el-row v-if="type==='list'" :gutter="10">
-      <el-col class="simple-list-item" :span="24" v-for="(item) in typecho.content.list.filter(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" :key="item.id">
+      <el-col class="simple-list-item" :span="24" v-for="(item) in typecho.branch.list.filter(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" :key="item.id">
         <el-col :style="{width:'20px',textAlign:'center'}">
           <el-checkbox v-model="selection" :label="item" :style="{width:'19px',overflow:'hidden',verticalAlign:'top'}">&nbsp;</el-checkbox>
         </el-col>
@@ -9,7 +9,7 @@
           <font-awesome-icon v-if="item.file" icon="fa-solid fa-file" />
           <font-awesome-icon v-else icon="fa-solid fa-folder" />
         </el-col>
-        <el-col :style="{width:'calc(100% - 60px)'}" @click.native="$router.push({name:'Info - Typecho Content',params:{cid:data.cid},query:$route.query})">
+        <el-col :style="{width:'calc(100% - 60px)'}" @click.native="$router.push({path:'/typecho/branch/'+data.cid})">
           <h3>{{item.title}}</h3>
           <p>{{item.text}}</p>
         </el-col>
@@ -19,60 +19,42 @@
       <template #empty>
         <el-empty />
       </template>
-      <el-table-column type="expand">
-        <template slot-scope="{row}">{{row.text}}</template>
-      </el-table-column>
       <el-table-column align="center" type="selection"></el-table-column>
-      <el-table-column show-overflow-tooltip prop="title" label="title">
+      <el-table-column show-overflow-tooltip prop="name" label="name">
         <template slot="header" slot-scope="{}">
-          <el-input size="mini" filterable clearable v-model="form.title" placeholder="title" @blur="$emit('select',form)"></el-input>
+          <el-input size="mini" filterable clearable v-model="form.name" placeholder="name" @blur="$emit('select',form)"></el-input>
         </template>
       </el-table-column>
       <el-table-column show-overflow-tooltip prop="slug" label="slug"></el-table-column>
-      <el-table-column show-overflow-tooltip prop="status" label="status" width="150px">
-        <template slot="header" slot-scope="{}">
-          <el-select size="mini" filterable clearable v-model="form.status" placeholder="status" @focus="handleFormStatusFocus" @change="$emit('select',form)">
-            <el-option v-for="opt in statusOptions" :key="opt.value" :value="opt.value" />
-          </el-select>
+      <el-table-column show-overflow-tooltip prop="metasNum" label="metasNum">
+        <template slot-scope="{row}">
+          <el-button type="text" size="mini" @click="handleTableColCick('/typecho/meta/list', row)">{{row.metasNum}}</el-button>
         </template>
       </el-table-column>
-      <el-table-column show-overflow-tooltip prop="type" label="type" width="150px">
-        <template slot="header" slot-scope="{}">
-          <el-select size="mini" filterable clearable v-model="form.type" placeholder="type" @focus="handleFormTypeFocus" @change="$emit('select',form)">
-            <el-option v-for="opt in typeOptions" :key="opt.value" :value="opt.value" />
-          </el-select>
+      <el-table-column show-overflow-tooltip prop="contentsNum" label="contentsNum">
+        <template slot-scope="{row}">
+          <el-button type="text" size="mini" @click="handleTableColCick('/typecho/content/list', row, )">{{row.contentsNum}}</el-button>
         </template>
       </el-table-column>
+      <el-table-column show-overflow-tooltip prop="templatesNum" label="templatesNum"></el-table-column>
       <el-table-column show-overflow-tooltip prop="commentsNum" label="commentsNum"></el-table-column>
     </el-table>
     <el-form v-if="type==='form'" ref="form" :model="form" :rules="rules" size="small" label-width="80px">
-      <el-row :gutter="16">
-        <el-col :span="24">
-          <el-form-item prop="title" label="title">
-            <el-input v-model="form.title" />
+      <el-row :gutter="10">
+        <el-col :span="12">
+          <el-form-item prop="name" label="name">
+            <el-input v-model="form.name" />
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="12">
           <el-form-item prop="slug" label="slug">
             <el-input v-model="form.slug" />
           </el-form-item>
         </el-col>
-        <el-col :span="8">
-          <el-form-item prop="type" label="type">
-            <el-select v-model="form.type" filterable allow-create @focus="handleFormTypeFocus">
-              <el-option v-for="opt in typeOptions" :key="opt.value" :value="opt.value" />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item prop="status" label="status">
-            <el-select v-model="form.status" filterable allow-create @focus="handleFormStatusFocus">
-              <el-option v-for="opt in statusOptions" :key="opt.value" :value="opt.value" />
-            </el-select>
-          </el-form-item>
-        </el-col>
         <el-col :span="24">
-          <div ref="monaco" :style="{height:'360px',width:'100%'}"></div>
+          <el-form-item prop="description" label="description">
+            <el-input v-model="form.description" type="textarea" />
+          </el-form-item>
         </el-col>
       </el-row>
     </el-form>
@@ -82,8 +64,6 @@
 <script>
 import { TypechoMeta } from '@/store/modules/typecho/meta'
 import { mapActions, mapGetters, mapState } from "vuex";
-import { select_typecho_content_type_list, select_typecho_content_status_list } from '@/apis/typecho/content'
-import * as monaco from 'monaco-editor'
 export default {
   props: {
     readonly: {
@@ -114,13 +94,13 @@ export default {
       statusOptions: [],
       rules: {
         name: [
-          { required: true, message: '请输入名称', trigger: 'blur' },
+          { required: true, trigger: 'blur' },
         ],
         slug: [
-          { required: true, message: '请输入别名', trigger: 'blur' },
+          { required: true, trigger: 'blur' },
         ],
         type: [
-          { required: true, message: '请至少选择一个性质', trigger: 'change' }
+          { required: true, trigger: 'change' }
         ],
       },
       monacoEditor: {}
@@ -129,37 +109,20 @@ export default {
   computed: {
   },
   created() {
-    console.log(this.$route);
   },
   mounted() {
-    if (this.type === 'form') {
-      this.monacoEditor = monaco.editor.create(this.$refs.monaco, {
-        value: this.form.text_content,
-        readOnly: false,
-        language: this.form.text_language || 'markdonw',
-        theme: 'vs-dark',
-      })
-    }
   },
   methods: {
-    handleFormTypeFocus() {
-      select_typecho_content_type_list({
-        root: this.$store.state.typecho.content.root?.cid
-      }).then(res => {
-        this.typeOptions = res.rows;
-      })
-    },
-    handleFormStatusFocus() {
-      select_typecho_content_status_list({
-        root: this.$store.state.typecho.content.root?.cid
-      }).then(res => {
-        this.statusOptions = res.rows;
-        this.$forceUpdate()
+    handleTableColCick(path, row) {
+      this.$store.commit('typecho/content/SET_ROOT', row)
+      this.$store.commit('typecho/meta/SET_ROOT', row)
+      this.$router.push({
+        path
       })
     },
     handleTableRowDblClick(row, column, event) {
       this.$router.push({
-        path: "/typecho/content/" + row.cid
+        path: "/typecho/branch/" + row.mid
       })
     },
     handleTableSelectionChange(val) {

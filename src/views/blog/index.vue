@@ -1,8 +1,6 @@
 <template>
   <div class="blog">
-    <el-col class="simple-list-item" v-if="!list.some(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)">
-      <el-empty />
-    </el-col>
+    <el-empty v-if="!list.some(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" />
     <el-card shadow="hover" v-for="(item) in list.filter(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" :key="item.id" :style="{marginBottom:'10px',cursor:'pointer',opacity:item.type=='done'?'0.5':'1'}">
       <div slot="header" class="clearfix">
         <strong>{{item.title}}</strong>
@@ -32,7 +30,7 @@ export default {
   created() {
     this.handleSelectItem({
       slug: 'blog',
-      type: 'template',
+      type: 'branch',
     }).then(res => {
       this.parent = res;
       this.handleSelectList({

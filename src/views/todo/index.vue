@@ -51,7 +51,7 @@ export default {
   created() {
     this.handleSelectItem({
       slug: 'todo',
-      type: 'template',
+      type: 'branch',
     }).then(res => {
       this.parent = res;
       this.handleSelectList({

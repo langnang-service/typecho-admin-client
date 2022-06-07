@@ -1,6 +1,10 @@
 <template>
   <el-container class="layout-admin">
     <el-header>
+      <span :style="{float:'left',marginTop:'-1px',display:'inline-block'}">
+        <!-- 插槽：左侧信息 -->
+        <slot name="prefix"></slot>
+      </span>
       <el-breadcrumb separator-class="el-icon-arrow-right" :style="{display:'inline-block'}">
         <el-breadcrumb-item v-for="(item,index) in breadcrumb" :key="item.path">
           <span v-if="!breadcrumbOptions[index]">{{item.meta.name}}</span>
@@ -85,6 +89,7 @@ export default {
   computed: {
   },
   created() {
+    console.log(this.$route.matched);
     this.breadcrumb = this.$route.matched.slice(0).reduce((total, value, index) => {
       if (!value.name) {
         const name = value.path.split('/').slice(-1)[0];
@@ -95,7 +100,6 @@ export default {
       total.push(value);
       return total;
     }, [])
-    console.log(this.breadcrumb, this.breadcrumbOptions)
   },
   methods: {
     handlePaginationSizeChange(val) {

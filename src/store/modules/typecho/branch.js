@@ -1,17 +1,10 @@
-import { select_typecho_content_list, delete_typecho_content_list, delete_typecho_content_item, insert_typecho_content_item, select_typecho_content_item, update_typecho_content_item } from '@/apis/typecho/content'
+import { select_typecho_branch_list, delete_typecho_branch_list, delete_typecho_branch_item, insert_typecho_branch_item, select_typecho_branch_item, update_typecho_branch_item } from '@/apis/typecho/branch'
 import { state, mutations, actions } from '@/store';
 import Mock from 'mockjs'
 const MOCK_KEY = 'mock'
-const NAMESPACE = 'typecho/content/'
-export class TypechoContent {
+const NAMESPACE = 'typecho/branch/'
+export class TypechoBranch {
   constructor(info = {}) {
-    this.id = info === MOCK_KEY ? () => Mock.Random.id() : info.id;
-    this.title = info === MOCK_KEY ? () => Mock.Random.sentence() : info.title;
-    this.description = info === MOCK_KEY ? () => Mock.Random.paragraph() : info.description;
-    this.keywords = info.keywords
-    this.order = info.order
-    this.parent = info.parent
-    this.datetime = info.datetime
   }
 }
 export default {
@@ -26,17 +19,17 @@ export default {
     insertItem({ state, commit, dispatch }, payload) {
       return dispatch('_insertItem', {
         NAMESPACE,
-        request: insert_typecho_content_item,
+        request: insert_typecho_branch_item,
         data: payload
       }, {
         root: true
       })
     },
-    selectList({ state, dispatch }, payload) {
+    selectList({ dispatch }, payload) {
       return dispatch('_selectList', {
         NAMESPACE,
-        request: select_typecho_content_list,
-        data: { ...payload, root: state.root ? state.root.cid : null }
+        request: select_typecho_branch_list,
+        data: payload
       }, {
         root: true
       })
@@ -44,7 +37,7 @@ export default {
     selectItem({ state, commit, dispatch }, payload) {
       return dispatch('_selectItem', {
         NAMESPACE,
-        request: select_typecho_content_item,
+        request: select_typecho_branch_item,
         data: payload
       }, {
         root: true
@@ -53,7 +46,7 @@ export default {
     deleteList({ state, commit, dispatch }, payload) {
       return dispatch('_deleteList', {
         NAMESPACE,
-        request: delete_typecho_content_list,
+        request: delete_typecho_branch_list,
         data: { cids: payload.map(v => v.cid) }
       }, {
         root: true
@@ -62,7 +55,7 @@ export default {
     deleteItem({ state, commit, dispatch }, payload) {
       return dispatch('_deleteItem', {
         NAMESPACE,
-        request: delete_typecho_content_item,
+        request: delete_typecho_branch_item,
         data: { ...state.info, ...payload }
       }, {
         root: true
@@ -71,7 +64,7 @@ export default {
     updateItem({ state, commit, dispatch }, payload = {}) {
       return dispatch('_updateItem', {
         NAMESPACE,
-        request: update_typecho_content_item,
+        request: update_typecho_branch_item,
         data: { ...state.info, ...payload }
       }, {
         root: true

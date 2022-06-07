@@ -2,9 +2,11 @@ import LayoutRouterView from '@/layout/router-view'
 import $store from '@/store'
 import { TypechoMeta } from '@/store/modules/typecho/meta'
 import { TypechoContent } from '@/store/modules/typecho/content'
+import { TypechoBranch } from '@/store/modules/typecho/branch'
 const breadcrumbOptions = [
   null,
   [
+    { name: "Branch", path: '/typecho/branch/list' },
     { name: "Meta", path: '/typecho/meta/list' },
     { name: "Content", path: '/typecho/content/list' },
     { name: "Comment", path: '/typecho/comment/list' },
@@ -12,6 +14,7 @@ const breadcrumbOptions = [
     { name: "User", path: '/typecho/user/list' },
   ]
 ]
+const requiredQueryKey = "branch";
 export default {
   path: '/typecho',
   component: LayoutRouterView,
@@ -20,6 +23,54 @@ export default {
       path: '',
       name: "Typecho",
       component: () => import('@/views/typecho'),
+    },
+    {
+      path: 'branch',
+      name: "Branch - Typecho",
+      component: LayoutRouterView,
+      children: [
+        {
+          path: 'list',
+          name: 'List - Typecho Branch',
+          meta: {
+            footer: true,
+            pagination: true,
+            paginationModule: "typecho.branch"
+          },
+          component: () => import('@/views/typecho/branch/list'),
+          beforeEnter: (to, from, next) => {
+            $store.dispatch('typecho/branch/selectList').then(() => {
+              $store.commit('typecho/branch/SET_INFO', new TypechoBranch())
+              next()
+            })
+          }
+        },
+        {
+          path: 'insert',
+          name: "Insert - Typecho Branch",
+          meta: {
+            paginationModule: "typecho.content"
+          },
+          component: () => import('@/views/typecho/branch/info.vue'),
+          beforeEnter: (to, from, next) => {
+            $store.commit('typecho/branch/SET_INFO', {})
+            next()
+          }
+        },
+        {
+          path: ':mid',
+          name: 'Info - Typecho Branch',
+          meta: {
+            paginationModule: "typecho.branch"
+          },
+          component: () => import('@/views/typecho/branch/info'),
+          beforeEnter: (to, from, next) => {
+            $store.dispatch('typecho/branch/selectItem', to.params).then(() => {
+              next()
+            })
+          }
+        }
+      ]
     },
     {
       path: 'content',
@@ -37,10 +88,12 @@ export default {
           },
           component: () => import('@/views/typecho/content/list'),
           beforeEnter: (to, from, next) => {
-            $store.dispatch('typecho/content/selectList')
-            $store.commit('typecho/content/SET_INFO', new TypechoContent())
-            next()
-          }
+            if (!$store.state.typecho.content.root) return next("/typecho/branch/list");
+            $store.dispatch('typecho/content/selectList', { root: $store.state.typecho.content.root?.cid }).then(() => {
+              $store.commit('typecho/content/SET_INFO', {})
+              next()
+            })
+          },
         },
         {
           path: 'insert',
@@ -51,7 +104,10 @@ export default {
           },
           component: () => import('@/views/typecho/content/info.vue'),
           beforeEnter: (to, from, next) => {
-            $store.commit('typecho/content/SET_INFO', new TypechoContent())
+            if (!$store.state.typecho.content.root) return next("/typecho/branch/list");
+            $store.commit('typecho/content/SET_INFO', {
+              parent: $store.state.typecho.content.root.cid
+            })
             next()
           }
         },
@@ -64,12 +120,12 @@ export default {
           },
           component: () => import('@/views/typecho/content/info'),
           beforeEnter: (to, from, next) => {
-            $store.dispatch('typecho/content/selectItem', to.params).then(() => {
-              next()
-            })
+            if (!$store.state.typecho.content.root) return next("/typecho/branch/list");
+            $store.dispatch('typecho/content/selectItem', to.params)
+            next()
           }
         }
-      ]
+      ],
     },
     {
       path: 'meta',
@@ -87,9 +143,10 @@ export default {
           },
           component: () => import('@/views/typecho/meta/list'),
           beforeEnter: (to, from, next) => {
-            $store.dispatch('typecho/meta/selectList').then(() => {
-              next()
-            })
+            if (!$store.state.typecho.meta.root) return next("/typecho/branch/list");
+            $store.dispatch('typecho/meta/selectList', { root: $store.state.typecho.meta.root?.cid })
+            $store.commit('typecho/meta/SET_INFO', {})
+            next()
           }
         },
         {
@@ -99,11 +156,13 @@ export default {
             breadcrumbOptions,
             paginationModule: "typecho.meta"
           },
-          component: () => import('@/views/typecho/meta/info.vue'),
+          component: () => import('@/views/typecho/meta/info'),
           beforeEnter: (to, from, next) => {
-            $store.commit('typecho/meta/SET_INFO', new TypechoMeta()).then(() => {
-              next()
+            if (!$store.state.typecho.meta.root) return next("/typecho/branch/list");
+            $store.commit('typecho/meta/SET_INFO', {
+              parent: $store.state.typecho.meta.root.mid
             })
+            next()
           }
         },
         {
@@ -115,10 +174,12 @@ export default {
           },
           component: () => import('@/views/typecho/meta/info'),
           beforeEnter: (to, from, next) => {
+            if (!$store.state.typecho.meta.root) return next("/typecho/branch/list");
+            $store.dispatch('typecho/meta/selectItem', to.params)
             next()
           }
         }
       ]
     },
-  ]
+  ],
 }

@@ -1,5 +1,5 @@
 import { select_typecho_meta_list, delete_typecho_meta_list, insert_typecho_meta_item, select_typecho_meta_item, update_typecho_meta_item } from '@/apis/typecho/meta'
-import { state, mutations, actions } from '@/store/modules/_';
+import { state, mutations, actions } from '@/store';
 import Mock from 'mockjs'
 const MOCK_KEY = 'mock'
 const NAMESPACE = 'typecho/meta/';
@@ -24,7 +24,7 @@ export default {
   },
   actions: {
     insertItem({ state, commit, dispatch }, payload) {
-      dispatch('_insertItem', {
+      return dispatch('_insertItem', {
         NAMESPACE,
         request: insert_typecho_meta_item,
         data: payload
@@ -36,7 +36,7 @@ export default {
       return dispatch('_selectList', {
         NAMESPACE,
         request: select_typecho_meta_list,
-        data: payload,
+        data: { ...payload, root: state.root ? state.root.mid : null }
       }, {
         root: true
       })
@@ -51,7 +51,7 @@ export default {
       })
     },
     deleteList({ state, commit, dispatch }, payload) {
-      dispatch('_deleteList', {
+      return dispatch('_deleteList', {
         NAMESPACE,
         request: delete_typecho_meta_list,
         data: payload
@@ -60,7 +60,7 @@ export default {
       })
     },
     updateItem({ state, commit, dispatch }, payload) {
-      dispatch('_updateItem', {
+      return dispatch('_updateItem', {
         NAMESPACE,
         request: update_typecho_meta_item,
         data: payload
@@ -69,7 +69,7 @@ export default {
       })
     },
     submitItem({ state, commit, dispatch }, payload) {
-      payload.mid ? dispatch('updateItem', payload) : dispatch('insertItem', payload)
+      return payload.mid ? dispatch('updateItem', payload) : dispatch('insertItem', payload)
     },
   }
 }

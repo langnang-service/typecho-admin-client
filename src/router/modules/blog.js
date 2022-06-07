@@ -23,12 +23,12 @@ export default {
     },
     {
       path: 'content',
-      name: "Content - Typecho",
+      name: "Content - Blog",
       component: LayoutRouterView,
       children: [
         {
           path: 'list',
-          name: 'List - Typecho Content',
+          name: 'List - Blog Content',
           meta: {
             breadcrumbOptions,
             footer: true,
@@ -44,7 +44,7 @@ export default {
         },
         {
           path: 'insert',
-          name: "Insert - Typecho Content",
+          name: "Insert - Blog Content",
           meta: {
             breadcrumbOptions,
             paginationModule: "typecho.content"
@@ -57,7 +57,7 @@ export default {
         },
         {
           path: ':cid',
-          name: 'Info - Typecho Content',
+          name: 'Info - Blog Content',
           meta: {
             breadcrumbOptions,
             paginationModule: "typecho.content"
@@ -73,12 +73,12 @@ export default {
     },
     {
       path: 'meta',
-      name: "Meta - Typecho",
+      name: "Meta - Blog",
       component: LayoutRouterView,
       children: [
         {
           path: 'list',
-          name: 'List - Typecho Meta',
+          name: 'List - Blog Meta',
           meta: {
             breadcrumbOptions,
             footer: true,
@@ -94,7 +94,7 @@ export default {
         },
         {
           path: 'insert',
-          name: "Insert - Typecho Meta",
+          name: "Insert - Blog Meta",
           meta: {
             breadcrumbOptions,
             paginationModule: "typecho.meta"
@@ -108,7 +108,7 @@ export default {
         },
         {
           path: ':mid',
-          name: 'Info - Typecho Meta',
+          name: 'Info - Blog Meta',
           meta: {
             breadcrumbOptions,
             paginationModule: "typecho.meta"

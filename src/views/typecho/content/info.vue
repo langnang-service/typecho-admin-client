@@ -1,5 +1,8 @@
 <template>
   <LayoutAdmin class="typecho-meta-info" v-loading="$store.state.typecho.content.loading" v-bind="$route.meta">
+    <template #prefix>
+      <span>【{{$store.state.typecho.meta.root.slug}}】</span>
+    </template>
     <template #toolbar>
       <el-tooltip class="item" effect="dark" content="返回" placement="bottom">
         <el-button size="mini" circle type="info" @click="$router.push({path:'/typecho/content/list'})">
@@ -29,7 +32,6 @@ export default {
   computed: {
   },
   created() {
-    console.log(this.$route)
   },
   methods: {
     handleSubmit() {
