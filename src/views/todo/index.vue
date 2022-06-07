@@ -50,7 +50,8 @@ export default {
   },
   created() {
     this.handleSelectItem({
-      slug: 'todo'
+      slug: 'todo',
+      type: 'template',
     }).then(res => {
       this.parent = res;
       this.handleSelectList({

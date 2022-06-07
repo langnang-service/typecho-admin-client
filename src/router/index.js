@@ -13,6 +13,8 @@ const routes = [
   require('./modules/novel')['default'],
   require('./modules/public-api')['default'],
   require('./modules/todo')['default'],
+  require('./modules/navigation')['default'],
+  require('./modules/blog')['default'],
 ];
 
 const router = new VueRouter({
