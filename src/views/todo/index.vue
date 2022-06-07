@@ -21,7 +21,9 @@
               </el-col>
               <el-col :style="{width:'calc(100% - 65px)',fontSize:'18px',textDecoration:item.type=='done'?'line-through':'none'}" @click.native="handleClickRow(item)">{{item.title}}</el-col>
               <el-col :style="{width:'30px',}">
-                <el-button size="mini" circle type="danger" icon="el-icon-delete" @click="handleDeleteItem(item)"></el-button>
+                <el-button size="mini" circle type="danger" @click="handleDeleteItem(item)">
+                  <font-awesome-icon icon="fa-regular fa-trash-can" />
+                </el-button>
               </el-col>
             </el-row>
           </el-card>
