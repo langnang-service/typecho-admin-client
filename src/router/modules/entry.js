@@ -15,8 +15,9 @@ export default {
       name: "List - Entry",
       component: () => import('@/views/entry/list.vue'),
       beforeEnter: (to, from, next) => {
-        $store.dispatch('entry/selectList')
-        next()
+        $store.dispatch('entry/selectList').then(() => {
+          next()
+        })
       }
     },
     {
@@ -24,8 +25,9 @@ export default {
       name: "Insert - Entry",
       component: () => import('@/views/entry/info.vue'),
       beforeEnter: (to, from, next) => {
-        $store.commit('entry/SET_INFO', new Entry())
-        next()
+        $store.commit('entry/SET_INFO', new Entry()).then(() => {
+          next()
+        })
       }
     },
     {
@@ -33,8 +35,9 @@ export default {
       name: "Info - Entry",
       component: () => import('@/views/entry/info.vue'),
       beforeEnter: (to, from, next) => {
-        $store.dispatch('entry/selectItem', to.params)
-        next()
+        $store.dispatch('entry/selectItem', to.params).then(() => {
+          next()
+        })
       }
     }
   ]

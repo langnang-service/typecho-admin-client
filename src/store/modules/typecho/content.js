@@ -77,8 +77,8 @@ export default {
         root: true
       })
     },
-    submitItem({ state, commit, dispatch }) {
-      return state.info.cid ? dispatch('updateItem', state.info) : dispatch('insertItem', state.info)
+    submitItem({ state, commit, dispatch }, payload = {}) {
+      return state.info.cid ? dispatch('updateItem', { ...state.info, ...payload }) : dispatch('insertItem', { ...state.info, ...payload })
     },
   }
 }

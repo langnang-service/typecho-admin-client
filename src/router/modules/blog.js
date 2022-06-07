@@ -87,8 +87,9 @@ export default {
           },
           component: () => import('@/views/typecho/meta/list'),
           beforeEnter: (to, from, next) => {
-            $store.dispatch('typecho/meta/selectList')
-            next()
+            $store.dispatch('typecho/meta/selectList').then(() => {
+              next()
+            })
           }
         },
         {
@@ -100,8 +101,9 @@ export default {
           },
           component: () => import('@/views/typecho/meta/info.vue'),
           beforeEnter: (to, from, next) => {
-            $store.commit('typecho/meta/SET_INFO', new TypechoMeta())
-            next()
+            $store.commit('typecho/meta/SET_INFO', new TypechoMeta()).then(() => {
+              next()
+            })
           }
         },
         {

@@ -45,7 +45,7 @@
       </el-table-column>
       <el-table-column show-overflow-tooltip prop="commentsNum" label="commentsNum"></el-table-column>
     </el-table>
-    <el-form v-if="type==='form'" ref="form" :model="form" :rules="rules" label-width="80px">
+    <el-form v-if="type==='form'" ref="form" :model="form" :rules="rules" size="small" label-width="80px">
       <el-row :gutter="16">
         <el-col :span="24">
           <el-form-item prop="title" label="title">
@@ -72,13 +72,10 @@
           </el-form-item>
         </el-col>
         <el-col :span="24">
-          <el-form-item prop="text" label="text">
-            <el-input v-model="form.text" type="textarea" />
-          </el-form-item>
+          <div ref="monaco" :style="{height:'360px',width:'100%'}"></div>
         </el-col>
       </el-row>
     </el-form>
-    <div ref="monaco" :style="{height:'360px',width:'100%'}"></div>
   </el-card>
 </template>
 
@@ -134,12 +131,14 @@ export default {
   created() {
   },
   mounted() {
-    this.monacoEditor = monaco.editor.create(this.$refs.monaco, {
-      value: '',
-      readOnly: true,
-      language: 'markdonw',
-      theme: 'vs-dark',
-    })
+    if (this.type === 'form') {
+      this.monacoEditor = monaco.editor.create(this.$refs.monaco, {
+        value: this.form.text_content,
+        readOnly: false,
+        language: this.form.text_language || 'markdonw',
+        theme: 'vs-dark',
+      })
+    }
   },
   methods: {
     handleFormTypeFocus() {

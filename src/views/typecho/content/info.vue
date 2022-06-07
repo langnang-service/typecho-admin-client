@@ -35,7 +35,10 @@ export default {
     handleSubmit() {
       this.$refs.form.$refs.form.validate((valid) => {
         if (valid) {
-          this.$store.dispatch('typecho/content/submitItem', this.$refs.form.form)
+          this.$store.dispatch('typecho/content/submitItem', {
+            ...this.$refs.form.form,
+            text: `<!--${this.$refs.form.form.text_language || 'markdown'}-->${this.$refs.form.monacoEditor.getValue()}`
+          })
             .then(res => {
               this.$router.push({ path: '/typecho/content/list' })
             })
