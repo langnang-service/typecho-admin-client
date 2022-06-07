@@ -11,11 +11,13 @@ const vuexLocal = new VuexPersist({
 export const state = {
   loading: false,
   list: [],
+  tree: [],
   total: 0,
   page: 1,
   size: 10,
   info: null,
   root: null,
+  distinct: {},
 }
 export const mutations = {
   SET_LOADING(state, payload) {
@@ -23,6 +25,9 @@ export const mutations = {
   },
   SET_LIST(state, payload) {
     state.list = payload;
+  },
+  SET_TREE(state, payload) {
+    state.tree = payload;
   },
   SET_INFO(state, payload) {
     state.info = payload
@@ -38,6 +43,9 @@ export const mutations = {
   },
   SET_SIZE(state, payload) {
     state.size = payload
+  },
+  SET_DISTINCT(state, payload) {
+    state.distinct = { ...state.distinct, ...payload }
   },
 }
 export const actions = {
@@ -95,6 +103,29 @@ export const actions = {
       commit(`${payload.NAMESPACE}SET_TOTAL`, res.total)
       commit(`${payload.NAMESPACE}SET_PAGE`, res.page)
       commit(`${payload.NAMESPACE}SET_SIZE`, res.size)
+      return Promise.resolve(res);
+    }).finally(() => {
+      commit(`${payload.NAMESPACE}SET_LOADING`, false)
+    })
+  },
+  _selectTree({ state, rootState, commit, dispatch }, payload = {}) {
+    commit(`${payload.NAMESPACE}SET_LOADING`, true)
+    return payload.request({
+      ...payload.data,
+    }).then(res => {
+      commit(`${payload.NAMESPACE}SET_TREE`, res.tree)
+      commit(`${payload.NAMESPACE}SET_TOTAL`, res.total)
+      return Promise.resolve(res);
+    }).finally(() => {
+      commit(`${payload.NAMESPACE}SET_LOADING`, false)
+    })
+  },
+  _selectDistinct({ state, rootState, commit, dispatch }, payload = {}) {
+    commit(`${payload.NAMESPACE}SET_LOADING`, true)
+    return payload.request({
+      ...payload.data,
+    }).then(res => {
+      commit(`${payload.NAMESPACE}SET_DISTINCT`, { [payload.data.column]: res })
       return Promise.resolve(res);
     }).finally(() => {
       commit(`${payload.NAMESPACE}SET_LOADING`, false)

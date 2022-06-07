@@ -83,7 +83,7 @@
 <script>
 import { TypechoMeta } from '@/store/modules/typecho/meta'
 import { mapActions, mapGetters, mapState } from "vuex";
-import { select_typecho_meta_type_list } from '@/apis/typecho/meta'
+import { select_typecho_meta_distinct } from '@/apis/typecho/meta'
 export default {
   props: {
     readonly: {
@@ -124,8 +124,9 @@ export default {
   },
   methods: {
     handleFormTypeFocus() {
-      select_typecho_meta_type_list({
-        root: this.$store.state.typecho.meta.root?.mid
+      select_typecho_meta_distinct({
+        column: 'type',
+        root: this.$store.state.typecho.branch.info?.mid
       }).then(res => {
         this.typeOptions = res.rows;
       })

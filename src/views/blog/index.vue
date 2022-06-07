@@ -1,13 +1,24 @@
 <template>
   <div class="blog">
-    <el-empty v-if="!list.some(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" />
-    <el-card shadow="hover" v-for="(item) in list.filter(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" :key="item.id" :style="{marginBottom:'10px',cursor:'pointer',opacity:item.type=='done'?'0.5':'1'}">
-      <div slot="header" class="clearfix">
-        <strong>{{item.title}}</strong>
-        <el-button style="float: right; padding: 3px 0" type="text" @click="$router.push({path:'/blog/content/'+item.cid})">阅读全文</el-button>
-      </div>
-      {{item.text_content}}
-    </el-card>
+    <el-row :gutter="10">
+      <el-col :style="{width:'280px'}">
+        <el-input size="mini"></el-input>
+        <el-tree :data="$store.state.typecho.meta.tree" node-key="mid" :props="{children: 'children',label: 'name'}" :style="{marginTop:'20px'}" @node-click="handleCatagoryTreeNodeClick"></el-tree>
+        <el-checkbox-group size="small" v-model="checkedTags">
+          <el-checkbox-button v-for="tag in $store.state.typecho.meta.list" :label="tag.mid" :key="tag.mid">{{tag.name}}</el-checkbox-button>
+        </el-checkbox-group>
+      </el-col>
+      <el-col :style="{width:'calc(100% - 280px)'}">
+        <el-empty v-if="!$store.state.typecho.content.list.some(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" />
+        <el-card shadow="hover" v-for="(item) in $store.state.typecho.content.list.filter(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" :key="item.id" :style="{marginBottom:'10px',cursor:'pointer',opacity:item.type=='done'?'0.5':'1'}">
+          <div slot="header" class="clearfix">
+            <strong>{{item.title}}</strong>
+            <el-button style="float: right; padding: 3px 0" type="text" @click="$router.push({path:'/blog/content/'+item.cid})">阅读全文</el-button>
+          </div>
+          {{item.text_content}}
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -24,20 +35,11 @@ export default {
       selection: [],
       parent: {},
       list: [],
-      done: []
+      done: [],
+      checkedTags: []
     };
   },
   created() {
-    this.handleSelectItem({
-      slug: 'blog',
-      type: 'branch',
-    }).then(res => {
-      this.parent = res;
-      this.handleSelectList({
-        template: 'blog',
-        parent: this.parent.cid,
-      })
-    })
   },
   computed: {
     ...mapState(["typecho"])
@@ -82,6 +84,9 @@ export default {
       }).then(() => {
         this.handleSelectList()
       })
+    },
+    handleCatagoryTreeNodeClick(data, node, ref) {
+      console.log(data, node, ref)
     }
   }
 };

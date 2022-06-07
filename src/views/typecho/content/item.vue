@@ -82,7 +82,7 @@
 <script>
 import { TypechoMeta } from '@/store/modules/typecho/meta'
 import { mapActions, mapGetters, mapState } from "vuex";
-import { select_typecho_content_type_list, select_typecho_content_status_list } from '@/apis/typecho/content'
+import { select_typecho_content_distinct } from '@/apis/typecho/content'
 import * as monaco from 'monaco-editor'
 export default {
   props: {
@@ -113,17 +113,24 @@ export default {
       typeOptions: [],
       statusOptions: [],
       rules: {
-        name: [
-          { required: true, message: '请输入名称', trigger: 'blur' },
-        ],
-        slug: [
-          { required: true, message: '请输入别名', trigger: 'blur' },
-        ],
-        type: [
-          { required: true, message: '请至少选择一个性质', trigger: 'change' }
-        ],
+        // name: [
+        //   { required: true, trigger: 'blur' },
+        // ],
+        // slug: [
+        //   { required: true, trigger: 'blur' },
+        // ],
+        // type: [
+        //   { required: true, trigger: 'change' }
+        // ],
       },
       monacoEditor: {}
+    }
+  },
+  watch: {
+    "$store.state.typecho.content.info.text_content": {
+      handler(value) {
+        this.monacoEditor.setValue(value);
+      }
     }
   },
   computed: {
@@ -138,20 +145,23 @@ export default {
         readOnly: false,
         language: this.form.text_language || 'markdonw',
         theme: 'vs-dark',
+        wordWrap: true,
       })
     }
   },
   methods: {
     handleFormTypeFocus() {
-      select_typecho_content_type_list({
-        root: this.$store.state.typecho.content.root?.cid
+      select_typecho_content_distinct({
+        column: 'type',
+        root: this.$store.state.typecho.branch.info?.cid
       }).then(res => {
         this.typeOptions = res.rows;
       })
     },
     handleFormStatusFocus() {
-      select_typecho_content_status_list({
-        root: this.$store.state.typecho.content.root?.cid
+      select_typecho_content_distinct({
+        column: 'status',
+        root: this.$store.state.typecho.branch.info?.cid
       }).then(res => {
         this.statusOptions = res.rows;
         this.$forceUpdate()

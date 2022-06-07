@@ -114,8 +114,7 @@ export default {
   },
   methods: {
     handleTableColCick(path, row) {
-      this.$store.commit('typecho/content/SET_ROOT', row)
-      this.$store.commit('typecho/meta/SET_ROOT', row)
+      this.$store.commit('typecho/branch/SET_INFO', row)
       this.$router.push({
         path
       })

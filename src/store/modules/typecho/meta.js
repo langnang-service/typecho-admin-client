@@ -1,17 +1,15 @@
-import { select_typecho_meta_list, delete_typecho_meta_list, insert_typecho_meta_item, select_typecho_meta_item, update_typecho_meta_item } from '@/apis/typecho/meta'
+import { select_typecho_meta_list, delete_typecho_meta_list, insert_typecho_meta_item, select_typecho_meta_item, select_typecho_meta_tree, update_typecho_meta_item, select_typecho_meta_distinct } from '@/apis/typecho/meta'
 import { state, mutations, actions } from '@/store';
 import Mock from 'mockjs'
-const MOCK_KEY = 'mock'
-const NAMESPACE = 'typecho/meta/';
+export const MOCK_KEY = 'mock'
+export const NAMESPACE = 'typecho/meta/';
 export class TypechoMeta {
   constructor(info = {}) {
-    this.mid = info === MOCK_KEY ? () => Mock.Random.id() : info.id;
-    this.name = info === MOCK_KEY ? () => Mock.Random.sentence() : info.title;
-    this.slug = info.slug;
-    this.description = info === MOCK_KEY ? () => Mock.Random.paragraph() : info.description;
-    this.count = info.order
-    this.order = info.order
-    this.parent = info.parent
+    // this.mid = info === MOCK_KEY ? Mock.Random.id() : info.id;
+    this.name = info === MOCK_KEY ? Mock.Random.sentence() : info.title;
+    this.slug = info === MOCK_KEY ? Mock.Random.word() : info.slug;
+    this.type = info === MOCK_KEY ? Mock.Random.string() : info.type;
+    this.description = info === MOCK_KEY ? Mock.Random.paragraph() : info.description;
   }
 }
 export default {
@@ -23,20 +21,29 @@ export default {
     ...mutations,
   },
   actions: {
-    insertItem({ state, commit, dispatch }, payload) {
+    insertItem({ state, commit, dispatch, rootState }, payload) {
       return dispatch('_insertItem', {
         NAMESPACE,
         request: insert_typecho_meta_item,
-        data: payload
+        data: { ...payload, parent: rootState.typecho.branch.info?.mid || payload.parent }
       }, {
         root: true
       })
     },
-    selectList({ state, commit, dispatch }, payload) {
+    selectList({ state, commit, dispatch, rootState }, payload) {
       return dispatch('_selectList', {
         NAMESPACE,
         request: select_typecho_meta_list,
-        data: { ...payload, root: state.root ? state.root.mid : null }
+        data: { ...payload, root: rootState.typecho.branch.info?.mid || payload.parent }
+      }, {
+        root: true
+      })
+    },
+    selectDistinct({ dispatch, rootState }, payload) {
+      return dispatch('_selectDistinct', {
+        NAMESPACE,
+        request: select_typecho_meta_distinct,
+        data: { ...payload, root: rootState.typecho.branch.info?.mid || payload.parent }
       }, {
         root: true
       })
@@ -45,6 +52,15 @@ export default {
       return dispatch('_selectItem', {
         NAMESPACE,
         request: select_typecho_meta_item,
+        data: payload
+      }, {
+        root: true
+      })
+    },
+    selectTree({ state, commit, dispatch }, payload) {
+      return dispatch('_selectTree', {
+        NAMESPACE,
+        request: select_typecho_meta_tree,
         data: payload
       }, {
         root: true

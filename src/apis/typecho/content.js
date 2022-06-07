@@ -36,16 +36,9 @@ export const select_typecho_content_list = data => {
     data,
   })
 }
-export const select_typecho_content_type_list = data => {
+export const select_typecho_content_distinct = data => {
   return request({
-    url: '/api/typecho/content/list/type/select',
-    method: "post",
-    data,
-  })
-}
-export const select_typecho_content_status_list = data => {
-  return request({
-    url: '/api/typecho/content/list/status/select',
+    url: '/api/typecho/content/list/distinct',
     method: "post",
     data,
   })

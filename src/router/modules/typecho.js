@@ -88,8 +88,8 @@ export default {
           },
           component: () => import('@/views/typecho/content/list'),
           beforeEnter: (to, from, next) => {
-            if (!$store.state.typecho.content.root) return next("/typecho/branch/list");
-            $store.dispatch('typecho/content/selectList', { root: $store.state.typecho.content.root?.cid }).then(() => {
+            if (!$store.state.typecho.branch.info) return next("/typecho/branch/list");
+            $store.dispatch('typecho/content/selectList', { root: $store.state.typecho.branch.info?.cid }).then(() => {
               $store.commit('typecho/content/SET_INFO', {})
               next()
             })
@@ -104,9 +104,9 @@ export default {
           },
           component: () => import('@/views/typecho/content/info.vue'),
           beforeEnter: (to, from, next) => {
-            if (!$store.state.typecho.content.root) return next("/typecho/branch/list");
+            if (!$store.state.typecho.branch.info) return next("/typecho/branch/list");
             $store.commit('typecho/content/SET_INFO', {
-              parent: $store.state.typecho.content.root.cid
+              parent: $store.state.typecho.branch.info.cid
             })
             next()
           }
@@ -120,7 +120,7 @@ export default {
           },
           component: () => import('@/views/typecho/content/info'),
           beforeEnter: (to, from, next) => {
-            if (!$store.state.typecho.content.root) return next("/typecho/branch/list");
+            if (!$store.state.typecho.branch.info) return next("/typecho/branch/list");
             $store.dispatch('typecho/content/selectItem', to.params)
             next()
           }
@@ -143,8 +143,8 @@ export default {
           },
           component: () => import('@/views/typecho/meta/list'),
           beforeEnter: (to, from, next) => {
-            if (!$store.state.typecho.meta.root) return next("/typecho/branch/list");
-            $store.dispatch('typecho/meta/selectList', { root: $store.state.typecho.meta.root?.cid })
+            if (!$store.state.typecho.branch.info) return next("/typecho/branch/list");
+            $store.dispatch('typecho/meta/selectList', { root: $store.state.typecho.branch.info?.mid })
             $store.commit('typecho/meta/SET_INFO', {})
             next()
           }
@@ -158,9 +158,9 @@ export default {
           },
           component: () => import('@/views/typecho/meta/info'),
           beforeEnter: (to, from, next) => {
-            if (!$store.state.typecho.meta.root) return next("/typecho/branch/list");
+            if (!$store.state.typecho.branch.info) return next("/typecho/branch/list");
             $store.commit('typecho/meta/SET_INFO', {
-              parent: $store.state.typecho.meta.root.mid
+              parent: $store.state.typecho.branch.info?.mid
             })
             next()
           }
@@ -174,7 +174,7 @@ export default {
           },
           component: () => import('@/views/typecho/meta/info'),
           beforeEnter: (to, from, next) => {
-            if (!$store.state.typecho.meta.root) return next("/typecho/branch/list");
+            if (!$store.state.typecho.branch.info) return next("/typecho/branch/list");
             $store.dispatch('typecho/meta/selectItem', to.params)
             next()
           }

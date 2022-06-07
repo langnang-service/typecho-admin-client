@@ -1,10 +1,13 @@
 import { select_typecho_branch_list, delete_typecho_branch_list, delete_typecho_branch_item, insert_typecho_branch_item, select_typecho_branch_item, update_typecho_branch_item } from '@/apis/typecho/branch'
 import { state, mutations, actions } from '@/store';
 import Mock from 'mockjs'
-const MOCK_KEY = 'mock'
-const NAMESPACE = 'typecho/branch/'
+export const MOCK_KEY = 'mock'
+export const NAMESPACE = 'typecho/branch/'
 export class TypechoBranch {
   constructor(info = {}) {
+    this.name = info === MOCK_KEY ? Mock.Random.cword(2, 4) : info.title;
+    this.slug = info === MOCK_KEY ? Mock.Random.word() : info.slug;
+    this.description = info === MOCK_KEY ? Mock.Random.paragraph() : info.description;
   }
 }
 export default {

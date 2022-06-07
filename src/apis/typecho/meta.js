@@ -36,9 +36,16 @@ export const select_typecho_meta_list = data => {
     data,
   })
 }
-export const select_typecho_meta_type_list = data => {
+export const select_typecho_meta_tree = data => {
   return request({
-    url: '/api/typecho/meta/list/type/select',
+    url: '/api/typecho/meta/tree/select',
+    method: "post",
+    data,
+  })
+}
+export const select_typecho_meta_distinct = data => {
+  return request({
+    url: '/api/typecho/meta/list/distinct',
     method: "post",
     data,
   })

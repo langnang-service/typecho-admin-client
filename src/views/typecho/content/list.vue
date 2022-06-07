@@ -1,7 +1,7 @@
 <template>
   <LayoutAdmin class="typecho-content-list" v-loading="$store.state.typecho.content.loading" v-bind="$route.meta">
     <template #prefix>
-      <span>【{{$store.state.typecho.content.root.slug}}】</span>
+      <span>【{{$store.state.typecho.branch.info.slug}}】</span>
     </template>
     <template #toolbar>
       <el-tooltip class="item" effect="dark" content="查询" placement="bottom">
