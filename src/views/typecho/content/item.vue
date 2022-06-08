@@ -15,13 +15,10 @@
         </el-col>
       </el-col>
     </el-row>
-    <el-table v-if="type==='table'" :data="data" size="mini" stripe @selection-change="(val)=>$emit('selection-change',val)" @row-dblclick="handleTableRowDblClick">
+    <el-table v-if="type==='table'" :data="data" size="mini" stripe border @selection-change="(val)=>$emit('selection-change',val)" @row-dblclick="handleTableRowDblClick">
       <template #empty>
         <el-empty />
       </template>
-      <el-table-column type="expand">
-        <template slot-scope="{row}">{{row.text}}</template>
-      </el-table-column>
       <el-table-column align="center" type="selection"></el-table-column>
       <el-table-column show-overflow-tooltip prop="title" label="title">
         <template slot="header" slot-scope="{}">
@@ -47,32 +44,46 @@
     </el-table>
     <el-form v-if="type==='form'" ref="form" :model="form" :rules="rules" size="small" label-width="80px">
       <el-row :gutter="16">
-        <el-col :span="24">
-          <el-form-item prop="title" label="title">
-            <el-input v-model="form.title" />
-          </el-form-item>
+        <el-col :style="{width:'calc(100% - 280px)'}">
+          <el-col :span="24">
+            <el-form-item prop="title" label="title">
+              <el-input v-model="form.title" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="slug" label="slug">
+              <el-input v-model="form.slug" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="type" label="type">
+              <el-select v-model="form.type" filterable allow-create @focus="handleFormTypeFocus">
+                <el-option v-for="opt in typeOptions" :key="opt.value" :value="opt.value" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item prop="status" label="status">
+              <el-select v-model="form.status" filterable allow-create @focus="handleFormStatusFocus">
+                <el-option v-for="opt in statusOptions" :key="opt.value" :value="opt.value" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24">
+            <div ref="monaco" :style="{height:'360px',width:'100%'}"></div>
+          </el-col>
         </el-col>
-        <el-col :span="8">
-          <el-form-item prop="slug" label="slug">
-            <el-input v-model="form.slug" />
+        <el-col :style="{width:'280px'}">
+          <el-form-item prop="categories" label="Categories" label-width="0">
+            <el-scrollbar :style="{height:'400px',marginTop:'32px'}">
+              <el-tree ref="categories" show-checkbox :data="$store.state.typecho.meta.tree" node-key="mid" :props="{children: 'children',label: 'name'}" :default-checked-keys="$store.state.typecho.content.info.mids?$store.state.typecho.content.info.mids.split(','):[]"></el-tree>
+            </el-scrollbar>
           </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item prop="type" label="type">
-            <el-select v-model="form.type" filterable allow-create @focus="handleFormTypeFocus">
-              <el-option v-for="opt in typeOptions" :key="opt.value" :value="opt.value" />
+          <el-form-item prop="tags" label="Tags" label-width="0">
+            <el-select v-model="$store.state.typecho.content.info.tags" multiple filterable allow-create remote :remote-method="handleFormRemote" @change="$forceUpdate()">
+              <el-option v-for="item in $store.state.typecho.meta.list" :key="item.mid" :value="item.mid" :label="item.name" />
             </el-select>
           </el-form-item>
-        </el-col>
-        <el-col :span="8">
-          <el-form-item prop="status" label="status">
-            <el-select v-model="form.status" filterable allow-create @focus="handleFormStatusFocus">
-              <el-option v-for="opt in statusOptions" :key="opt.value" :value="opt.value" />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24">
-          <div ref="monaco" :style="{height:'360px',width:'100%'}"></div>
         </el-col>
       </el-row>
     </el-form>
@@ -123,20 +134,25 @@ export default {
         //   { required: true, trigger: 'change' }
         // ],
       },
-      monacoEditor: {}
+      monacoEditor: null
     }
   },
   watch: {
     "$store.state.typecho.content.info.text_content": {
       handler(value) {
+        if (!this.monacoEditor) return
         this.monacoEditor.setValue(value);
+      }
+    },
+    "$store.state.typecho.content.info.tags": {
+      handler(value) {
+        console.log(value)
       }
     }
   },
   computed: {
   },
   created() {
-    console.log(this.$route);
   },
   mounted() {
     if (this.type === 'form') {
@@ -167,6 +183,10 @@ export default {
         this.$forceUpdate()
       })
     },
+    handleFormTagRemove(val) {
+      console.log("handleFormTagRemove", val, this.$store.state.typecho.content.info.tags.filter(v => v == val), this.$store.state.typecho.content.info.tags)
+      // this.$store.state.typecho.content.info.tags = this.$store.state.typecho.content.info.tags.filter(v => v === val)
+    },
     handleTableRowDblClick(row, column, event) {
       this.$router.push({
         path: "/typecho/content/" + row.cid
@@ -175,6 +195,14 @@ export default {
     handleTableSelectionChange(val) {
       this.selection = val
     },
+    handleFormRemote(val) {
+      this.$store.dispatch('typecho/meta/selectList', {
+        name: val,
+        size: 99999,
+        type: 'tag',
+        page: 1,
+      })
+    }
   }
 }
 </script>

@@ -21,17 +21,9 @@ export default {
       name: "Blog",
       component: () => import('@/views/blog'),
       beforeEnter(to, from, next) {
-        $store.dispatch('typecho/meta/selectTree', {
-          root: $store.state.typecho.branch.info.mid,
-          type: 'category'
-        })
-        $store.dispatch('typecho/meta/selectList', {
-          root: $store.state.typecho.branch.info.mid,
-          type: 'tag'
-        })
-        $store.dispatch('typecho/content/selectList', {
-          root: $store.state.typecho.branch.info.cid,
-        })
+        $store.dispatch('typecho/meta/selectTree', { type: 'category' })
+        $store.dispatch('typecho/meta/selectList', { type: 'tag' })
+        $store.dispatch('typecho/content/selectList', {})
         next();
       }
     },
@@ -136,7 +128,6 @@ export default {
     },
   ],
   beforeEnter(to, from, next) {
-    console.log(to);
     $store.dispatch('typecho/branch/selectItem', {
       type: 'branch',
       slug: to.path

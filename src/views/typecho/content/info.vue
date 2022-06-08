@@ -50,7 +50,8 @@ export default {
         if (valid) {
           this.$store.dispatch('typecho/content/submitItem', {
             ...this.$refs.form.form,
-            text: `<!--${this.$refs.form.form.text_language || 'markdown'}-->${this.$refs.form.monacoEditor.getValue()}`
+            text: `<!--${this.$refs.form.form.text_language || 'markdown'}-->${this.$refs.form.monacoEditor.getValue()}`,
+            mids: [...this.$refs.form.$refs.categories.getCheckedKeys(), ...this.$refs.form.form.tags].join()
           })
             .then(res => {
               this.$router.push({ path: '/typecho/content/list' })

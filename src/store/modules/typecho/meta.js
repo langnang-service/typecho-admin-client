@@ -57,11 +57,11 @@ export default {
         root: true
       })
     },
-    selectTree({ state, commit, dispatch }, payload) {
+    selectTree({ state, commit, dispatch, rootState }, payload) {
       return dispatch('_selectTree', {
         NAMESPACE,
         request: select_typecho_meta_tree,
-        data: payload
+        data: { ...payload, root: rootState.typecho.branch.info?.mid || payload.parent }
       }, {
         root: true
       })

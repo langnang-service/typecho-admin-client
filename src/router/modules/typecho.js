@@ -14,7 +14,22 @@ const breadcrumbOptions = [
     { name: "User", path: '/typecho/user/list' },
   ]
 ]
-const requiredQueryKey = "branch";
+export const beforeEnter = (to, from, next) => {
+  console.log("beforeEnter", to, from);
+  console.log([...to.matched].pop().path);
+  console.log(/^\/(\w+)(?:\/(?=$))?$/i.test(to.path))
+  console.log(/^\/(\w+)(?=$)?$/i.test(to.path))
+  if (/^\/(\w+)(?=$)?$/i.test(to.path)) {
+    $store.dispatch('typecho/branch/selectItem', {
+      type: 'branch',
+      slug: to.path
+    }).then(() => {
+      next()
+    })
+  } else {
+    next();
+  }
+}
 export default {
   path: '/typecho',
   component: LayoutRouterView,
@@ -89,10 +104,11 @@ export default {
           component: () => import('@/views/typecho/content/list'),
           beforeEnter: (to, from, next) => {
             if (!$store.state.typecho.branch.info) return next("/typecho/branch/list");
-            $store.dispatch('typecho/content/selectList', { root: $store.state.typecho.branch.info?.cid }).then(() => {
-              $store.commit('typecho/content/SET_INFO', {})
-              next()
-            })
+            $store.commit('typecho/content/SET_INFO', new TypechoContent())
+            $store.commit('typecho/meta/SET_INFO', new TypechoMeta())
+            $store.dispatch('typecho/content/selectList', { root: $store.state.typecho.branch.info?.cid })
+
+            next()
           },
         },
         {
@@ -121,8 +137,17 @@ export default {
           component: () => import('@/views/typecho/content/info'),
           beforeEnter: (to, from, next) => {
             if (!$store.state.typecho.branch.info) return next("/typecho/branch/list");
-            $store.dispatch('typecho/content/selectItem', to.params)
-            next()
+            Promise.all([
+              $store.dispatch('typecho/content/selectItem', to.params).then(res => {
+                return $store.dispatch('typecho/meta/selectList', { mids: res.mids, type: 'tag', size: 99999, page: 1 })
+                  .then(res => {
+                    $store.state.typecho.content.info.tags = res.rows.map(v => v.mid);
+                  })
+              }),
+              $store.dispatch('typecho/meta/selectTree', { type: 'category' })
+            ]).then(() => {
+              next()
+            })
           }
         }
       ],

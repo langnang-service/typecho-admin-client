@@ -10,6 +10,8 @@ export class TypechoContent {
     this.slug = info === MOCK_KEY ? Mock.Random.string() : info.slug;
     this.type = info === MOCK_KEY ? Mock.Random.word() : info.type;
     this.text_content = info === MOCK_KEY ? Mock.Random.paragraph() : info.description;
+    this.mids = (info === MOCK_KEY ? Mock.Random.paragraph() : info.mids) || "";
+    this.tags = (info === MOCK_KEY ? Mock.Random.paragraph() : info.tags) || [];
   }
 }
 export default {

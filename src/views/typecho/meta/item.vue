@@ -19,7 +19,7 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-table v-if="type==='table'" :data="data" size="mini" stripe @selection-change="(val)=>$emit('selection-change',val)" @row-dblclick="handleTableRowDblClick">
+    <el-table v-if="type==='table'" :data="data" size="mini" stripe border @selection-change="(val)=>$emit('selection-change',val)" @row-dblclick="handleTableRowDblClick">
       <template #empty>
         <el-empty />
       </template>
