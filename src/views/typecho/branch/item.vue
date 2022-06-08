@@ -48,6 +48,9 @@
             <el-input v-model="form.description" type="textarea" />
           </el-form-item>
         </el-col>
+        <el-col :span="24">
+          <VueMonacoEditor />
+        </el-col>
       </el-row>
     </el-form>
     <v-contextmenu ref="contextmenu">

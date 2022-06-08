@@ -5,7 +5,7 @@ import getters from './getters'
 Vue.use(Vuex);
 
 const vuexLocal = new VuexPersist({
-  storage: window.localStorage
+  storage: window.sessionStorage
 
 })
 export const state = {
@@ -22,15 +22,10 @@ export const state = {
 export const mutations = {
   SET(state, payload = {}) {
     for (let key in payload) {
-      console.log(key.split());
-      let path = key.split('.').reduce((stateKey, itemKey) => {
-        return stateKey[itemKey];
-      }, state);
-      path = payload[key];
-      console.log(state["info.name"]);
-      console.log(state, key, path);
+      eval(`state['${key.split(".").join('\'][\'')}'] = payload[key]`);
     }
   },
+  CONCAT(state, payload) { },
   SET_LOADING(state, payload) {
     state.loading = payload === false ? false : true;
   },
@@ -155,6 +150,6 @@ export default new Vuex.Store({
     typecho: require('./modules/typecho')['default']
   },
   plugins: [
-    // vuexLocal.plugin
+    vuexLocal.plugin
   ]
 });

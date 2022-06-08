@@ -4,8 +4,9 @@
       <el-menu v-if="layout.menu.visible" :default-active="layout.menu.active" router class="el-menu-demo" mode="horizontal" :style="{borderBottom: 'unset',display:'inline-block'}">
         <el-menu-item index="/">首页</el-menu-item>
         <el-menu-item index="/entry">Entry</el-menu-item>
+        <el-menu-item index="/template">Template</el-menu-item>
         <el-menu-item index="/blog">Blog</el-menu-item>
-        <el-menu-item index="/todo">To Do</el-menu-item>
+        <el-menu-item index="/todo">ToDoList</el-menu-item>
         <el-menu-item index="/navigation">Navigation</el-menu-item>
         <el-menu-item index="/snippet">Snippet</el-menu-item>
         <el-menu-item index="/novel">Novel</el-menu-item>
