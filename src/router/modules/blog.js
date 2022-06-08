@@ -130,7 +130,7 @@ export default {
   beforeEnter(to, from, next) {
     $store.dispatch('typecho/branch/selectItem', {
       type: 'branch',
-      slug: to.path
+      slug: to.path.substring(1)
     }).then(() => {
       next()
     })

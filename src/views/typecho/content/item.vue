@@ -15,7 +15,7 @@
         </el-col>
       </el-col>
     </el-row>
-    <el-table v-if="type==='table'" :data="data" size="mini" stripe border @selection-change="(val)=>$emit('selection-change',val)" @row-dblclick="handleTableRowDblClick" @row-contextmenu="handleShowContextMenu" @mousedown.native="()=>$refs.contextmenu.hide()">
+    <el-table v-if="type==='table'" :data="data" size="mini" stripe border @selection-change="(val)=>$emit('selection-change',val)" @row-contextmenu="handleShowContextMenu" @mousedown.native="()=>$refs.contextmenu.hide()">
       <template #empty>
         <el-empty />
       </template>
@@ -88,10 +88,13 @@
       </el-row>
     </el-form>
     <v-contextmenu ref="contextmenu">
-      <v-contextmenu-item>新建</v-contextmenu-item>
-      <v-contextmenu-item>删除</v-contextmenu-item>
-      <v-contextmenu-item>编辑</v-contextmenu-item>
-      <v-contextmenu-item>查看</v-contextmenu-item>
+      <v-contextmenu-item @click="$router.push({
+        path:'/typecho/content/insert',
+        query:{parent:$store.state.typecho.content.info.cid}
+      })" :disabled="$store.state.typecho.content.info.type!='template'">新建</v-contextmenu-item>
+      <v-contextmenu-item disabled>删除</v-contextmenu-item>
+      <v-contextmenu-item @click="$router.push('/typecho/content/'+$store.state.typecho.content.info.cid)">编辑</v-contextmenu-item>
+      <v-contextmenu-item disabled>查看</v-contextmenu-item>
     </v-contextmenu>
   </el-card>
 </template>
@@ -167,13 +170,10 @@ export default {
     }
   },
   methods: {
-    handleShowContextMenu() {
+    handleShowContextMenu(row, column, event) {
       event.preventDefault()
-      this.$refs.contextmenu.style.left = event.clientX + 'px'
-      this.$refs.contextmenu.style.top = event.clientY + 'px'
-      // this.$refs.contextmenu.style.display = 'block'
-      this.$refs.contextmenu.show();
-      console.log(this.$refs.contextmenu)
+      this.$store.commit('typecho/content/SET_INFO', row)
+      this.$refs.contextmenu.show({ top: event.clientY, left: event.clientX });
     },
     handleFormTypeFocus() {
       select_typecho_content_distinct({

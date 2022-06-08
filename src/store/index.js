@@ -20,6 +20,17 @@ export const state = {
   distinct: {},
 }
 export const mutations = {
+  SET(state, payload = {}) {
+    for (let key in payload) {
+      console.log(key.split());
+      let path = key.split('.').reduce((stateKey, itemKey) => {
+        return stateKey[itemKey];
+      }, state);
+      path = payload[key];
+      console.log(state["info.name"]);
+      console.log(state, key, path);
+    }
+  },
   SET_LOADING(state, payload) {
     state.loading = payload === false ? false : true;
   },

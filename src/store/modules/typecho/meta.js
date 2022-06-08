@@ -10,6 +10,7 @@ export class TypechoMeta {
     this.slug = info === MOCK_KEY ? Mock.Random.word() : info.slug;
     this.type = info === MOCK_KEY ? Mock.Random.string() : info.type;
     this.description = info === MOCK_KEY ? Mock.Random.paragraph() : info.description;
+    this.parent = info === MOCK_KEY ? Mock.Random.integer() : info.parent;
   }
 }
 export default {

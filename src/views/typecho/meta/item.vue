@@ -19,7 +19,7 @@
         </el-card>
       </el-col>
     </el-row>
-    <el-table v-if="type==='table'" :data="data" size="mini" stripe border @selection-change="(val)=>$emit('selection-change',val)" @row-dblclick="handleTableRowDblClick">
+    <el-table v-if="type==='table'" :data="data" size="mini" stripe border @selection-change="(val)=>$emit('selection-change',val)" @row-contextmenu="handleShowContextMenu" @mousedown.native="()=>$refs.contextmenu.hide()">
       <template #empty>
         <el-empty />
       </template>
@@ -77,6 +77,15 @@
         </el-col>
       </el-row>
     </el-form>
+    <v-contextmenu ref="contextmenu">
+      <v-contextmenu-item @click="$router.push({
+        path:'/typecho/meta/insert',
+        query:{parent:$store.state.typecho.meta.info.mid}
+      })" :disabled="$store.state.typecho.meta.info.type!='category'">新建</v-contextmenu-item>
+      <v-contextmenu-item disabled>删除</v-contextmenu-item>
+      <v-contextmenu-item @click="$router.push('/typecho/meta/'+$store.state.typecho.meta.info.mid)">编辑</v-contextmenu-item>
+      <v-contextmenu-item disabled>查看</v-contextmenu-item>
+    </v-contextmenu>
   </el-card>
 </template>
 
@@ -123,6 +132,11 @@ export default {
   computed: {
   },
   methods: {
+    handleShowContextMenu(row, column, event) {
+      event.preventDefault()
+      this.$store.commit('typecho/meta/SET_INFO', row)
+      this.$refs.contextmenu.show({ top: event.clientY, left: event.clientX });
+    },
     handleFormTypeFocus() {
       select_typecho_meta_distinct({
         column: 'type',

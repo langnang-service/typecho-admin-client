@@ -5,8 +5,10 @@ module.exports = {
   outputDir: "dist",
   // 配置 webpack-dev-server 行为
   devServer: {
+    hot: true,
     // 设置是否自动打开浏览器
     open: true,
+    host: "0.0.0.0",
     proxy: {
       "/api": {
         target: 'http://localhost:9090',

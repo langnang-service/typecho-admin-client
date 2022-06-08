@@ -121,9 +121,9 @@ export default {
           component: () => import('@/views/typecho/content/info.vue'),
           beforeEnter: (to, from, next) => {
             if (!$store.state.typecho.branch.info) return next("/typecho/branch/list");
-            $store.commit('typecho/content/SET_INFO', {
-              parent: $store.state.typecho.branch.info.cid
-            })
+            $store.commit('typecho/content/SET_INFO', new TypechoContent({
+              parent: to.query.parent || $store.state.typecho.branch.info?.cid
+            }))
             next()
           }
         },
@@ -184,9 +184,9 @@ export default {
           component: () => import('@/views/typecho/meta/info'),
           beforeEnter: (to, from, next) => {
             if (!$store.state.typecho.branch.info) return next("/typecho/branch/list");
-            $store.commit('typecho/meta/SET_INFO', {
-              parent: $store.state.typecho.branch.info?.mid
-            })
+            $store.commit('typecho/meta/SET_INFO', new TypechoMeta({
+              parent: to.query.parent || $store.state.typecho.branch.info?.mid
+            }))
             next()
           }
         },

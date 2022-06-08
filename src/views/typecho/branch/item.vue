@@ -15,7 +15,7 @@
         </el-col>
       </el-col>
     </el-row>
-    <el-table v-if="type==='table'" :data="data" size="mini" stripe border @selection-change="(val)=>$emit('selection-change',val)" @row-dblclick="handleTableRowDblClick">
+    <el-table v-if="type==='table'" :data="data" size="mini" stripe border @selection-change="(val)=>$emit('selection-change',val)" @row-contextmenu="handleShowContextMenu" @mousedown.native="()=>$refs.contextmenu.hide()">
       <template #empty>
         <el-empty />
       </template>
@@ -26,16 +26,8 @@
         </template>
       </el-table-column>
       <el-table-column show-overflow-tooltip prop="slug" label="slug"></el-table-column>
-      <el-table-column show-overflow-tooltip prop="metasNum" label="metasNum">
-        <template slot-scope="{row}">
-          <el-button type="text" size="mini" @click="handleTableColCick('/typecho/meta/list', row)">{{row.metasNum}}</el-button>
-        </template>
-      </el-table-column>
-      <el-table-column show-overflow-tooltip prop="contentsNum" label="contentsNum">
-        <template slot-scope="{row}">
-          <el-button type="text" size="mini" @click="handleTableColCick('/typecho/content/list', row, )">{{row.contentsNum}}</el-button>
-        </template>
-      </el-table-column>
+      <el-table-column show-overflow-tooltip prop="metasNum" label="metasNum"></el-table-column>
+      <el-table-column show-overflow-tooltip prop="contentsNum" label="contentsNum"></el-table-column>
       <el-table-column show-overflow-tooltip prop="templatesNum" label="templatesNum"></el-table-column>
       <el-table-column show-overflow-tooltip prop="commentsNum" label="commentsNum"></el-table-column>
     </el-table>
@@ -58,6 +50,13 @@
         </el-col>
       </el-row>
     </el-form>
+    <v-contextmenu ref="contextmenu">
+      <v-contextmenu-item @click="$router.push('/typecho/meta/list')">Metas</v-contextmenu-item>
+      <v-contextmenu-item @click="$router.push('/typecho/content/list')">Contents</v-contextmenu-item>
+      <v-contextmenu-item disabled>删除</v-contextmenu-item>
+      <v-contextmenu-item @click="$router.push('/typecho/branch/'+$store.state.typecho.branch.info.mid)">编辑</v-contextmenu-item>
+      <v-contextmenu-item disabled>查看</v-contextmenu-item>
+    </v-contextmenu>
   </el-card>
 </template>
 
@@ -113,15 +112,15 @@ export default {
   mounted() {
   },
   methods: {
+    handleShowContextMenu(row, column, event) {
+      event.preventDefault()
+      this.$store.commit('typecho/branch/SET_INFO', row)
+      this.$refs.contextmenu.show({ top: event.clientY, left: event.clientX });
+    },
     handleTableColCick(path, row) {
       this.$store.commit('typecho/branch/SET_INFO', row)
       this.$router.push({
         path
-      })
-    },
-    handleTableRowDblClick(row, column, event) {
-      this.$router.push({
-        path: "/typecho/branch/" + row.mid
       })
     },
     handleTableSelectionChange(val) {
