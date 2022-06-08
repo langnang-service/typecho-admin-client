@@ -26,7 +26,7 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
-import { TypechoContent, MOCK_KEY } from '@/store/modules/typecho/content'
+import { TypechoContentModel, MOCK_KEY } from '@/store/modules/typecho/content'
 import Item from './item.vue';
 export default {
   components: { Item },
@@ -63,7 +63,7 @@ export default {
       });
     },
     handleMock() {
-      this.$store.commit('typecho/content/SET_INFO', { ...this.$store.state.typecho.content.info, ...new TypechoContent(MOCK_KEY) })
+      this.$store.commit('typecho/content/SET_INFO', { ...this.$store.state.typecho.content.info, ...new TypechoContentModel(MOCK_KEY) })
     }
   }
 }

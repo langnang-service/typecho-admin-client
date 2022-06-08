@@ -3,8 +3,10 @@ import { state, mutations, actions } from '@/store';
 import Mock from 'mockjs'
 export const MOCK_KEY = 'mock'
 export const NAMESPACE = 'typecho/branch/'
-export class TypechoBranch {
+export class TypechoBranchModel {
   constructor(info = {}) {
+    this.cid = info.cid;
+    this.mid = info.mid;
     this.name = info === MOCK_KEY ? Mock.Random.cword(2, 4) : info.title;
     this.slug = info === MOCK_KEY ? Mock.Random.word() : info.slug;
     this.description = info === MOCK_KEY ? Mock.Random.paragraph() : info.description;

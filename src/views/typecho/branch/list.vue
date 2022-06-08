@@ -1,5 +1,5 @@
 <template>
-  <LayoutAdmin class="typecho-content-list" v-loading="$store.state.typecho.content.loading" v-bind="$route.meta">
+  <LayoutAdmin class="typecho-content-list" v-loading="loading" v-bind="$route.meta" :pagination="{visible:true,...table}" @pagination-change="handlePaginationChange">
     <template #toolbar>
       <el-tooltip class="item" effect="dark" content="查询" placement="bottom">
         <el-button size="mini" circle type="info" @click="handleSelect">
@@ -45,7 +45,7 @@
         </el-button>
       </el-tooltip>
     </template>
-    <Item type="table" ref="table" :form="$store.state.typecho.branch.info" @select="(form)=>handleSelect(form)" :data="typecho.branch.list.filter(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" @selection-change="handleTableSelectionChange" />
+    <TypechoBranchTable v-loading="table.loading" :data="table.data" @filter="handleSelect" @selection-change="(val) => table.selection = val" />
   </LayoutAdmin>
 </template>
 
@@ -53,12 +53,25 @@
 import { mapActions, mapGetters, mapState } from "vuex";
 import Item from './item.vue'
 import { readExcel } from '@/utils/fileReader'
+import { TypechoBranchModel } from '@/store/modules/typecho/branch'
+import TypechoBranchTable from './components/table.vue'
 export default {
   components: {
-    Item
+    Item,
+    TypechoBranchTable
   },
   data() {
     return {
+      loading: false,
+      form: new TypechoBranchModel(),
+      table: {
+        loading: false,
+        data: [],
+        selection: [],
+        page: 1,
+        size: 10,
+        total: 0,
+      },
       searchVisible: false,
       inputFilterNameValue: '',
       inputFilterTagValue: '',
@@ -80,11 +93,22 @@ export default {
     ...mapState(["typecho"])
   },
   created() {
+    this.handleSelect();
   },
   methods: {
-    ...mapActions({
-      handleSelect: "typecho/branch/selectList",
-    }),
+    handleSelect(val, key, row) {
+      this.loading = true;
+      this.$store.dispatch('typecho/branch/selectList', {
+        ...row,
+        page: this.table.page,
+        size: this.table.size,
+      }).then(res => {
+        this.table.data = res.rows
+        this.table.total = res.total
+        this.table.page = res.page
+        this.table.size = res.size
+      }).finally(() => this.loading = false)
+    },
     handleDelete() {
       this.$store.dispatch('typecho/branch/deleteList', this.selection.slice(0))
       this.selection = [];
@@ -108,8 +132,11 @@ export default {
       this.$store.commit('typecho.content/SET_INFO', item);
       // this.$router.push({ path: '/typecho.content/info' })
     },
-    handleTableSelectionChange(val) {
-      this.selection = val
+    handlePaginationChange(pagination) {
+      this.table.total = pagination.total
+      this.table.page = pagination.page
+      this.table.size = pagination.size
+      this.handleSelect();
     }
   },
 };

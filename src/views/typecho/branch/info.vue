@@ -23,10 +23,10 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
-import { TypechoBranch, MOCK_KEY } from '@/store/modules/typecho/branch'
+import { TypechoBranchModel, MOCK_KEY } from '@/store/modules/typecho/branch'
 import Item from './item.vue';
 export default {
-  components: { Item },
+  components: { Item, },
   props: {
   },
   data() {
@@ -55,7 +55,7 @@ export default {
       });
     },
     handleMock() {
-      this.$store.commit('typecho/branch/SET_INFO', { ...this.$store.state.typecho.branch.info, ...new TypechoBranch(MOCK_KEY) })
+      this.$store.commit('typecho/branch/SET_INFO', { ...this.$store.state.typecho.branch.info, ...new TypechoBranchModel(MOCK_KEY) })
     }
   }
 }

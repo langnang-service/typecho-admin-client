@@ -42,8 +42,8 @@ export default {
   computed: {
     _editor: () => this.editor,
     _model: () => this.editor.getModel(),
-    _language() { },
-    _theme() { },
+    // _language() { },
+    // _theme() { },
     _options: () => ({
       ...Object.values(monaco.editor.EditorOptions).reduce((total, item) => {
         total[item.name] = item.defaultValue

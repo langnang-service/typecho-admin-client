@@ -3,7 +3,7 @@ import { state, mutations, actions } from '@/store';
 import Mock from 'mockjs'
 export const MOCK_KEY = 'mock'
 export const NAMESPACE = 'typecho/meta/';
-export class TypechoMeta {
+export class TypechoMetaModel {
   constructor(info = {}) {
     // this.mid = info === MOCK_KEY ? Mock.Random.id() : info.id;
     this.name = info === MOCK_KEY ? Mock.Random.sentence() : info.title;

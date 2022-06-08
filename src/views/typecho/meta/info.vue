@@ -26,7 +26,7 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
-import { TypechoMeta, MOCK_KEY } from '@/store/modules/typecho/meta'
+import { TypechoMetaModel, MOCK_KEY } from '@/store/modules/typecho/meta'
 import Item from './item.vue';
 export default {
   components: { Item },
@@ -53,7 +53,7 @@ export default {
       });
     },
     handleMock() {
-      this.$store.commit('typecho/meta/SET_INFO', { ...this.$store.state.typecho.meta.info, ...new TypechoMeta(MOCK_KEY) })
+      this.$store.commit('typecho/meta/SET_INFO', { ...this.$store.state.typecho.meta.info, ...new TypechoMetaModel(MOCK_KEY) })
     }
   }
 }

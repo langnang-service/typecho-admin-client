@@ -1,7 +1,7 @@
 import LayoutRouterView from '@/layout/router-view'
 import $store from '@/store'
-import { TypechoMeta } from '@/store/modules/typecho/meta'
-import { TypechoContent } from '@/store/modules/typecho/content'
+import { TypechoMetaModel } from '@/store/modules/typecho/meta'
+import { TypechoContentModel } from '@/store/modules/typecho/content'
 const breadcrumbOptions = [
   null,
   [
@@ -38,7 +38,7 @@ export default {
           component: () => import('@/views/typecho/content/list'),
           beforeEnter: (to, from, next) => {
             $store.dispatch('typecho/content/selectList')
-            $store.commit('typecho/content/SET_INFO', new TypechoContent())
+            $store.commit('typecho/content/SET_INFO', new TypechoContentModel())
             next()
           }
         },
@@ -51,7 +51,7 @@ export default {
           },
           component: () => import('@/views/typecho/content/info.vue'),
           beforeEnter: (to, from, next) => {
-            $store.commit('typecho/content/SET_INFO', new TypechoContent())
+            $store.commit('typecho/content/SET_INFO', new TypechoContentModel())
             next()
           }
         },
@@ -101,7 +101,7 @@ export default {
           },
           component: () => import('@/views/typecho/meta/info.vue'),
           beforeEnter: (to, from, next) => {
-            $store.commit('typecho/meta/SET_INFO', new TypechoMeta()).then(() => {
+            $store.commit('typecho/meta/SET_INFO', new TypechoMetaModel()).then(() => {
               next()
             })
           }

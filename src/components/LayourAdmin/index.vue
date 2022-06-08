@@ -21,23 +21,21 @@
         <slot name="toolbar"></slot>
       </span>
     </el-header>
-    <el-main :style="{padding:0}">
-      <el-card :body-style="{padding:'10px'}" v-loading="loading">
-        <el-scrollbar ref="scroll" :style="{height: `calc(100vh - 103px - ${header?50:0}px - ${footer?50:0}px)`}">
-          <slot></slot>
-        </el-scrollbar>
-      </el-card>
+    <el-main>
+      <el-scrollbar ref="scroll" :style="{height: `calc(100vh - 81px - ${header?50:0}px - ${footer?50:0}px)`}">
+        <slot></slot>
+      </el-scrollbar>
     </el-main>
     <el-footer v-if="footer">
       <el-pagination
-        v-if="pagination"
+        v-if="pagination.visible"
         @size-change="handlePaginationSizeChange"
         @current-change="handlePaginationCurrentChange"
-        :current-page="paginationModule.split('.').reduce((total, key) => total[key], $store.state).page"
+        :current-page="pagination.page"
         :page-sizes="[10, 20, 50, 100,200,400]"
-        :page-size="paginationModule.split('.').reduce((total, key) => total[key], $store.state).size"
+        :page-size="pagination.size"
         layout="total, sizes, prev, pager, next, jumper"
-        :total="paginationModule.split('.').reduce((total, key) => total[key], $store.state).total"
+        :total="pagination.total"
       ></el-pagination>
       <slot name="footer"></slot>
     </el-footer>
@@ -73,8 +71,15 @@ export default {
     },
     // 底部分页
     pagination: {
-      type: Boolean,
-      default: false
+      type: Object,
+      default() {
+        return {
+          visible: true,
+          size: 10,
+          page: 1,
+          total: 0,
+        }
+      }
     },
     paginationAlign: {
       type: String,
@@ -108,12 +113,10 @@ export default {
   },
   methods: {
     handlePaginationSizeChange(val) {
-      this.$store.commit(`${this.paginationModule.split('.').join('/')}/SET_SIZE`, val)
-      this.$store.dispatch(`${this.paginationModule.split('.').join('/')}/selectList`)
+      this.$emit('pagination-change', { ...this.pagination, size: val })
     },
     handlePaginationCurrentChange(val) {
-      this.$store.commit(`${this.paginationModule.split('.').join('/')}/SET_PAGE`, val)
-      this.$store.dispatch(`${this.paginationModule.split('.').join('/')}/selectList`)
+      this.$emit('pagination-change', { ...this.pagination, page: val })
     }
   },
 };
@@ -155,6 +158,8 @@ export default {
   }
 
   & > .el-main {
+    border: 0;
+    padding: 0;
   }
   & > .el-footer {
     border: 1px solid #ebeef5;

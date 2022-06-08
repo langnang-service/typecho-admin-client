@@ -78,63 +78,63 @@ export const actions = {
     })
   },
   _updateItem({ state, commit, dispatch }, payload) {
-    commit(`${payload.NAMESPACE}SET_LOADING`, true)
+    // commit(`${payload.NAMESPACE}SET_LOADING`, true)
     return payload.request(payload.data).then(res => {
-      commit(`${payload.NAMESPACE}SET_INFO`, res.row)
+      // commit(`${payload.NAMESPACE}SET_INFO`, res.row)
     }).finally(() => {
-      commit(`${payload.NAMESPACE}SET_LOADING`, false)
+      // commit(`${payload.NAMESPACE}SET_LOADING`, false)
     })
   },
   _selectItem({ state, commit, dispatch }, payload) {
-    commit(`${payload.NAMESPACE}SET_LOADING`, true)
+    // commit(`${payload.NAMESPACE}SET_LOADING`, true)
     return payload.request(payload.data).then(res => {
       if (payload.data._root === true) {
-        commit(`${payload.NAMESPACE}SET_ROOT`, res.row)
+        // commit(`${payload.NAMESPACE}SET_ROOT`, res.row)
       } else {
-        commit(`${payload.NAMESPACE}SET_INFO`, res.row)
+        // commit(`${payload.NAMESPACE}SET_INFO`, res.row)
       }
-      return Promise.resolve(res.row);
+      return Promise.resolve(res);
     }).finally(() => {
-      commit(`${payload.NAMESPACE}SET_LOADING`, false)
+      // commit(`${payload.NAMESPACE}SET_LOADING`, false)
     })
   },
   _selectList({ state, rootState, commit, dispatch }, payload = {}) {
-    commit(`${payload.NAMESPACE}SET_LOADING`, true)
+    // commit(`${payload.NAMESPACE}SET_LOADING`, true)
     return payload.request({
       ...payload.data,
       page: payload.data?.page || payload.NAMESPACE.split('/').slice(0, -1).reduce((total, key) => total[key], rootState).page,
       size: payload.data?.size || payload.NAMESPACE.split('/').slice(0, -1).reduce((total, key) => total[key], rootState).size
     }).then(res => {
-      commit(`${payload.NAMESPACE}SET_LIST`, res.rows)
-      commit(`${payload.NAMESPACE}SET_TOTAL`, res.total)
-      commit(`${payload.NAMESPACE}SET_PAGE`, res.page)
-      commit(`${payload.NAMESPACE}SET_SIZE`, res.size)
+      // commit(`${payload.NAMESPACE}SET_LIST`, res.rows)
+      // commit(`${payload.NAMESPACE}SET_TOTAL`, res.total)
+      // commit(`${payload.NAMESPACE}SET_PAGE`, res.page)
+      // commit(`${payload.NAMESPACE}SET_SIZE`, res.size)
       return Promise.resolve(res);
     }).finally(() => {
-      commit(`${payload.NAMESPACE}SET_LOADING`, false)
+      // commit(`${payload.NAMESPACE}SET_LOADING`, false)
     })
   },
   _selectTree({ state, rootState, commit, dispatch }, payload = {}) {
-    commit(`${payload.NAMESPACE}SET_LOADING`, true)
+    // commit(`${payload.NAMESPACE}SET_LOADING`, true)
     return payload.request({
       ...payload.data,
     }).then(res => {
-      commit(`${payload.NAMESPACE}SET_TREE`, res.tree)
-      commit(`${payload.NAMESPACE}SET_TOTAL`, res.total)
+      // commit(`${payload.NAMESPACE}SET_TREE`, res.tree)
+      // commit(`${payload.NAMESPACE}SET_TOTAL`, res.total)
       return Promise.resolve(res);
     }).finally(() => {
-      commit(`${payload.NAMESPACE}SET_LOADING`, false)
+      // commit(`${payload.NAMESPACE}SET_LOADING`, false)
     })
   },
   _selectDistinct({ state, rootState, commit, dispatch }, payload = {}) {
-    commit(`${payload.NAMESPACE}SET_LOADING`, true)
+    // commit(`${payload.NAMESPACE}SET_LOADING`, true)
     return payload.request({
       ...payload.data,
     }).then(res => {
-      commit(`${payload.NAMESPACE}SET_DISTINCT`, { [payload.data.column]: res })
+      // commit(`${payload.NAMESPACE}SET_DISTINCT`, { [payload.data.column]: res })
       return Promise.resolve(res);
     }).finally(() => {
-      commit(`${payload.NAMESPACE}SET_LOADING`, false)
+      // commit(`${payload.NAMESPACE}SET_LOADING`, false)
     })
   },
 }

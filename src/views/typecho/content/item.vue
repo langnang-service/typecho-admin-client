@@ -100,7 +100,7 @@
 </template>
 
 <script>
-import { TypechoMeta } from '@/store/modules/typecho/meta'
+import { TypechoMetaModel } from '@/store/modules/typecho/meta'
 import { mapActions, mapGetters, mapState } from "vuex";
 import { select_typecho_content_distinct } from '@/apis/typecho/content'
 import * as monaco from 'monaco-editor'

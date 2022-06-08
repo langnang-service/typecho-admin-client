@@ -3,7 +3,7 @@ import { state, mutations, actions } from '@/store';
 import Mock from 'mockjs'
 export const MOCK_KEY = 'mock'
 export const NAMESPACE = 'typecho/content/'
-export class TypechoContent {
+export class TypechoContentModel {
   constructor(info = {}) {
     // this.id = info === MOCK_KEY ? Mock.Random.id() : info.id;
     this.title = info === MOCK_KEY ? Mock.Random.sentence() : info.title;
