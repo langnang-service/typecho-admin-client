@@ -15,7 +15,7 @@
         </el-col>
       </el-col>
     </el-row>
-    <el-table v-if="type==='table'" :data="data" size="mini" stripe border @selection-change="(val)=>$emit('selection-change',val)" @row-dblclick="handleTableRowDblClick">
+    <el-table v-if="type==='table'" :data="data" size="mini" stripe border @selection-change="(val)=>$emit('selection-change',val)" @row-dblclick="handleTableRowDblClick" @row-contextmenu="handleShowContextMenu" @mousedown.native="()=>$refs.contextmenu.hide()">
       <template #empty>
         <el-empty />
       </template>
@@ -87,6 +87,12 @@
         </el-col>
       </el-row>
     </el-form>
+    <v-contextmenu ref="contextmenu">
+      <v-contextmenu-item>新建</v-contextmenu-item>
+      <v-contextmenu-item>删除</v-contextmenu-item>
+      <v-contextmenu-item>编辑</v-contextmenu-item>
+      <v-contextmenu-item>查看</v-contextmenu-item>
+    </v-contextmenu>
   </el-card>
 </template>
 
@@ -134,7 +140,7 @@ export default {
         //   { required: true, trigger: 'change' }
         // ],
       },
-      monacoEditor: null
+      monacoEditor: null,
     }
   },
   watch: {
@@ -144,11 +150,6 @@ export default {
         this.monacoEditor.setValue(value);
       }
     },
-    "$store.state.typecho.content.info.tags": {
-      handler(value) {
-        console.log(value)
-      }
-    }
   },
   computed: {
   },
@@ -166,6 +167,14 @@ export default {
     }
   },
   methods: {
+    handleShowContextMenu() {
+      event.preventDefault()
+      this.$refs.contextmenu.style.left = event.clientX + 'px'
+      this.$refs.contextmenu.style.top = event.clientY + 'px'
+      // this.$refs.contextmenu.style.display = 'block'
+      this.$refs.contextmenu.show();
+      console.log(this.$refs.contextmenu)
+    },
     handleFormTypeFocus() {
       select_typecho_content_distinct({
         column: 'type',
