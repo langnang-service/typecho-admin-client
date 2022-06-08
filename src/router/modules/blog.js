@@ -19,6 +19,12 @@ export default {
     {
       path: '',
       name: "Blog",
+      meta: {
+        header: false,
+        footer: true,
+        pagination: true,
+        paginationModule: "typecho.content"
+      },
       component: () => import('@/views/blog'),
       beforeEnter(to, from, next) {
         $store.dispatch('typecho/meta/selectTree', { type: 'category' })

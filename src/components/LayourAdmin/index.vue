@@ -1,6 +1,6 @@
 <template>
   <el-container class="layout-admin">
-    <el-header>
+    <el-header v-if="header">
       <span :style="{float:'left',marginTop:'-1px',display:'inline-block'}">
         <!-- 插槽：左侧信息 -->
         <slot name="prefix"></slot>
@@ -23,7 +23,7 @@
     </el-header>
     <el-main :style="{padding:0}">
       <el-card :body-style="{padding:'10px'}" v-loading="loading">
-        <el-scrollbar ref="scroll" :style="{height: footer?'calc(100vh - 203px)':'calc(100vh - 153px)'}">
+        <el-scrollbar ref="scroll" :style="{height: `calc(100vh - 103px - ${header?50:0}px - ${footer?50:0}px)`}">
           <slot></slot>
         </el-scrollbar>
       </el-card>
@@ -60,6 +60,11 @@ export default {
       default() {
         return []
       }
+    },
+    // 顶部
+    header: {
+      type: Boolean,
+      default: true
     },
     // 底部
     footer: {
