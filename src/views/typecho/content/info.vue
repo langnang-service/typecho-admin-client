@@ -11,7 +11,7 @@
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="模拟" placement="bottom">
         <el-button size="mini" circle type="warning" @click="handleMock">
-          <img src="@/assets/mockjs.svg" alt style="height:10.5px;" />
+          <img src="http://mockjs.com/assets/img/logo-2.svg" alt style="height:10.5px;" />
         </el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="保存" placement="bottom">
