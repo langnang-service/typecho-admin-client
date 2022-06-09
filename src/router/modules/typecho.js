@@ -9,9 +9,9 @@ const breadcrumbOptions = [
     { name: "Branch", path: '/typecho/branch/list' },
     { name: "Meta", path: '/typecho/meta/list' },
     { name: "Content", path: '/typecho/content/list' },
-    { name: "Comment", path: '/typecho/comment/list' },
-    { name: "RelationShip", path: '/typecho/relation-ship/list' },
-    { name: "User", path: '/typecho/user/list' },
+    { name: "Comment", path: '/typecho/comment/list', disabled: true },
+    { name: "RelationShip", path: '/typecho/relation-ship/list', disabled: true },
+    { name: "User", path: '/typecho/user/list', disabled: true },
   ]
 ]
 export const beforeEnter = (to, from, next) => {

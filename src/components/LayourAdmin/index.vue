@@ -11,7 +11,7 @@
           <el-menu v-else :default-active="$route.path" router mode="horizontal">
             <el-submenu :index="''+index">
               <template slot="title">{{item.meta.name}}</template>
-              <el-menu-item v-for="option in breadcrumbOptions[1]" :key="option.path" :index="option.path">{{option.name}}</el-menu-item>
+              <el-menu-item v-for="option in breadcrumbOptions[1]" :key="option.path" :index="option.path" v-bind="option">{{option.name}}</el-menu-item>
             </el-submenu>
           </el-menu>
         </el-breadcrumb-item>

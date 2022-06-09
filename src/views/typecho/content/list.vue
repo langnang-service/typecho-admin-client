@@ -1,5 +1,5 @@
 <template>
-  <LayoutAdmin class="typecho-content-list" v-loading="loading" v-bind="$route.meta" :pagination="{visible:true,...table}">
+  <LayoutAdmin class="typecho-content-list" v-loading="loading" v-bind="$route.meta" :pagination="{visible:true,...table}" @pagination-change="handlePaginationChange">
     <template #prefix>
       <span>【{{$store.state.typecho.branch.info.slug}}】</span>
     </template>
@@ -56,7 +56,7 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
-import Item from './item.vue'
+import Item from './components/item.vue'
 import { readExcel } from '@/utils/fileReader'
 import { TypechoContentModel } from '@/store/modules/typecho/content'
 import TypechoContentTable from './components/table.vue'
@@ -140,6 +140,12 @@ export default {
     },
     handleTableSelectionChange(val) {
       this.selection = val
+    },
+    handlePaginationChange(pagination) {
+      this.table.total = pagination.total
+      this.table.page = pagination.page
+      this.table.size = pagination.size
+      this.handleSelect();
     }
   },
 };

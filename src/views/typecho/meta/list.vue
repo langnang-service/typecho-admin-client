@@ -1,5 +1,5 @@
 <template>
-  <LayoutAdmin class="typecho-meta-list" v-loading="loading" v-bind="$route.meta" :pagination="{visible:true,...table}">
+  <LayoutAdmin class="typecho-meta-list" v-loading="loading" v-bind="$route.meta" :pagination="{visible:true,...table}" @pagination-change="handlePaginationChange">
     <template #prefix>
       <span>【{{branch.slug}}】</span>
     </template>
@@ -129,6 +129,12 @@ export default {
     },
     handleTableSelectionChange(val) {
       this.selection = val
+    },
+    handlePaginationChange(pagination) {
+      this.table.total = pagination.total
+      this.table.page = pagination.page
+      this.table.size = pagination.size
+      this.handleSelect();
     }
   },
 };
