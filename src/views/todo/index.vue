@@ -3,7 +3,7 @@
     <el-card>
       <el-form :model="content" size="small">
         <el-form-item prop="content" style="margin-bottom:0">
-          <el-input v-model="content.title" @keyup.enter.native="handleInsertItem"></el-input>
+          <el-input v-model="content.title" @keyup.enter.native="handleInsertContent"></el-input>
         </el-form-item>
       </el-form>
     </el-card>
@@ -16,11 +16,11 @@
           <el-card shadow="hover" :style="{marginBottom:'10px',cursor:'pointer',opacity:item.type=='done'?'0.5':'1'}" :body-style="{ padding: '10px' }">
             <el-row :gutter="10">
               <el-col :style="{width:'30px',textAlign:'center'}">
-                <el-checkbox v-model="done" :label="item" :style="{width:'19px',overflow:'hidden',verticalAlign:'top',fontSize:'18px'}" @change="(checked)=>handleSelectionChange(item,checked)">&nbsp;</el-checkbox>
+                <el-checkbox v-model="done" :label="item" :style="{width:'19px',overflow:'hidden',verticalAlign:'top',fontSize:'18px'}" @change="(checked)=>handleContentSelectionChange(item,checked)">&nbsp;</el-checkbox>
               </el-col>
               <el-col :style="{width:'calc(100% - 65px)',fontSize:'18px',textDecoration:item.type=='done'?'line-through':'none'}" @click.native="handleClickRow(item)">{{item.title}}</el-col>
               <el-col :style="{width:'30px',}">
-                <el-button size="mini" circle type="danger" @click="handleDeleteItem(item)">
+                <el-button size="mini" circle type="danger" @click="handleDeleteContent(item)">
                   <font-awesome-icon icon="fa-regular fa-trash-can" />
                 </el-button>
               </el-col>
@@ -44,7 +44,7 @@ export default {
       loading: false,
       categoryTree: [],
       breadcrumbOptions: [],
-      content: new TypechoContentModel(),
+      content: new TypechoContentModel({ type: 'todo' }),
       meta: new TypechoMetaModel(),
       table: {
         loading: false,
@@ -68,6 +68,7 @@ export default {
     }),
   },
   created() {
+    this.content = new TypechoContentModel({ type: 'todo', parent: this.branch.cid, mids: this.branch.mid })
   },
   mounted() {
     this.$store.dispatch('typecho/meta/selectTree', { type: 'category' }).then(res => {
@@ -83,6 +84,7 @@ export default {
       if (!this.$route.params.mids) {
         this.$refs.layout.breadcrumb = [{ ...this.$refs.layout.breadcrumb[1], path: '/todo' }]
         this.breadcrumbOptions = [this.categoryTree.map(v => ({ children: v.children, name: v.mid, mid: v.mid, path: '/todo/' + v.mid }))];
+        this.content.mids = this.branch.mid
       } else {
         const mids = this.$route.params.mids.split('/');
         this.$refs.layout.breadcrumb = [...this.$refs.layout.breadcrumb.slice(0, mids.length), { meta: { name: mids[mids.length - 1] } }]
@@ -91,6 +93,7 @@ export default {
           total.push(parent.children.map(v => ({ children: v.children, name: v.mid, mid: v.mid, path: parent.path + '/' + v.mid })))
           return total;
         }, [this.categoryTree.map(v => ({ children: v.children, name: v.mid, mid: v.mid, path: '/todo/' + v.mid }))])
+        this.content.mids = mids[mids.length - 1]
       }
       this.handleSelect()
     },
@@ -106,20 +109,29 @@ export default {
         this.table.total = res.total
         this.table.page = res.page
         this.table.size = res.size
-        console.log(this.table.data.some(v => (v.title).indexOf(this.content.title || '') > -1));
+        this.done = res.rows.filter(v => v.type == 'done')
       }).finally(() => this.loading = false)
     },
-    handleInsertItem() {
+    handleInsertContent() {
+      if (this.content.title.trim() == '') return
+      this.$store.dispatch('typecho/content/insertItem', this.content).then(() => {
+        this.content.title = ''
+        this.handleSelect()
+      })
     },
-    handleDeleteItem(item) {
+    handleDeleteContent(item) {
+      console.log(item);
+      this.$store.dispatch('typecho/content/deleteItem', item).then(() => {
+        this.handleSelect();
+      })
     },
-    handleSelectionChange(item, checked) {
-      // this.$store.dispatch("typecho/content/updateItem", {
-      //   ...item,
-      //   type: checked ? 'done' : 'todo'
-      // }).then(() => {
-      //   this.handleSelectList()
-      // })
+    handleContentSelectionChange(item, checked) {
+      this.$store.dispatch("typecho/content/updateItem", {
+        ...item,
+        type: checked ? 'done' : 'todo'
+      }).then(() => {
+        this.handleSelect()
+      })
     }
   },
 };
