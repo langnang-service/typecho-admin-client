@@ -4,13 +4,13 @@ import Mock from 'mockjs'
 export const MOCK_KEY = 'mock'
 export const NAMESPACE = 'typecho/meta/';
 export class TypechoMetaModel {
-  constructor(info = {}) {
-    // this.mid = info === MOCK_KEY ? Mock.Random.id() : info.id;
-    this.name = info === MOCK_KEY ? Mock.Random.sentence() : info.title;
-    this.slug = info === MOCK_KEY ? Mock.Random.word() : info.slug;
-    this.type = info === MOCK_KEY ? Mock.Random.string() : info.type;
-    this.description = info === MOCK_KEY ? Mock.Random.paragraph() : info.description;
-    this.parent = info === MOCK_KEY ? Mock.Random.integer() : info.parent;
+  constructor(params = {}, mock = false) {
+    this.mid = params.mid;
+    this.name = mock === true ? Mock.Random.sentence() : params.title;
+    this.slug = mock === true ? Mock.Random.word() : params.slug;
+    this.type = mock === true ? Mock.Random.string() : params.type;
+    this.description = mock === true ? Mock.Random.paragraph() : params.description;
+    this.parent = params.parent;
   }
 }
 export default {

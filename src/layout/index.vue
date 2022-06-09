@@ -5,8 +5,9 @@
         <el-menu-item index="/">首页</el-menu-item>
         <el-menu-item index="/entry">Entry</el-menu-item>
         <el-menu-item index="/todo">ToDoList</el-menu-item>
-        <el-submenu index="/typecho">
+        <el-submenu index="typecho">
           <template slot="title">Typecho</template>
+          <el-menu-item index="/typecho">Admin</el-menu-item>
           <el-menu-item index="/template">Template</el-menu-item>
           <el-menu-item index="/blog">Blog</el-menu-item>
           <el-menu-item index="/navigation">Navigation</el-menu-item>

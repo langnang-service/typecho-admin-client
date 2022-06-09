@@ -2,37 +2,15 @@
   <LayoutAdmin class="typecho-content-list" v-loading="loading" v-bind="$route.meta" :pagination="{visible:true,...table}" @pagination-change="handlePaginationChange">
     <template #toolbar>
       <el-tooltip class="item" effect="dark" content="查询" placement="bottom">
-        <el-button size="mini" circle type="info" @click="handleSelect">
-          <font-awesome-icon icon="fa-solid fa-search" />
+        <el-button size="mini" circle type="primary" @click="handleSelect(null,null,$refs.table.form)">
+          <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
         </el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="新增" placement="bottom">
-        <el-button size="mini" circle type="primary" icon="el-icon-plus" @click="$router.push({path:'/typecho/branch/insert'})"></el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="模板" placement="bottom">
-        <el-button size="mini" circle type="info">
-          <font-awesome-icon icon="fa-solid fa-stamp" />
-        </el-button>
+        <el-button size="mini" circle type="primary" icon="el-icon-plus" @click="$router.push('/typecho/branch/insert')"></el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
         <el-button size="mini" circle type="danger" icon="el-icon-delete" :disabled="selection.length === 0" @click="handleDelete"></el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="上传" placement="bottom">
-        <el-upload action="#" accept=".xls, .xlsx" :show-file-list="false" :http-request="handleUpload" :style="{display:'inline-block',margin:'0 10px'}">
-          <el-button size="mini" circle type="primary">
-            <font-awesome-icon icon="fa-solid fa-upload" />
-          </el-button>
-        </el-upload>
-      </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="下载" placement="bottom">
-        <el-button size="mini" circle type="primary">
-          <font-awesome-icon icon="fa-solid fa-download" />
-        </el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="模板" placement="bottom">
-        <el-button size="mini" circle type="primary">
-          <font-awesome-icon icon="fa-solid fa-file-excel" />
-        </el-button>
       </el-tooltip>
       <el-tooltip class="item" effect="dark" content="记录" placement="bottom">
         <el-button size="mini" circle type="info">
@@ -45,19 +23,19 @@
         </el-button>
       </el-tooltip>
     </template>
-    <TypechoBranchTable v-loading="table.loading" :data="table.data" @filter="handleSelect" @selection-change="(val) => table.selection = val" />
+    <el-card>
+      <TypechoBranchTable ref="table" v-loading="table.loading" :data="table.data" @filter="handleSelect" @selection-change="(val) => table.selection = val" />
+    </el-card>
   </LayoutAdmin>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
-import Item from './item.vue'
 import { readExcel } from '@/utils/fileReader'
 import { TypechoBranchModel } from '@/store/modules/typecho/branch'
 import TypechoBranchTable from './components/table.vue'
 export default {
   components: {
-    Item,
     TypechoBranchTable
   },
   data() {

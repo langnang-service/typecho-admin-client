@@ -9,6 +9,9 @@ module.exports = {
     // 设置是否自动打开浏览器
     open: true,
     host: "0.0.0.0",
+    port: '8080', // 端口
+    sockHost: 'localhost:8080',// localhost[端口]、IP[端口]、域名
+    disableHostCheck: true,
     proxy: {
       "/api": {
         target: 'http://localhost:9090',

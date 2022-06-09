@@ -1,6 +1,6 @@
 <template>
   <div class="typecho">
-    <Jumbotron route="/typecho/content/list" title="Typecho" />
+    <Jumbotron route="/typecho/branch/list" title="Typecho" />
   </div>
 </template>
 

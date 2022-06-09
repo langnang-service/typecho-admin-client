@@ -4,12 +4,12 @@ import Mock from 'mockjs'
 export const MOCK_KEY = 'mock'
 export const NAMESPACE = 'typecho/branch/'
 export class TypechoBranchModel {
-  constructor(info = {}) {
-    this.cid = info.cid;
-    this.mid = info.mid;
-    this.name = info === MOCK_KEY ? Mock.Random.cword(2, 4) : info.title;
-    this.slug = info === MOCK_KEY ? Mock.Random.word() : info.slug;
-    this.description = info === MOCK_KEY ? Mock.Random.paragraph() : info.description;
+  constructor(params = {}, mock = false) {
+    this.cid = params.cid;
+    this.mid = params.mid;
+    this.name = mock ? Mock.Random.cword(2, 4) : params.title;
+    this.slug = mock ? Mock.Random.word() : params.slug;
+    this.description = mock ? Mock.Random.paragraph() : params.description;
   }
 }
 export default {
@@ -76,7 +76,7 @@ export default {
       })
     },
     submitItem({ state, commit, dispatch }, payload = {}) {
-      return state.info.cid ? dispatch('updateItem', { ...state.info, ...payload }) : dispatch('insertItem', { ...state.info, ...payload })
+      return payload.cid ? dispatch('updateItem', { ...state.info, ...payload }) : dispatch('insertItem', { ...state.info, ...payload })
     },
   }
 }

@@ -4,14 +4,14 @@ import Mock from 'mockjs'
 export const MOCK_KEY = 'mock'
 export const NAMESPACE = 'typecho/content/'
 export class TypechoContentModel {
-  constructor(info = {}) {
-    // this.id = info === MOCK_KEY ? Mock.Random.id() : info.id;
-    this.title = info === MOCK_KEY ? Mock.Random.sentence() : info.title;
-    this.slug = info === MOCK_KEY ? Mock.Random.string() : info.slug;
-    this.type = info === MOCK_KEY ? Mock.Random.word() : info.type;
-    this.text_content = info === MOCK_KEY ? Mock.Random.paragraph() : info.description;
-    this.mids = (info === MOCK_KEY ? Mock.Random.paragraph() : info.mids) || "";
-    this.tags = (info === MOCK_KEY ? Mock.Random.paragraph() : info.tags) || [];
+  constructor(params = {}, mock = false) {
+    this.id = params.id;
+    this.title = mock === true ? Mock.Random.sentence() : params.title;
+    this.slug = mock === true ? Mock.Random.string() : params.slug;
+    this.type = mock === true ? Mock.Random.word() : params.type;
+    this.text_content = mock === true ? Mock.Random.paragraph() : params.description;
+    this.mids = params.mids || "";
+    this.tags = params.tags || [];
   }
 }
 export default {
