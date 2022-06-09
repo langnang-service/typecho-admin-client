@@ -60,9 +60,9 @@ export default {
       theme: 'vs-dark',
       wordWrap: true,
     })
-    console.log(monaco);
-    console.log(this)
-    console.log(this._options);
+    // console.log(monaco);
+    // console.log(this)
+    // console.log(this._options);
   },
   methods: {
 

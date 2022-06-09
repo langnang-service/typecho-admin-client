@@ -12,6 +12,21 @@ export class TypechoMetaModel {
     this.description = mock === true ? Mock.Random.paragraph() : params.description;
     this.parent = params.parent;
   }
+  static getLabels = (key) => ({
+    name: "名称",
+    slug: '编码',
+    type: '类型',
+    order: '次序',
+    description: "描述"
+  })
+  static getRules = (key) => ({
+    name: [
+      { required: true, trigger: 'blur' },
+    ],
+    type: [
+      { required: true, trigger: 'change' }
+    ],
+  })
 }
 export default {
   namespaced: true,
@@ -26,7 +41,7 @@ export default {
       return dispatch('_insertItem', {
         NAMESPACE,
         request: insert_typecho_meta_item,
-        data: { ...payload, parent: rootState.typecho.branch.info?.mid || payload.parent }
+        data: { ...payload, parent: payload.parent || rootState.typecho.branch.info?.mid }
       }, {
         root: true
       })

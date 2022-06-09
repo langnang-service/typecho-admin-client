@@ -28,6 +28,12 @@ module.exports = {
     config.plugin("html").tap(function (args) {
       args[0].title = "Vue Element - Langnang Service"; // 自定义标题
       return args;
-    });
+    })
+    // 打包时去掉 console.log
+    config.optimization.minimizer('terser').tap((args) => {
+      args[0].terserOptions.compress.drop_console = true
+      return args
+    })
+
   }
 };

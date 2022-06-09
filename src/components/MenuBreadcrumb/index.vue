@@ -26,10 +26,10 @@ export default {
     }
   },
   created() {
-    console.log(this.$router)
-    console.log(this.$route)
+    // console.log(this.$router)
+    // console.log(this.$route)
     this.$route.matched.forEach((route, index) => {
-      console.log(route, index)
+      // console.log(route, index)
       if (index == 0) {
         this.routes.push(this.$router.options.routes.find(v => v.path == route.path))
         this.actives.push(this.routes[index].path)
@@ -38,10 +38,10 @@ export default {
         this.actives.push(`${this.routes[index - 1].path}/${route.path}`)
       }
     });
-    console.log(this.$data);
+    // console.log(this.$data);
   },
   beforeRouteUpdate() {
-    console.log('beforeRouteUpdate')
+    // console.log('beforeRouteUpdate')
   },
 }
 </script>

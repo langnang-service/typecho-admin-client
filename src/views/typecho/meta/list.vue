@@ -1,7 +1,7 @@
 <template>
-  <LayoutAdmin class="typecho-meta-list" v-loading="$store.state.typecho.meta.loading" v-bind="$route.meta">
+  <LayoutAdmin class="typecho-meta-list" v-loading="loading" v-bind="$route.meta" :pagination="{visible:true,...table}">
     <template #prefix>
-      <span>【{{$store.state.typecho.branch.info.slug}}】</span>
+      <span>【{{branch.slug}}】</span>
     </template>
     <template #toolbar>
       <el-tooltip class="item" effect="dark" content="查询" placement="bottom">
@@ -43,31 +43,30 @@
         </el-button>
       </el-tooltip>
     </template>
-    <Item type="table" ref="table" :form="typecho.meta.info" @select="(form)=>handleSelect(form)" :data="typecho.meta.list.filter(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" @selection-change="handleTableSelectionChange" />
-
-    <template #append>
-      <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :before-close="handleCancelDialog">
-        <el-form :ref="dialog.form.ref" :model="dialog.form">
-          <el-form-item>
-            <el-input v-model="dialog.form.title"></el-input>
-          </el-form-item>
-        </el-form>
-        <span slot="footer">
-          <el-button @click="handleCancelDialog">Cancel</el-button>
-          <el-button type="primary" @click="handleSubmitDialog">Submit</el-button>
-        </span>
-      </el-dialog>
-    </template>
+    <el-card>
+      <TypechoMetaTable ref="table" v-loading="table.loading" :data="table.data" @filter="handleSelect" @selection-change="(val) => table.selection = val" />
+    </el-card>
   </LayoutAdmin>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
-import Item from './item.vue'
+import TypechoMetaTable from './components/table.vue'
+import { TypechoMetaModel } from '@/store/modules/typecho/meta'
 export default {
-  components: { Item },
+  components: { TypechoMetaTable },
   data() {
     return {
+      loading: false,
+      form: new TypechoMetaModel(),
+      table: {
+        loading: false,
+        data: [],
+        selection: [],
+        page: 1,
+        size: 10,
+        total: 0,
+      },
       inputFilterNameValue: '',
       inputFilterTagValue: '',
       // 已选列表
@@ -85,12 +84,28 @@ export default {
 
   },
   computed: {
-    ...mapState(["typecho"])
+    ...mapState({
+      branch: state => state.typecho.branch.info,
+    }),
   },
   created() {
+    this.handleSelect();
   },
   methods: {
-    ...mapActions({}),
+    handleSelect(val, key, row) {
+      this.loading = true;
+      this.$store.dispatch('typecho/meta/selectList', {
+        ...row,
+        root: this.branch.mid,
+        page: this.table.page,
+        size: this.table.size,
+      }).then(res => {
+        this.table.data = res.rows
+        this.table.total = res.total
+        this.table.page = res.page
+        this.table.size = res.size
+      }).finally(() => this.loading = false)
+    },
     handleDelete() {
       this.$store.dispatch('typecho/meta/deleteList', this.selection)
       this.selection = [];

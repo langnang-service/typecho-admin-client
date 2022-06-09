@@ -1,7 +1,7 @@
 <template>
-  <LayoutAdmin class="typecho-meta-info" v-loading="$store.state.typecho.meta.loading" v-bind="$route.meta">
+  <LayoutAdmin class="typecho-meta-info" v-loading="loading" v-bind="$route.meta">
     <template #prefix>
-      <span>【{{$store.state.typecho.branch.info.slug}}】</span>
+      <span>【{{branch.slug}}】</span>
     </template>
     <template #toolbar>
       <el-tooltip class="item" effect="dark" content="返回" placement="bottom">
@@ -20,40 +20,59 @@
         </el-button>
       </el-tooltip>
     </template>
-    <Item type="form" ref="form" :form="$store.state.typecho.meta.info" />
+    <el-card>
+      <TypechoMetaForm :model="form" ref="form" />
+    </el-card>
   </LayoutAdmin>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
-import { TypechoMetaModel, MOCK_KEY } from '@/store/modules/typecho/meta'
-import Item from './item.vue';
+import { TypechoMetaModel } from '@/store/modules/typecho/meta'
+import TypechoMetaForm from './components/form.vue'
 export default {
-  components: { Item },
+  components: { TypechoMetaForm },
   props: {
   },
   data() {
-    return {}
+    return {
+      loading: false,
+      form: new TypechoMetaModel()
+    }
   },
   computed: {
+    ...mapState({
+      branch: state => state.typecho.branch.info,
+    })
   },
   created() {
+    if (['/typecho/meta/insert'].includes(this.$route.path)) {
+      this.form = new TypechoMetaModel(this.$route.query);
+    } else {
+      this.loading = true
+      this.$store.dispatch('typecho/meta/selectItem', this.$route.params)
+        .then(res => {
+          this.form = res.row;
+        }).finally(() => this.loading = false)
+    }
   },
   methods: {
     handleSubmit() {
       this.$refs.form.$refs.form.validate((valid) => {
         if (valid) {
-          this.$store.dispatch('typecho/meta/submitItem', this.$refs.form.form).then(res => {
+          this.loading = true
+          this.$store.dispatch('typecho/meta/submitItem', {
+            ...this.form,
+          }).then(res => {
             this.$router.push({ path: '/typecho/meta/list' })
-          })
-
+          }).finally(() => this.loading = false)
         } else {
           return false;
         }
       });
     },
     handleMock() {
-      this.$store.commit('typecho/meta/SET_INFO', { ...this.$store.state.typecho.meta.info, ...new TypechoMetaModel(MOCK_KEY) })
+      this.form = new TypechoMetaModel(this.form, true)
     }
   }
 }

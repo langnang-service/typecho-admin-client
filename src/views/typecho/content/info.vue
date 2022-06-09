@@ -41,8 +41,8 @@ export default {
 
   },
   created() {
-    console.log(process.env.NODE_ENV)
-    console.log(this)
+    // console.log(process.env.NODE_ENV)
+    // console.log(this)
   },
   methods: {
     handleSubmit() {

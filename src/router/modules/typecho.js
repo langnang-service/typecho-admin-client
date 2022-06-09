@@ -15,10 +15,10 @@ const breadcrumbOptions = [
   ]
 ]
 export const beforeEnter = (to, from, next) => {
-  console.log("beforeEnter", to, from);
-  console.log([...to.matched].pop().path);
-  console.log(/^\/(\w+)(?:\/(?=$))?$/i.test(to.path))
-  console.log(/^\/(\w+)(?=$)?$/i.test(to.path))
+  // console.log("beforeEnter", to, from);
+  // console.log([...to.matched].pop().path);
+  // console.log(/^\/(\w+)(?:\/(?=$))?$/i.test(to.path))
+  // console.log(/^\/(\w+)(?=$)?$/i.test(to.path))
   if (/^\/(\w+)(?=$)?$/i.test(to.path)) {
     $store.dispatch('typecho/branch/selectItem', {
       type: 'branch',
@@ -201,7 +201,14 @@ export default {
             next()
           }
         }
-      ]
+      ].map(item => ({
+        ...item,
+        beforeEnter(to, from, next) {
+          $store.dispatch('typecho/meta/selectDistinct', { column: 'type' })
+          next();
+        },
+      })),
+
     },
   ],
 }

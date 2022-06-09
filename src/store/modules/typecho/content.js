@@ -27,7 +27,7 @@ export default {
       return dispatch('_insertItem', {
         NAMESPACE,
         request: insert_typecho_content_item,
-        data: { ...payload, parent: rootState.typecho.branch.info?.cid || payload.parent }
+        data: { ...payload, parent: payload.parent || rootState.typecho.branch.info?.mid }
       }, {
         root: true
       })

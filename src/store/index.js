@@ -131,7 +131,7 @@ export const actions = {
     return payload.request({
       ...payload.data,
     }).then(res => {
-      // commit(`${payload.NAMESPACE}SET_DISTINCT`, { [payload.data.column]: res })
+      commit(`${payload.NAMESPACE}SET_DISTINCT`, { [payload.data.column]: res })
       return Promise.resolve(res);
     }).finally(() => {
       // commit(`${payload.NAMESPACE}SET_LOADING`, false)

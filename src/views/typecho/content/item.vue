@@ -193,7 +193,7 @@ export default {
       })
     },
     handleFormTagRemove(val) {
-      console.log("handleFormTagRemove", val, this.$store.state.typecho.content.info.tags.filter(v => v == val), this.$store.state.typecho.content.info.tags)
+      // console.log("handleFormTagRemove", val, this.$store.state.typecho.content.info.tags.filter(v => v == val), this.$store.state.typecho.content.info.tags)
       // this.$store.state.typecho.content.info.tags = this.$store.state.typecho.content.info.tags.filter(v => v === val)
     },
     handleTableRowDblClick(row, column, event) {

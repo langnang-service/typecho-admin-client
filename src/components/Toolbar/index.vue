@@ -17,9 +17,9 @@ export default {
     }
   },
   created() {
-    console.log(Vue.options.components,)
-    console.log(Vue.options.components['ElButton'].options)
-    console.log(Vue.options.components['ElButton'].options.$listeners)
+    // console.log(Vue.options.components,)
+    // console.log(Vue.options.components['ElButton'].options)
+    // console.log(Vue.options.components['ElButton'].options.$listeners)
   }
 }
 </script>

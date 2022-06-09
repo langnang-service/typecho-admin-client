@@ -126,7 +126,7 @@ export default {
     },
     handleUpload() { },
     handleClickRow(item) {
-      console.log('handleClickRow', arguments)
+      // console.log('handleClickRow', arguments)
       this.$store.commit('entry/SET_INFO', item);
       // this.$router.push({ path: '/entry/info' })
     }

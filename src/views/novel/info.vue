@@ -38,7 +38,7 @@ export default {
     ...mapGetters(['entry'])
   },
   created() {
-    console.log(this.$route)
+    // console.log(this.$route)
   },
   methods: {
     async handleSubmit() {

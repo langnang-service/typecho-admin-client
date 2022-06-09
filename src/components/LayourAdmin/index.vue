@@ -99,7 +99,7 @@ export default {
   computed: {
   },
   created() {
-    console.log(this.$route.matched);
+    // console.log(this.$route.matched);
     this.breadcrumb = this.$route.matched.slice(0).reduce((total, value, index) => {
       if (!value.name) {
         const name = value.path.split('/').slice(-1)[0];
