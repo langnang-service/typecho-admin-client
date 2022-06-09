@@ -39,6 +39,14 @@ export default {
       languages: monaco.languages.getLanguages(),
     }
   },
+  watch: {
+    'options.value': {
+      handler(val) {
+        if (!this.editor) return
+        this.editor.setValue(val);
+      }
+    }
+  },
   computed: {
     _editor: () => this.editor,
     _model: () => this.editor.getModel(),
@@ -52,13 +60,15 @@ export default {
       // ...this.options,
     })
   },
+  created() {
+  },
   mounted() {
     this.editor = monaco.editor.create(this.$refs.monaco, {
-      // ...this._options,
       readOnly: false,
       language: 'markdown',
       theme: 'vs-dark',
       wordWrap: true,
+      ...this.options,
     })
     // console.log(monaco);
     // console.log(this)

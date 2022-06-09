@@ -52,12 +52,6 @@ export default {
             paginationModule: "typecho.branch"
           },
           component: () => import('@/views/typecho/branch/list'),
-          beforeEnter: (to, from, next) => {
-            // $store.commit('typecho/branch/SET_INFO', new TypechoBranchModel())
-            // $store.dispatch('typecho/branch/selectList').then(() => {
-            // })
-            next()
-          }
         },
         {
           path: 'insert',
@@ -66,10 +60,6 @@ export default {
             paginationModule: "typecho.content"
           },
           component: () => import('@/views/typecho/branch/info.vue'),
-          beforeEnter: (to, from, next) => {
-            // $store.commit('typecho/branch/SET_INFO', {})
-            next()
-          }
         },
         {
           path: ':mid',
@@ -78,11 +68,6 @@ export default {
             paginationModule: "typecho.branch"
           },
           component: () => import('@/views/typecho/branch/info'),
-          beforeEnter: (to, from, next) => {
-            // $store.dispatch('typecho/branch/selectItem', to.params).then(() => {
-            // })
-            next()
-          }
         }
       ]
     },
@@ -100,14 +85,6 @@ export default {
             paginationModule: "typecho.content"
           },
           component: () => import('@/views/typecho/content/list'),
-          beforeEnter: (to, from, next) => {
-            if (!$store.state.typecho.branch.info) return next("/typecho/branch/list");
-            // $store.commit('typecho/content/SET_INFO', new TypechoContentModel())
-            // $store.commit('typecho/meta/SET_INFO', new TypechoMetaModel())
-            // $store.dispatch('typecho/content/selectList', { root: $store.state.typecho.branch.info?.cid })
-
-            next()
-          },
         },
         {
           path: 'insert',
@@ -117,13 +94,6 @@ export default {
             paginationModule: "typecho.content"
           },
           component: () => import('@/views/typecho/content/info.vue'),
-          beforeEnter: (to, from, next) => {
-            if (!$store.state.typecho.branch.info) return next("/typecho/branch/list");
-            // $store.commit('typecho/content/SET_INFO', new TypechoContentModel({
-            // parent: to.query.parent || $store.state.typecho.branch.info?.cid
-            // }))
-            next()
-          }
         },
         {
           path: ':cid',
@@ -133,22 +103,16 @@ export default {
             paginationModule: "typecho.content"
           },
           component: () => import('@/views/typecho/content/info'),
-          beforeEnter: (to, from, next) => {
-            if (!$store.state.typecho.branch.info) return next("/typecho/branch/list");
-            // Promise.all([
-            //   $store.dispatch('typecho/content/selectItem', to.params).then(res => {
-            //     return $store.dispatch('typecho/meta/selectList', { mids: res.mids, type: 'tag', size: 99999, page: 1 })
-            //       .then(res => {
-            //         $store.state.typecho.content.info.tags = res.rows.map(v => v.mid);
-            //       })
-            //   }),
-            //   $store.dispatch('typecho/meta/selectTree', { type: 'category' })
-            // ]).then(() => {
-            // })
-            next()
-          }
         }
-      ],
+      ].map(item => ({
+        ...item,
+        beforeEnter(to, from, next) {
+          if (!$store.state.typecho.branch.info) return next("/typecho/branch/list");
+          $store.dispatch('typecho/content/selectDistinct', { column: 'type' })
+          $store.dispatch('typecho/content/selectDistinct', { column: 'status' })
+          next();
+        },
+      })),
     },
     {
       path: 'meta',
@@ -164,12 +128,6 @@ export default {
             paginationModule: "typecho.meta",
           },
           component: () => import('@/views/typecho/meta/list'),
-          beforeEnter: (to, from, next) => {
-            if (!$store.state.typecho.branch.info) return next("/typecho/branch/list");
-            // $store.dispatch('typecho/meta/selectList', { root: $store.state.typecho.branch.info?.mid })
-            // $store.commit('typecho/meta/SET_INFO', {})
-            next()
-          }
         },
         {
           path: 'insert',
@@ -179,13 +137,6 @@ export default {
             paginationModule: "typecho.meta"
           },
           component: () => import('@/views/typecho/meta/info'),
-          beforeEnter: (to, from, next) => {
-            if (!$store.state.typecho.branch.info) return next("/typecho/branch/list");
-            // $store.commit('typecho/meta/SET_INFO', new TypechoMetaModel({
-            //   parent: to.query.parent || $store.state.typecho.branch.info?.mid
-            // }))
-            next()
-          }
         },
         {
           path: ':mid',
@@ -195,15 +146,11 @@ export default {
             paginationModule: "typecho.meta"
           },
           component: () => import('@/views/typecho/meta/info'),
-          beforeEnter: (to, from, next) => {
-            if (!$store.state.typecho.branch.info) return next("/typecho/branch/list");
-            // $store.dispatch('typecho/meta/selectItem', to.params)
-            next()
-          }
         }
       ].map(item => ({
         ...item,
         beforeEnter(to, from, next) {
+          if (!$store.state.typecho.branch.info) return next("/typecho/branch/list");
           $store.dispatch('typecho/meta/selectDistinct', { column: 'type' })
           next();
         },

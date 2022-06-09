@@ -12,7 +12,18 @@ export class TypechoContentModel {
     this.text_content = mock === true ? Mock.Random.paragraph() : params.description;
     this.mids = params.mids || "";
     this.tags = params.tags || [];
+    this.parent = params.parent;
   }
+
+  static getRules = () => ({
+    name: [
+      { required: true, trigger: 'blur' },
+    ],
+    type: [
+      { required: true, trigger: 'change' }
+    ],
+  })
+  static getLabels = () => ({})
 }
 export default {
   namespaced: true,
@@ -87,7 +98,7 @@ export default {
       })
     },
     submitItem({ state, commit, dispatch }, payload = {}) {
-      return state.info.cid ? dispatch('updateItem', { ...state.info, ...payload }) : dispatch('insertItem', { ...state.info, ...payload })
+      return payload.cid ? dispatch('updateItem', payload) : dispatch('insertItem', payload)
     },
   }
 }

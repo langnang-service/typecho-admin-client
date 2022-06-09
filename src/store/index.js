@@ -33,7 +33,7 @@ export const mutations = {
     state.list = payload;
   },
   SET_TREE(state, payload) {
-    state.tree = payload;
+    state.tree = { ...state.tree, ...payload }
   },
   SET_INFO(state, payload) {
     state.info = payload
@@ -114,13 +114,15 @@ export const actions = {
       // commit(`${payload.NAMESPACE}SET_LOADING`, false)
     })
   },
+
   _selectTree({ state, rootState, commit, dispatch }, payload = {}) {
     // commit(`${payload.NAMESPACE}SET_LOADING`, true)
     return payload.request({
       ...payload.data,
     }).then(res => {
-      // commit(`${payload.NAMESPACE}SET_TREE`, res.tree)
+      commit(`${payload.NAMESPACE}SET_TREE`, { [Object.keys(payload.data).reduce((total, item, index) => total + (index === 0 ? '' : '_') + `${item}_${payload.data[item]}`, '')]: res })
       // commit(`${payload.NAMESPACE}SET_TOTAL`, res.total)
+      // commit(`${payload.NAMESPACE}SET_TREE`, { [payload.data.column]: res })
       return Promise.resolve(res);
     }).finally(() => {
       // commit(`${payload.NAMESPACE}SET_LOADING`, false)

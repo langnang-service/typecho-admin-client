@@ -1,5 +1,5 @@
 <template>
-  <LayoutAdmin class="typecho-content-list" v-loading="$store.state.typecho.content.loading" v-bind="$route.meta">
+  <LayoutAdmin class="typecho-content-list" v-loading="loading" v-bind="$route.meta" :pagination="{visible:true,...table}">
     <template #prefix>
       <span>【{{$store.state.typecho.branch.info.slug}}】</span>
     </template>
@@ -48,20 +48,9 @@
         </el-button>
       </el-tooltip>
     </template>
-    <Item type="table" ref="table" :form="$store.state.typecho.content.info" @select="(form)=>handleSelect(form)" :data="typecho.content.list.filter(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" @selection-change="handleTableSelectionChange" />
-    <template #append>
-      <el-dialog :title="dialog.title" :visible.sync="dialog.visible" :before-close="handleCancelDialog">
-        <el-form :ref="dialog.form.ref" :model="dialog.form">
-          <el-form-item>
-            <el-input v-model="dialog.form.title"></el-input>
-          </el-form-item>
-        </el-form>
-        <span slot="footer">
-          <el-button @click="handleCancelDialog">Cancel</el-button>
-          <el-button type="primary" @click="handleSubmitDialog">Submit</el-button>
-        </span>
-      </el-dialog>
-    </template>
+    <el-card>
+      <TypechoContentTable ref="table" v-loading="table.loading" :data="table.data" @filter="handleSelect" @selection-change="(val) => table.selection = val" />
+    </el-card>
   </LayoutAdmin>
 </template>
 
@@ -69,12 +58,24 @@
 import { mapActions, mapGetters, mapState } from "vuex";
 import Item from './item.vue'
 import { readExcel } from '@/utils/fileReader'
+import { TypechoContentModel } from '@/store/modules/typecho/content'
+import TypechoContentTable from './components/table.vue'
 export default {
   components: {
-    Item
+    TypechoContentTable
   },
   data() {
     return {
+      loading: false,
+      form: new TypechoContentModel(),
+      table: {
+        loading: false,
+        data: [],
+        selection: [],
+        page: 1,
+        size: 10,
+        total: 0,
+      },
       searchVisible: false,
       inputFilterNameValue: '',
       inputFilterTagValue: '',
@@ -93,14 +94,28 @@ export default {
 
   },
   computed: {
-    ...mapState(["typecho"])
+    ...mapState({
+      branch: state => state.typecho.branch.info,
+    }),
   },
   created() {
+    this.handleSelect()
   },
   methods: {
-    ...mapActions({
-      handleSelect: "typecho/content/selectList",
-    }),
+    handleSelect(val, key, row) {
+      this.loading = true;
+      this.$store.dispatch('typecho/content/selectList', {
+        ...row,
+        root: this.branch.mid,
+        page: this.table.page,
+        size: this.table.size,
+      }).then(res => {
+        this.table.data = res.rows
+        this.table.total = res.total
+        this.table.page = res.page
+        this.table.size = res.size
+      }).finally(() => this.loading = false)
+    },
     handleDelete() {
       this.$store.dispatch('typecho/content/deleteList', this.selection.slice(0))
       this.selection = [];
