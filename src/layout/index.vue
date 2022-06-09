@@ -1,25 +1,27 @@
 <template>
   <el-container id="app">
-    <el-header style="height: 61px; border-bottom: solid 1px #e6e6e6">
-      <el-menu v-if="layout.menu.visible" :default-active="layout.menu.active" router class="el-menu-demo" mode="horizontal" :style="{borderBottom: 'unset',display:'inline-block'}">
-        <el-menu-item index="/">首页</el-menu-item>
-        <el-menu-item index="/entry">Entry</el-menu-item>
-        <el-menu-item index="/todo">ToDoList</el-menu-item>
-        <el-submenu index="typecho">
-          <template slot="title">Typecho</template>
-          <el-menu-item index="/typecho">Admin</el-menu-item>
-          <el-menu-item index="/template">Template</el-menu-item>
-          <el-menu-item index="/blog">Blog</el-menu-item>
-          <el-menu-item index="/navigation">Navigation</el-menu-item>
-          <el-menu-item index="/public-api">Public APIs</el-menu-item>
-          <el-menu-item index="/snippet">Snippet</el-menu-item>
-          <el-menu-item index="/novel">Novel</el-menu-item>
-        </el-submenu>
-        <el-submenu index="langnang">
-          <template slot="title">Langnang</template>
+    <el-header style="padding:0 10px;height: 61px; border-bottom: solid 1px #e6e6e6;">
+      <el-row :gutter="10">
+        <el-col :span="24">
+          <el-menu class="hidden-xs-only" v-if="layout.menu.visible" :default-active="layout.menu.active" router mode="horizontal" :style="{borderBottom: 'unset',display:'inline-block'}">
+            <el-menu-item index="/">首页</el-menu-item>
+            <el-menu-item index="/entry">Entry</el-menu-item>
+            <el-menu-item index="/todo">ToDoList</el-menu-item>
+            <el-submenu index="typecho">
+              <template slot="title">Typecho</template>
+              <el-menu-item index="/typecho">Admin</el-menu-item>
+              <el-menu-item index="/template">Template</el-menu-item>
+              <el-menu-item index="/blog">Blog</el-menu-item>
+              <el-menu-item index="/navigation">Navigation</el-menu-item>
+              <el-menu-item index="/public-api">Public APIs</el-menu-item>
+              <el-menu-item index="/snippet">Snippet</el-menu-item>
+              <el-menu-item index="/novel">Novel</el-menu-item>
+            </el-submenu>
+            <el-submenu index="langnang">
+              <template slot="title">Langnang</template>
 
-          <el-menu-item
-            v-for="(href,key) in {
+              <el-menu-item
+                v-for="(href,key) in {
               Home:'https://langnang.github.io/',
               VuePress:'https://langnang.github.io/langnang/',
               Toolkit:'https://langnang.github.io/toolkit/',
@@ -31,26 +33,28 @@
               ToDoList:'https://langnang.github.io/ToDoList/',
               Palette:'https://langnang.github.io/Palette/',
             }"
-            :key="key"
-            :index="key"
-          >
-            <el-link target="_blank" :href="href">{{key}}</el-link>
-          </el-menu-item>
-        </el-submenu>
-        <el-menu-item>理论</el-menu-item>
-        <el-menu-item>实践</el-menu-item>
-        <el-menu-item>工具</el-menu-item>
-        <el-menu-item>资源</el-menu-item>
-      </el-menu>
-      <span v-if="layout.toolbar.visible" :style="{ 
+                :key="key"
+                :index="key"
+              >
+                <el-link target="_blank" :href="href">{{key}}</el-link>
+              </el-menu-item>
+            </el-submenu>
+            <el-menu-item>理论</el-menu-item>
+            <el-menu-item>实践</el-menu-item>
+            <el-menu-item>工具</el-menu-item>
+            <el-menu-item>资源</el-menu-item>
+          </el-menu>
+          <span v-if="layout.toolbar.visible" :style="{ 
             float: 'right' ,
             height:'60px',
             lineHeight:'60px',
             marginLeft:'20px'
           }">
-        <el-button type="primary">Sign Up</el-button>
-        <el-button type="primary">Sign In</el-button>
-      </span>
+            <el-button type="primary">Sign Up</el-button>
+            <el-button type="primary">Sign In</el-button>
+          </span>
+        </el-col>
+      </el-row>
     </el-header>
     <el-scrollbar ref="scroll" style="height: calc(100vh - 61px)">
       <el-main :style="{

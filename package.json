@@ -24,6 +24,7 @@
     "moment": "^2.29.1",
     "monaco-editor": "^0.27.0",
     "monaco-editor-webpack-plugin": "^4.2.0",
+    "px2rem-loader": "^0.1.9",
     "v-contextmenu": "^2.9.0",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",

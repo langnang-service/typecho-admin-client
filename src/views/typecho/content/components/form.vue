@@ -76,7 +76,6 @@ export default {
     this.$store.dispatch('typecho/meta/selectTree', { type: 'category' }).then(res => {
       this.categoryTree = res.tree;
     })
-    console.log(this);
   },
   methods: {
     handleFormTagRemote(val) {

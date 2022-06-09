@@ -38,10 +38,7 @@
 </template>
 
 <script>
-// @ is an alias to /src
-
 import { mapActions, mapGetters, mapState } from "vuex";
-
 export default {
   components: {},
   data() {

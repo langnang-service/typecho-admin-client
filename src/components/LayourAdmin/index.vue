@@ -7,11 +7,11 @@
       </span>
       <el-breadcrumb separator-class="el-icon-arrow-right" :style="{display:'inline-block'}">
         <el-breadcrumb-item v-for="(item,index) in breadcrumb" :key="item.path">
-          <span v-if="!breadcrumbOptions[index]">{{item.meta.name}}</span>
+          <span v-if="!breadcrumbOptions[index] || breadcrumbOptions[index].length == 0">{{item.meta.name}}</span>
           <el-menu v-else :default-active="$route.path" router mode="horizontal">
             <el-submenu :index="''+index">
               <template slot="title">{{item.meta.name}}</template>
-              <el-menu-item v-for="option in breadcrumbOptions[1]" :key="option.path" :index="option.path" v-bind="option">{{option.name}}</el-menu-item>
+              <el-menu-item v-for="option in breadcrumbOptions[index]" :key="option.path" :index="option.path" v-bind="option">{{option.name}}</el-menu-item>
             </el-submenu>
           </el-menu>
         </el-breadcrumb-item>
@@ -27,16 +27,20 @@
       </el-scrollbar>
     </el-main>
     <el-footer v-if="footer">
-      <el-pagination
-        v-if="pagination.visible"
-        @size-change="handlePaginationSizeChange"
-        @current-change="handlePaginationCurrentChange"
-        :current-page="pagination.page"
-        :page-sizes="[10, 20, 50, 100,200,400]"
-        :page-size="pagination.size"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="pagination.total"
-      ></el-pagination>
+      <el-row>
+        <el-col :span="24">
+          <el-pagination
+            v-if="pagination.visible"
+            @size-change="handlePaginationSizeChange"
+            @current-change="handlePaginationCurrentChange"
+            :current-page="pagination.page"
+            :page-sizes="[10, 20, 50, 100,200,400]"
+            :page-size="pagination.size"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="pagination.total"
+          ></el-pagination>
+        </el-col>
+      </el-row>
       <slot name="footer"></slot>
     </el-footer>
     <!-- 插槽：附加 -->

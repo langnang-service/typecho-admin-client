@@ -68,7 +68,6 @@ export default {
 
   },
   computed: {
-    ...mapState(["typecho"])
   },
   created() {
     this.handleSelect();
