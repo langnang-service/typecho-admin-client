@@ -5,18 +5,7 @@
         <!-- 插槽：左侧信息 -->
         <slot name="prefix"></slot>
       </span>
-      <el-breadcrumb separator-class="el-icon-arrow-right" :style="{display:'inline-block'}">
-        <el-breadcrumb-item v-for="(item,index) in breadcrumb" :key="item.path">
-          <span v-if="!breadcrumbOptions[index] || breadcrumbOptions[index].length == 0">{{item.meta.name}}</span>
-          <el-menu v-else :default-active="$route.path" router mode="horizontal">
-            <el-submenu :index="''+index">
-              <template slot="title">{{item.meta.name}}</template>
-              <el-input size="mini" v-model="item.value" />
-              <el-menu-item v-for="option in breadcrumbOptions[index]" :key="option.path" :index="option.path" v-bind="option">{{option.name}}</el-menu-item>
-            </el-submenu>
-          </el-menu>
-        </el-breadcrumb-item>
-      </el-breadcrumb>
+      <ElBreadcrumbMenu :data="breadcrumbMenuData" />
       <span :style="{float:'right',marginTop:'-1px',display:'inline-block'}">
         <!-- 插槽：右侧工具栏 -->
         <slot name="toolbar"></slot>
@@ -99,20 +88,18 @@ export default {
   data() {
     return {
       breadcrumb: [],
+      breadcrumbMenuData: [],
     };
   },
   computed: {
   },
   created() {
-    // console.log(this.$route.matched);
-    this.breadcrumb = this.$route.matched.slice(0).reduce((total, value, index) => {
-      if (!value.name) {
-        const name = value.path.split('/').slice(-1)[0];
-        value.meta.name = name.charAt(0).toUpperCase() + name.substring(1);
-      } else {
-        value.meta.name = value.name.split(' - ')[0]
-      }
-      total.push(value);
+    this.breadcrumbMenuData = this.$route.matched.slice(0).reduce((total, item, index) => {
+      if (!item.name) return total;
+      total.push({
+        title: item.name.split(' - ')[0],
+        menus: this.breadcrumbOptions[index],
+      });
       return total;
     }, [])
   },

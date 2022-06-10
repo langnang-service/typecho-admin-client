@@ -1,6 +1,6 @@
 <template>
   <el-container id="app">
-    <el-header style="padding:0 10px;height: 61px; border-bottom: solid 1px #e6e6e6;">
+    <el-header class="layout-header" style="padding:0 10px;height: 61px; border-bottom: solid 1px #e6e6e6;">
       <el-row :gutter="10">
         <el-col :span="24">
           <el-menu class="hidden-xs-only" v-if="layout.menu.visible" :default-active="layout.menu.active" router mode="horizontal" :style="{borderBottom: 'unset',display:'inline-block'}">
@@ -57,7 +57,7 @@
       </el-row>
     </el-header>
     <el-scrollbar ref="scroll" style="height: calc(100vh - 61px)">
-      <el-main :style="{
+      <el-main class="layout-main" :style="{
         padding:'10px'
       }">
         <LayoutRouterView />
@@ -93,20 +93,6 @@ export default {
 </script>
 
 <style lang="scss">
-body {
-  margin: 0;
-  padding: 0;
-}
-a {
-  text-decoration: none;
-}
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  // text-align: center;
-  color: #2c3e50;
-}
 .el-header {
   .el-menu.el-menu--horizontal {
     // float: right;
@@ -118,7 +104,8 @@ a {
 #app .el-scrollbar__wrap {
   overflow-x: hidden !important;
 }
-.el-select {
-  width: 100%;
+
+.layout-main > .el-row > .el-col {
+  // margin-top: 10px;
 }
 </style>

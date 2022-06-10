@@ -6,12 +6,12 @@ import { TypechoBranchModel } from '@/store/modules/typecho/branch'
 const breadcrumbOptions = [
   null,
   [
-    { name: "Branch", path: '/typecho/branch/list' },
-    { name: "Meta", path: '/typecho/meta/list' },
-    { name: "Content", path: '/typecho/content/list' },
-    { name: "Comment", path: '/typecho/comment/list', disabled: true },
-    { name: "RelationShip", path: '/typecho/relation-ship/list', disabled: true },
-    { name: "User", path: '/typecho/user/list', disabled: true },
+    { title: "Branch", path: '/typecho/branch/list' },
+    { title: "Meta", path: '/typecho/meta/list' },
+    { title: "Content", path: '/typecho/content/list' },
+    { title: "Comment", path: '/typecho/comment/list', disabled: true },
+    { title: "RelationShip", path: '/typecho/relation-ship/list', disabled: true },
+    { title: "User", path: '/typecho/user/list', disabled: true },
   ]
 ]
 export const beforeEnter = (to, from, next) => {
