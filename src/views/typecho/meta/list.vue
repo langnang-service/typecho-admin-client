@@ -3,9 +3,7 @@
     <template #prefix>
       <span>【{{branch.slug}}】</span>
     </template>
-    <el-card>
-      <TypechoMetaTable ref="table" v-loading="table.loading" :data="table.data" @filter="handleSelect" @selection-change="(val) => table.selection = val" />
-    </el-card>
+    <TypechoMetaTable ref="table" v-loading="table.loading" :data="table.data" @filter="handleSelect" @selection-change="(val) => table.selection = val" />
   </LayoutAdmin>
 </template>
 

@@ -5,7 +5,7 @@
         <!-- 插槽：左侧信息 -->
         <slot name="prefix"></slot>
       </span>
-      <ElBreadcrumbMenu :data="breadcrumbMenuData" />
+      <ElBreadcrumbMenu :data="breadcrumbMenuData" style="display: inline-block;" />
       <span :style="{float:'right',marginTop:'-1px',display:'inline-block'}">
         <!-- 插槽：右侧工具栏 -->
         <slot name="toolbar"></slot>

@@ -12,11 +12,29 @@
     <el-table-column show-overflow-tooltip prop="templatesNum" label="templatesNum"></el-table-column>
     <el-table-column show-overflow-tooltip prop="commentsNum" label="commentsNum"></el-table-column>
     <template #v-contextmenu-items>
-      <v-contextmenu-item @click="handleToggleRoute('/typecho/meta/list')">Metas</v-contextmenu-item>
-      <v-contextmenu-item @click="handleToggleRoute('/typecho/content/list')">Contents</v-contextmenu-item>
-      <v-contextmenu-item disabled>删除</v-contextmenu-item>
+      <v-contextmenu-submenu>
+        <template #title>
+          <span>跳转</span>
+        </template>
+        <v-contextmenu-item @click="handleToggleRoute('/typecho/meta/list')">Metas</v-contextmenu-item>
+        <v-contextmenu-item @click="handleToggleRoute('/typecho/content/list')">Contents</v-contextmenu-item>
+      </v-contextmenu-submenu>
+      <hr />
+      <v-contextmenu-submenu disabled>
+        <template #title>
+          <span>删除</span>
+        </template>
+        <v-contextmenu-item disabled>删除已选</v-contextmenu-item>
+      </v-contextmenu-submenu>
       <v-contextmenu-item @click="handleToggleRoute('/typecho/branch/' + $refs.table.row.mid)">编辑</v-contextmenu-item>
-      <v-contextmenu-item disabled>查看</v-contextmenu-item>
+      <hr />
+      <v-contextmenu-item disabled>上传</v-contextmenu-item>
+      <v-contextmenu-item disabled>下载</v-contextmenu-item>
+      <hr />
+      <v-contextmenu-item disabled>记录</v-contextmenu-item>
+      <v-contextmenu-item disabled>回收站</v-contextmenu-item>
+      <hr />
+      <v-contextmenu-item disabled>详情</v-contextmenu-item>
     </template>
   </ContextMenuTable>
 </template>

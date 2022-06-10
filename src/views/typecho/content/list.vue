@@ -3,9 +3,7 @@
     <template #prefix>
       <span>【{{$store.state.typecho.branch.info.slug}}】</span>
     </template>
-    <el-card>
       <TypechoContentTable ref="table" v-loading="table.loading" :data="table.data" @filter="handleSelect" @selection-change="(val) => table.selection = val" />
-    </el-card>
   </LayoutAdmin>
 </template>
 

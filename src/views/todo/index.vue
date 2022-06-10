@@ -87,7 +87,6 @@ export default {
   },
   created() {
     this.content = new TypechoContentModel({ type: 'todo', parent: this.branch.cid, mids: this.branch.mid })
-
   },
   mounted() {
     this.handleSelectCategoryTree();

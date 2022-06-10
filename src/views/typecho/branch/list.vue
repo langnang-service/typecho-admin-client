@@ -6,26 +6,8 @@
           <font-awesome-icon icon="fa-solid fa-magnifying-glass" />
         </el-button>
       </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="新增" placement="bottom">
-        <el-button size="mini" circle type="primary" icon="el-icon-plus" @click="$router.push('/typecho/branch/insert')"></el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
-        <el-button size="mini" circle type="danger" icon="el-icon-delete" :disabled="selection.length === 0" @click="handleDelete"></el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="记录" placement="bottom">
-        <el-button size="mini" circle type="info">
-          <font-awesome-icon icon="fa-solid fa-clock-rotate-left" />
-        </el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="回收站" placement="bottom">
-        <el-button size="mini" circle type="info">
-          <font-awesome-icon icon="fa-solid fa-recycle" />
-        </el-button>
-      </el-tooltip>
     </template>
-    <el-card>
       <TypechoBranchTable ref="table" v-loading="table.loading" :data="table.data" @filter="handleSelect" @selection-change="(val) => table.selection = val" />
-    </el-card>
   </LayoutAdmin>
 </template>
 
