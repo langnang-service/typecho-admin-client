@@ -1,6 +1,6 @@
 <template>
   <el-breadcrumb class="el-breadcrumb-menu" v-bind="$attrs" v-on="$listeners">
-    <el-breadcrumb-menu-item v-for="(item) in data" :key="item.path" :title="item.title" v-bind="item" @open="handleOpenMenuItem">
+    <el-breadcrumb-menu-item v-for="(item,index) in data" :key="item.path" :title="item.title" v-bind="item" @mouseover.native="$emit('menu-open',item,index,data)" @mouseleave.native="$emit('menu-close',item,index,data)">
       <template #prepend>
         <slot name="menu-prepend" />
       </template>
@@ -36,15 +36,15 @@ export default {
     }
   },
   watch: {
-    data(newV, oldV) {
-      console.log('data', newV, oldV)
-    }
   },
   created() {
   },
   methods: {
     handleOpenMenuItem() {
       console.log('handleOpenMenuItem', arguments)
+    },
+    handleMouseOver() {
+      console.log("handleMouseOver")
     }
   }
 }

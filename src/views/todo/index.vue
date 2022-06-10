@@ -1,8 +1,8 @@
 <template>
-  <el-row :gutter="10">
+  <el-row :gutter="10" v-loading="loading">
     <el-col :md="16" :lg="18">
       <el-card>
-        <ElBreadcrumbMenu :data="breadcrumbMenuData" input separator="/" style="height: 32px;line-height: 32px;">
+        <ElBreadcrumbMenu :data="breadcrumbMenuData" input separator="/" style="height: 32px;line-height: 32px;" @menu-open="handleBreadcrumbMenuOpen">
           <template #menu-prepend>
             <el-input ref="input" size="small" v-model="meta.name" @keyup.enter.native="handleInsertMeta" />
           </template>
@@ -62,7 +62,7 @@ export default {
       categoryTree: [],
       breadcrumbMenuData: [],
       content: new TypechoContentModel({ type: 'todo' }),
-      meta: new TypechoMetaModel(),
+      meta: new TypechoMetaModel({ type: 'category' }),
       table: {
         loading: false,
         data: [],
@@ -90,12 +90,16 @@ export default {
 
   },
   mounted() {
-    this.$store.dispatch('typecho/meta/selectTree', { type: 'category' }).then(res => {
-      this.categoryTree = res.tree;
-      this.setBreadcrumb()
-    })
+    this.handleSelectCategoryTree();
   },
   methods: {
+    handleSelectCategoryTree() {
+      this.loading = true;
+      this.$store.dispatch('typecho/meta/selectTree', { type: 'category' }).then(res => {
+        this.categoryTree = res.tree;
+        this.setBreadcrumb()
+      }).finally(() => this.loading = false)
+    },
     /**
      * 更新面包屑配置参数
      */
@@ -103,6 +107,7 @@ export default {
       this.breadcrumbMenuData = this.$route.matched.slice(0).reduce((total, item, index) => {
         if (!item.name) return total;
         total.push({
+          mid: this.branch.mid,
           title: item.name.split(' - ')[0],
           // input: true,
           // filterable: true,
@@ -115,6 +120,7 @@ export default {
         this.breadcrumbMenuData = mids.reduce((total, mid, index) => {
           const meta = total[index].menus.find(v => v.mid == mid);
           total.push({
+            mid,
             title: meta.title,
             // input: true,
             // filterable: true,
@@ -167,6 +173,15 @@ export default {
         type: checked ? 'done' : 'todo'
       }).then(() => {
         this.handleSelect()
+      })
+    },
+    handleBreadcrumbMenuOpen(row) {
+      this.meta.parent = row.mid
+    },
+    handleInsertMeta() {
+      this.$store.dispatch('typecho/meta/insertItem', this.meta).then(res => {
+        this.meta.name = '';
+        this.handleSelectCategoryTree();
       })
     }
   },
