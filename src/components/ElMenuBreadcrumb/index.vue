@@ -18,7 +18,7 @@
 
 <script>
 export default {
-  name: "MenuBreadcrumb",
+  name: "ElMenuBreadcrumb",
   data() {
     return {
       actives: [],

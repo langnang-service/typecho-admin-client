@@ -23,10 +23,34 @@
     </el-table-column>
     <el-table-column show-overflow-tooltip prop="commentsNum" label="commentsNum"></el-table-column>
     <template #v-contextmenu-items>
-      <v-contextmenu-item @click="$router.push({ path: '/typecho/content/insert', query: { parent: $refs.table.row.cid } })">新建子节点</v-contextmenu-item>
-      <v-contextmenu-item disabled>删除</v-contextmenu-item>
+      <v-contextmenu-submenu>
+        <template #title>
+          <span @click="$router.push({ path: '/typecho/content/insert' })">新建</span>
+        </template>
+        <v-contextmenu-submenu>
+          <template #title>
+            <span @click="$router.push({ path: '/typecho/content/insert', query: { parent: $refs.table.row.cid, } })">子节点</span>
+          </template>
+          <v-contextmenu-item disabled @click="$router.push({ path: '/typecho/content/insert', query: { parent: $refs.table.row.cid, type: 'template' } })">模板</v-contextmenu-item>
+        </v-contextmenu-submenu>
+        <hr />
+        <v-contextmenu-item @click="$router.push({ path: '/typecho/content/insert', query: { type: 'template' } })">模板</v-contextmenu-item>
+      </v-contextmenu-submenu>
+      <v-contextmenu-submenu disabled>
+        <template #title>
+          <span>删除</span>
+        </template>
+        <v-contextmenu-item disabled>删除已选</v-contextmenu-item>
+      </v-contextmenu-submenu>
       <v-contextmenu-item @click="$router.push('/typecho/content/'+$refs.table.row.cid)">编辑</v-contextmenu-item>
-      <v-contextmenu-item disabled>查看</v-contextmenu-item>
+      <hr />
+      <v-contextmenu-item disabled>上传</v-contextmenu-item>
+      <v-contextmenu-item disabled>下载</v-contextmenu-item>
+      <hr />
+      <v-contextmenu-item disabled>记录</v-contextmenu-item>
+      <v-contextmenu-item disabled>回收站</v-contextmenu-item>
+      <hr />
+      <v-contextmenu-item disabled>详情</v-contextmenu-item>
     </template>
   </ContextMenuTable>
 </template>
@@ -49,6 +73,13 @@ export default {
   created() {
   },
   methods: {
+    hanldeInsert(vm, event) {
+      console.log('hanldeInsert', arguments);
+      this.$refs.table.handleMouseDown()
+    },
+    hanldeInsertChild() {
+      console.log('hanldeInsertChild', arguments);
+    }
   }
 }
 </script>

@@ -3,51 +3,6 @@
     <template #prefix>
       <span>【{{$store.state.typecho.branch.info.slug}}】</span>
     </template>
-    <template #toolbar>
-      <el-tooltip class="item" effect="dark" content="查询" placement="bottom">
-        <el-button size="mini" circle type="info" @click="handleSelect">
-          <font-awesome-icon icon="fa-solid fa-search" />
-        </el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="新增" placement="bottom">
-        <el-button size="mini" circle type="primary" icon="el-icon-plus" @click="$router.push({path:'/typecho/content/insert'})"></el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="模板" placement="bottom">
-        <el-button size="mini" circle type="info">
-          <font-awesome-icon icon="fa-solid fa-stamp" />
-        </el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="删除" placement="bottom">
-        <el-button size="mini" circle type="danger" icon="el-icon-delete" :disabled="selection.length === 0" @click="handleDelete"></el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="上传" placement="bottom">
-        <el-upload action="#" accept=".xls, .xlsx" :show-file-list="false" :http-request="handleUpload" :style="{display:'inline-block',margin:'0 10px'}">
-          <el-button size="mini" circle type="primary">
-            <font-awesome-icon icon="fa-solid fa-upload" />
-          </el-button>
-        </el-upload>
-      </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="下载" placement="bottom">
-        <el-button size="mini" circle type="primary">
-          <font-awesome-icon icon="fa-solid fa-download" />
-        </el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="模板" placement="bottom">
-        <el-button size="mini" circle type="primary">
-          <font-awesome-icon icon="fa-solid fa-file-excel" />
-        </el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="记录" placement="bottom">
-        <el-button size="mini" circle type="info">
-          <font-awesome-icon icon="fa-solid fa-clock-rotate-left" />
-        </el-button>
-      </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="回收站" placement="bottom">
-        <el-button size="mini" circle type="info">
-          <font-awesome-icon icon="fa-solid fa-recycle" />
-        </el-button>
-      </el-tooltip>
-    </template>
     <el-card>
       <TypechoContentTable ref="table" v-loading="table.loading" :data="table.data" @filter="handleSelect" @selection-change="(val) => table.selection = val" />
     </el-card>
