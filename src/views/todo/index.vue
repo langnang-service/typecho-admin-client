@@ -2,9 +2,9 @@
   <el-row :gutter="10">
     <el-col :md="16" :lg="18">
       <el-card>
-        <ElBreadcrumbMenu :data="breadcrumbMenuData" separator="/" style="height: 32px;line-height: 32px;">
-          <template #menu>
-            <el-input></el-input>
+        <ElBreadcrumbMenu :data="breadcrumbMenuData" input separator="/" style="height: 32px;line-height: 32px;">
+          <template #menu-prepend>
+            <el-input ref="input" size="small" v-model="meta.name" @keyup.enter.native="handleInsertMeta" />
           </template>
         </ElBreadcrumbMenu>
       </el-card>
@@ -136,14 +136,16 @@ export default {
         page: this.table.page,
         size: this.table.size,
       }).then(res => {
-        this.table.data = res.rows.reduce((total, item) => {
-          item.type == 'done' ? total.push(item) : total.unshift(item);
+        const metas = res.rows.reduce((total, item) => {
+          if (!total[item.type]) total[item.type] = [];
+          total[item.type].push(item);
           return total;
-        }, []);
+        }, {});
+        this.table.data = [...metas.todo || [], ...metas.done || []];
         this.table.total = res.total
         this.table.page = res.page
         this.table.size = res.size
-        this.done = res.rows.filter(v => v.type == 'done')
+        this.done = metas.done || [];
       }).finally(() => this.table.loading = false)
     },
     handleInsertContent() {

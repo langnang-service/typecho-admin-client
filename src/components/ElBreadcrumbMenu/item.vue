@@ -1,11 +1,12 @@
 <template>
   <el-breadcrumb-item class="el-breadcrumb-menu-item" v-bind="$attrs" v-on="$listeners">
     <span v-if="menus.length == 0">{{title.length > wordLimit ? (title.substring(0, wordLimit) + '...'): title}}</span>
-    <el-menu v-else :default-active="$route.path" router mode="horizontal">
+    <el-menu v-else :default-active="$route.path" router mode="horizontal" @open="handleOpen">
       <el-submenu :index="''">
         <template slot="title">{{title.length > wordLimit ? (title.substring(0, wordLimit) + '...'): title}}</template>
-        <slot />
+        <slot name="prepend" />
         <el-menu-item v-for="item in menus.filter(v => v.title.indexOf(value) > -1 )" :key="item.path" :index="item.path" v-bind="item">{{item.title}}</el-menu-item>
+        <slot name="append" />
       </el-submenu>
     </el-menu>
   </el-breadcrumb-item>
@@ -47,7 +48,10 @@ export default {
     return {}
   },
   methods: {
-    handleEnterKeyUp() { }
+    handleEnterKeyUp() { },
+    handleOpen() {
+      console.log('handleOpen', arguments)
+    }
   }
 }
 </script>

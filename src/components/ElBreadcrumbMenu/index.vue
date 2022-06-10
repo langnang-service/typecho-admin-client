@@ -1,7 +1,12 @@
 <template>
   <el-breadcrumb class="el-breadcrumb-menu" v-bind="$attrs" v-on="$listeners">
-    <el-breadcrumb-menu-item v-for="(item) in data" :key="item.path" :title="item.title" v-bind="item">
-      <slot name="item" />
+    <el-breadcrumb-menu-item v-for="(item) in data" :key="item.path" :title="item.title" v-bind="item" @open="handleOpenMenuItem">
+      <template #prepend>
+        <slot name="menu-prepend" />
+      </template>
+      <template #append>
+        <slot name="menu-append" />
+      </template>
     </el-breadcrumb-menu-item>
   </el-breadcrumb>
 </template>
@@ -20,6 +25,11 @@ export default {
         return []
       }
     },
+    input: {
+      type: Boolean,
+      default: false
+    },
+    value: {},
   },
   data() {
     return {
@@ -32,5 +42,10 @@ export default {
   },
   created() {
   },
+  methods: {
+    handleOpenMenuItem() {
+      console.log('handleOpenMenuItem', arguments)
+    }
+  }
 }
 </script>
