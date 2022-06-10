@@ -22,7 +22,7 @@
         <template #title>
           <span @click="$router.push({ path: '/typecho/meta/insert' })">新建</span>
         </template>
-        <v-contextmenu-submenu>
+        <v-contextmenu-submenu :disabled="!refs.table || !refs.table.row">
           <template #title>
             <span @click="$router.push({ path: '/typecho/meta/insert', query: { parent: $refs.table.row.cid, } })">子节点</span>
           </template>
@@ -38,7 +38,7 @@
         </template>
         <v-contextmenu-item disabled>删除已选</v-contextmenu-item>
       </v-contextmenu-submenu>
-      <v-contextmenu-item @click="$router.push('/typecho/meta/'+$refs.table.row.mid)">编辑</v-contextmenu-item>
+      <v-contextmenu-item :disabled="!refs.table || !refs.table.row" @click="$router.push('/typecho/meta/'+$refs.table.row.mid)">编辑</v-contextmenu-item>
       <hr />
       <v-contextmenu-item disabled>上传</v-contextmenu-item>
       <v-contextmenu-item disabled>下载</v-contextmenu-item>
@@ -58,6 +58,9 @@ export default {
   data() {
     return {
       form: new TypechoMetaModel(),
+      refs: {
+        table: null,
+      }
     }
   },
   computed: {
@@ -66,6 +69,9 @@ export default {
     })
   },
   created() {
+  },
+  mounted() {
+    this.refs = this.$refs
   },
   methods: {
   }

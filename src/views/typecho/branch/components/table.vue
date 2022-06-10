@@ -12,7 +12,7 @@
     <el-table-column show-overflow-tooltip prop="templatesNum" label="templatesNum"></el-table-column>
     <el-table-column show-overflow-tooltip prop="commentsNum" label="commentsNum"></el-table-column>
     <template #v-contextmenu-items>
-      <v-contextmenu-submenu>
+      <v-contextmenu-submenu :disabled="!refs.table || !refs.table.row">
         <template #title>
           <span>跳转</span>
         </template>
@@ -20,13 +20,14 @@
         <v-contextmenu-item @click="handleToggleRoute('/typecho/content/list')">Contents</v-contextmenu-item>
       </v-contextmenu-submenu>
       <hr />
+      <v-contextmenu-item @click="$router.push('/typecho/content/insert')">新增</v-contextmenu-item>
       <v-contextmenu-submenu disabled>
         <template #title>
           <span>删除</span>
         </template>
         <v-contextmenu-item disabled>删除已选</v-contextmenu-item>
       </v-contextmenu-submenu>
-      <v-contextmenu-item @click="handleToggleRoute('/typecho/branch/' + $refs.table.row.mid)">编辑</v-contextmenu-item>
+      <v-contextmenu-item :disabled="!refs.table || !refs.table.row" @click="handleToggleRoute('/typecho/branch/' + $refs.table.row.mid)">编辑</v-contextmenu-item>
       <hr />
       <v-contextmenu-item disabled>上传</v-contextmenu-item>
       <v-contextmenu-item disabled>下载</v-contextmenu-item>
@@ -45,9 +46,15 @@ export default {
   data() {
     return {
       form: new TypechoBranchModel(),
+      refs: {
+        table: null,
+      }
     }
   },
   created() {
+  },
+  mounted() {
+    this.refs = this.$refs
   },
   methods: {
     /**

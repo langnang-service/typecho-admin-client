@@ -1,5 +1,5 @@
 <template>
-  <el-table v-bind="$attrs" v-on="$listeners" @row-contextmenu="handleRowContextMenu" @mousedown.native="handleMouseDown">
+  <el-table v-bind="$attrs" v-on="$listeners" v-contextmenu:contextmenu @row-contextmenu="row => $data.row = row" @mousedown.native="() => $data.row = null">
     <template #empty>
       <el-empty />
     </template>
@@ -26,16 +26,16 @@ export default {
      * 右键表格行，显示菜单
      */
     handleRowContextMenu(row, column, event) {
-      event.preventDefault()
+      // event.preventDefault()
       this.row = row;
-      this.$refs.contextmenu.show({ top: event.clientY, left: event.clientX });
+      // this.$refs.contextmenu.show({ top: event.clientY, left: event.clientX });
     },
     /**
      * 隐藏菜单
      */
     handleMouseDown() {
       this.row = null
-      this.$refs.contextmenu.hide()
+      // this.$refs.contextmenu.hide()
     },
   }
 }

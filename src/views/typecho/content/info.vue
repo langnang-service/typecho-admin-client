@@ -47,6 +47,7 @@ export default {
   created() {
     if (['/typecho/content/insert'].includes(this.$route.path)) {
       this.form = new TypechoContentModel(this.$route.query);
+      console.log(this.form)
     } else {
       this.loading = true
       this.$store.dispatch('typecho/content/selectItem', this.$route.params)
@@ -67,6 +68,7 @@ export default {
     handleSubmit() {
       this.$refs.form.$refs.form.validate((valid) => {
         if (valid) {
+          console.log(this.form)
           this.loading = true
           this.$store.dispatch('typecho/content/submitItem', {
             ...this.form,

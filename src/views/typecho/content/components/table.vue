@@ -27,14 +27,14 @@
         <template #title>
           <span @click="$router.push({ path: '/typecho/content/insert' })">新建</span>
         </template>
-        <v-contextmenu-submenu>
+        <v-contextmenu-submenu :disabled="!refs.table || !refs.table.row">
           <template #title>
             <span @click="$router.push({ path: '/typecho/content/insert', query: { parent: $refs.table.row.cid, } })">子节点</span>
           </template>
           <v-contextmenu-item disabled @click="$router.push({ path: '/typecho/content/insert', query: { parent: $refs.table.row.cid, type: 'template' } })">模板</v-contextmenu-item>
         </v-contextmenu-submenu>
         <hr />
-        <v-contextmenu-item @click="$router.push({ path: '/typecho/content/insert', query: { type: 'template' } })">模板</v-contextmenu-item>
+        <v-contextmenu-item :disabled="!refs.table || !refs.table.row" @click="$router.push({ path: '/typecho/content/insert', query: { type: 'template' } })">模板</v-contextmenu-item>
       </v-contextmenu-submenu>
       <v-contextmenu-submenu disabled>
         <template #title>
@@ -42,7 +42,7 @@
         </template>
         <v-contextmenu-item disabled>删除已选</v-contextmenu-item>
       </v-contextmenu-submenu>
-      <v-contextmenu-item @click="$router.push('/typecho/content/'+$refs.table.row.cid)">编辑</v-contextmenu-item>
+      <v-contextmenu-item :disabled="!refs.table || !refs.table.row" @click="$router.push('/typecho/content/'+$refs.table.row.cid)">编辑</v-contextmenu-item>
       <hr />
       <v-contextmenu-item disabled>上传</v-contextmenu-item>
       <v-contextmenu-item disabled>下载</v-contextmenu-item>
@@ -62,6 +62,10 @@ export default {
   data() {
     return {
       form: new TypechoContentModel(),
+      // 暂存 $refs
+      refs: {
+        table: null,
+      }
     }
   },
   computed: {
@@ -71,6 +75,9 @@ export default {
     })
   },
   created() {
+  },
+  mounted() {
+    this.refs = this.$refs
   },
   methods: {
     hanldeInsert(vm, event) {
