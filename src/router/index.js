@@ -6,7 +6,17 @@ const routes = [
   {
     path: "",
     name: "Home",
-    component: () => import("../views/home"),
+    component: () => import("@/views/home"),
+  },
+  {
+    path: "/signin",
+    name: "Sign In",
+    component: () => import("@/views/signin"),
+  },
+  {
+    path: "/signup",
+    name: "Sign Up",
+    component: () => import("@/views/signup"),
   },
   require('./modules/entry')['default'],
   require('./modules/typecho')['default'],

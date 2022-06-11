@@ -2,7 +2,7 @@
 
 import Vue from "vue";
 import axios from "axios";
-
+import Cookies from 'js-cookie'
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
@@ -21,6 +21,9 @@ const _axios = axios.create(config);
 _axios.interceptors.request.use(
   function (config) {
     // Do something before request is sent
+    if (Cookies.get("token")) {
+      config.headers['Authorization'] = Cookies.get("token");
+    }
     return config;
   },
   function (error) {
