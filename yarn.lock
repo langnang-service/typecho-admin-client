@@ -1062,6 +1062,16 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
+"@langnang/vue-element-ui@^0.0.1-beta-0.4":
+  version "0.0.1-beta-0.4"
+  resolved "https://registry.yarnpkg.com/@langnang/vue-element-ui/-/vue-element-ui-0.0.1-beta-0.4.tgz#0d86bd41075ad8cc9f1fe4a83039df33f576271b"
+  integrity sha512-OLYCN0C3ULJea1563ZRpawvHqd+MPdBXlxo8EymPXDdpNvw9eIqUdWV3ub9tEowmwxy/uCLg+UFPkAiJdXOHXA==
+  dependencies:
+    core-js "^3.6.5"
+    element-ui "^2.15.6"
+    vue "^2.6.12"
+    vue-router "^3.2.0"
+
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -9152,7 +9162,7 @@ vue-template-es2015-compiler@^1.9.0:
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
 
-vue@^2.6.11:
+vue@^2.6.11, vue@^2.6.12:
   version "2.6.14"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.14.tgz#e51aa5250250d569a3fbad3a8a5a687d6036e235"
   integrity sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ==
