@@ -1,19 +1,19 @@
 <template>
-  <div class="blog" v-loading="$store.state.typecho.content.loading">
+  <div class="blog" v-loading="loading">
     <el-row :gutter="10">
-      <el-col :style="{width:'280px'}">
+      <el-col :span="4">
         <el-input size="mini"></el-input>
         <el-scrollbar :style="{height:'50vh',marginTop:'10px'}">
-          <el-tree :data="$store.state.typecho.meta.tree" node-key="mid" :props="{children: 'children',label: 'name'}" :style="{marginTop:'20px'}" @node-click="handleCatagoryTreeNodeClick"></el-tree>
+          <el-tree :data="categories" highlight-current node-key="mid" :props="{children: 'children',label: 'name'}" :style="{marginTop:'20px'}" @node-click="handleCatagoryTreeNodeClick"></el-tree>
         </el-scrollbar>
         <el-checkbox-group size="small" v-model="checkedTags" @change="handleCheckedTagsChange">
-          <el-checkbox-button v-for="tag in $store.state.typecho.meta.list" :label="tag.mid" :key="tag.mid">{{tag.name}}</el-checkbox-button>
+          <el-checkbox-button v-for="tag in tags" :label="tag.mid" :key="tag.mid">{{tag.name}}</el-checkbox-button>
         </el-checkbox-group>
       </el-col>
-      <el-col :style="{width:'calc(100% - 280px)'}">
+      <el-col :span="20" v-loading="table.loading">
         <el-scrollbar :style="{height:'calc(100vh - 131px)'}">
-          <el-empty v-if="!$store.state.typecho.content.list.some(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" />
-          <el-card shadow="hover" v-for="(item) in $store.state.typecho.content.list.filter(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" :key="item.id" :style="{marginBottom:'10px',cursor:'pointer',opacity:item.type=='done'?'0.5':'1'}">
+          <el-empty v-if="!table.data.some(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" />
+          <el-card shadow="hover" v-for="(item) in table.data.filter(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" :key="item.id" :style="{marginBottom:'10px',cursor:'pointer',opacity:item.type=='done'?'0.5':'1'}">
             <div slot="header" class="clearfix">
               <strong>{{item.title}}</strong>
               <el-button style="float: right; padding: 3px 0" type="text" @click="$router.push({path:'/blog/content/'+item.cid})">阅读全文</el-button>
@@ -23,13 +23,13 @@
         </el-scrollbar>
         <el-footer>
           <el-pagination
-            @size-change="(size)=>$store.dispatch('typecho/content/selectList',{size})"
-            @current-change="(page)=>$store.dispatch('typecho/content/selectList',{page})"
-            :current-page="$store.state.typecho.content.page"
+            @size-change="(size) => handlePaginationChange(table.page, size)"
+            @current-change="(page) => handlePaginationChange(page, table.size)"
+            :current-page="table.page"
             :page-sizes="[10, 20, 50, 100,200,400]"
-            :page-size="$store.state.typecho.content.size"
+            :page-size="table.size"
             layout="total, sizes, prev, pager, next, jumper"
-            :total="$store.state.typecho.content.total"
+            :total="table.total"
           ></el-pagination>
         </el-footer>
       </el-col>
@@ -39,69 +39,76 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from "vuex";
+import { TypechoContentModel } from '@/store/modules/typecho/content'
 export default {
   components: {},
   data() {
     return {
+      loading: false,
       inputFilterNameValue: '',
       selection: [],
       parent: {},
       list: [],
       done: [],
-      checkedTags: []
+      table: {
+        loading: false,
+        data: [],
+        selection: [],
+        page: 1,
+        size: 10,
+        total: 0,
+      },
+      form: new TypechoContentModel(),
+      checkedTags: [],
+      categories: [],
+      tags: [],
     };
   },
   created() {
+    this.$store.dispatch('typecho/meta/selectTree', { type: 'category' }).then(res => {
+      this.categories = res.tree
+    })
+    this.$store.dispatch('typecho/meta/selectList', { type: 'tag' }).then(res => {
+      this.tags = res.rows
+    })
+    this.handleSelectList();
+
   },
   computed: {
-    ...mapState(["typecho"])
+    ...mapState(["typecho"]),
+    ...mapState({
+      branch: state => state.typecho.branch.info,
+    }),
   },
   methods: {
     ...mapActions({
       handleSelectItem: "typecho/content/selectItem",
     }),
     handleSelectList() {
-      this.$store.dispatch("typecho/content/selectList", {
-        template: 'blog',
-        parent: this.parent.cid,
+      this.table.loading = true
+      this.$store.dispatch('typecho/content/selectList', {
+        ...this.form,
+        size: this.table.size,
+        page: this.table.page,
       }).then(res => {
-        this.list = res.rows.reduce((total, item) => {
-          item.type == 'done' ? total.push(item) : total.unshift(item);
-          return total;
-        }, [])
-        this.done = res.rows.filter(v => v.type == 'done')
-      })
-    },
-    handleInsertItem() {
-      if (this.inputFilterNameValue.trim() == '') return
-      this.$store.dispatch("typecho/content/insertItem", {
-        title: this.inputFilterNameValue,
-        template: 'blog',
-        type: 'blog',
-        parent: this.parent.cid,
-      }).then(() => {
-        this.inputFilterNameValue = '';
-        this.handleSelectList();
-      })
-    },
-    handleDeleteItem(item) {
-      this.$store.dispatch("typecho/content/deleteItem", item).then(res => {
-        this.handleSelectList();
-      })
-    },
-    handleSelectionChange(item, checked) {
-      this.$store.dispatch("typecho/content/updateItem", {
-        ...item,
-        type: checked ? 'done' : 'blog'
-      }).then(() => {
-        this.handleSelectList()
-      })
+        this.table.data = res.rows
+        this.table.total = res.total
+        this.table.page = res.page
+        this.table.size = res.size
+      }).finally(() => this.table.loading = false)
     },
     handleCatagoryTreeNodeClick(data, node, ref) {
-      this.$store.dispatch('typecho/content/selectList', { mids: data.mid })
+      this.form.mids = data.mid;
+      this.handleSelectList()
     },
     handleCheckedTagsChange(val) {
-      this.$store.dispatch('typecho/content/selectList', { mids: val.join(',') })
+      this.form.mids = val.join(',')
+      this.handleSelectList()
+    },
+    handlePaginationChange(page, size) {
+      this.table.page = page
+      this.table.size = size
+      this.handleSelectList()
     }
   }
 };

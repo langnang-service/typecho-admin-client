@@ -29,11 +29,10 @@ export default {
   ],
   beforeEnter(to, from, next) {
     $store.dispatch('typecho/branch/selectItem', {
-      type: 'branch',
       slug: to.path.split('/')[1]
     }).then((res) => {
       $store.commit('typecho/branch/SET_INFO', res.row)
       next()
-    })
+    }).catch(() => next('/404'))
   }
 }

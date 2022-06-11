@@ -27,9 +27,7 @@ export default {
       },
       component: () => import('@/views/blog'),
       beforeEnter(to, from, next) {
-        $store.dispatch('typecho/meta/selectTree', { type: 'category' })
-        $store.dispatch('typecho/meta/selectList', { type: 'tag' })
-        $store.dispatch('typecho/content/selectList', {})
+
         next();
       }
     },
@@ -135,11 +133,10 @@ export default {
   ],
   beforeEnter(to, from, next) {
     $store.dispatch('typecho/branch/selectItem', {
-      type: 'branch',
       slug: to.path.split('/')[1]
     }).then(res => {
       $store.commit('typecho/branch/SET_INFO', res.row)
       next()
-    })
+    }).catch(() => next('/404'))
   }
 }

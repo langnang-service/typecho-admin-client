@@ -15,6 +15,11 @@ const routes = [
   require('./modules/todo')['default'],
   require('./modules/navigation')['default'],
   require('./modules/blog')['default'],
+  {
+    path: "*",
+    name: "Error",
+    component: () => import("@/views/error")
+  },
 ];
 
 const router = new VueRouter({

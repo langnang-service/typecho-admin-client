@@ -1,8 +1,8 @@
 <template>
-  <div class="typecho">
+  <div class="typecho" v-loading="loading">
     <el-card>
       <div slot="header" class="clearfix">
-        <strong>{{$store.state.typecho.content.info.title}}</strong>
+        <strong>{{form.title}}</strong>
         <el-button style="float: right; padding: 3px 0" type="text" @click="$router.push({path:'/blog'})">返回</el-button>
       </div>
       <div v-html="content"></div>
@@ -14,20 +14,28 @@
 // @ is an alias to /src
 
 import { mapActions, mapGetters, mapState } from "vuex";
+import { TypechoContentModel } from '@/store/modules/typecho/content'
 import MarkdownIt from 'markdown-it'
 const md = new MarkdownIt();
 export default {
   components: {},
   data() {
     return {
+      loading: false,
+      form: new TypechoContentModel(),
     };
   },
   computed: {
     content() {
-      return md.render(this.$store.state.typecho.content.info.text_content);
+      return md.render(this.form.text_content);
     }
   },
   created() {
+    this.loading = true
+    this.$store.dispatch('typecho/content/selectItem', this.$route.params)
+      .then(res => {
+        this.form = res.row;
+      }).finally(() => this.loading = false)
   },
   methods: {
   }

@@ -20,7 +20,8 @@
         <v-contextmenu-item @click="handleToggleRoute('/typecho/content/list')">Contents</v-contextmenu-item>
       </v-contextmenu-submenu>
       <hr />
-      <v-contextmenu-item @click="$router.push('/typecho/content/insert')">新增</v-contextmenu-item>
+      <v-contextmenu-item @click="$router.push('/typecho/branch/insert')">新增</v-contextmenu-item>
+      <v-contextmenu-item :disabled="!refs.table || !refs.table.row" @click="$router.push('/typecho/branch/insert')">复制</v-contextmenu-item>
       <v-contextmenu-submenu disabled>
         <template #title>
           <span>删除</span>
