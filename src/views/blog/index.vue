@@ -2,7 +2,7 @@
   <div class="blog" v-loading="loading">
     <el-row :gutter="10">
       <el-col :span="4">
-        <el-input size="mini"></el-input>
+        <el-input v-model="form.title" size="mini" clearable @blur="handleSelectList"></el-input>
         <el-scrollbar :style="{height:'50vh',marginTop:'10px'}">
           <el-tree :data="categories" highlight-current node-key="mid" :props="{children: 'children',label: 'name'}" :style="{marginTop:'20px'}" @node-click="handleCatagoryTreeNodeClick"></el-tree>
         </el-scrollbar>
@@ -12,7 +12,9 @@
       </el-col>
       <el-col :span="20" v-loading="table.loading">
         <el-scrollbar :style="{height:'calc(100vh - 131px)'}">
-          <el-empty v-if="!table.data.some(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" />
+          <el-card v-if="!table.data.some(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)">
+            <el-empty />
+          </el-card>
           <el-card shadow="hover" v-for="(item) in table.data.filter(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" :key="item.id" :style="{marginBottom:'10px',cursor:'pointer',opacity:item.type=='done'?'0.5':'1'}">
             <div slot="header" class="clearfix">
               <strong>{{item.title}}</strong>
@@ -98,6 +100,7 @@ export default {
       }).finally(() => this.table.loading = false)
     },
     handleCatagoryTreeNodeClick(data, node, ref) {
+      console.log("handleCatagoryTreeNodeClick", arguments)
       this.form.mids = data.mid;
       this.handleSelectList()
     },
