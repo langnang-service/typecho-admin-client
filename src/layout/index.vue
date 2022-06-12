@@ -3,7 +3,7 @@
     <el-header class="layout-header" style="padding:0 10px;height: 61px; border-bottom: solid 1px #e6e6e6;">
       <el-row :gutter="10">
         <el-col :span="24">
-          <el-menu default-active="layout.menu.active" collapse style="display: inline-block; vertical-align: top;">
+          <el-menu default-active="layout.menu.active" router collapse style="display: inline-block; vertical-align: top;">
             <el-submenu index="1">
               <template slot="title">
                 <i class="el-icon-s-home"></i>
