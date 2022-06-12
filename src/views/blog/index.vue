@@ -1,21 +1,32 @@
 <template>
   <div class="blog" v-loading="loading">
     <el-row :gutter="10">
-      <el-col :span="4">
-        <el-input v-model="form.title" size="mini" clearable @blur="handleSelectList"></el-input>
-        <el-scrollbar :style="{height:'50vh',marginTop:'10px'}">
-          <el-tree :data="categories" highlight-current node-key="mid" :props="{children: 'children',label: 'name'}" :style="{marginTop:'20px'}" @node-click="handleCatagoryTreeNodeClick"></el-tree>
+      <el-col :sm="4">
+        <el-input v-model="form.title" size="small" clearable>
+          <template slot="append">
+            <el-button size="small" @click="handleSelectList">
+              <el-icon class="el-icon-search"></el-icon>
+            </el-button>
+          </template>
+        </el-input>
+        <h4>Category</h4>
+        <el-scrollbar style="padding-bottom:30px;">
+          <el-tree ref="category" :data="category.data" highlight-current node-key="mid" :props="{children: 'children',label: 'name'}" @node-click="handleCatagoryTreeNodeClick"></el-tree>
         </el-scrollbar>
-        <el-checkbox-group size="small" v-model="checkedTags" @change="handleCheckedTagsChange">
-          <el-checkbox-button v-for="tag in tags" :label="tag.mid" :key="tag.mid">{{tag.name}}</el-checkbox-button>
-        </el-checkbox-group>
+        <h4>Tag</h4>
+        <el-scrollbar style="padding-bottom:30px;">
+          <el-checkbox-group size="small" v-model="tag.selection" @change="handleSelectList">
+            <el-checkbox-button v-for="tag in tag.data" :label="tag.mid" :key="tag.mid">{{tag.name}}</el-checkbox-button>
+          </el-checkbox-group>
+        </el-scrollbar>
       </el-col>
-      <el-col :span="20" v-loading="table.loading">
+      <el-col :sm="20" v-loading="table.loading">
         <el-scrollbar :style="{height:'calc(100vh - 131px)'}">
-          <el-card v-if="!table.data.some(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)">
+          <el-tag v-for="meta in metas" :key="meta.mid" :closable="meta.type=='category'" @close="handleCloseMeta" style="margin:0 10px 10px 0;">{{meta.name}}</el-tag>
+          <el-card v-if="table.data.length == 0">
             <el-empty />
           </el-card>
-          <el-card shadow="hover" v-for="(item) in table.data.filter(v=>(v.title||'').indexOf(inputFilterNameValue)>-1)" :key="item.id" :style="{marginBottom:'10px',cursor:'pointer',opacity:item.type=='done'?'0.5':'1'}">
+          <el-card shadow="hover" v-for="(item) in table.data" :key="item.id" :style="{marginBottom:'10px',cursor:'pointer'}">
             <div slot="header" class="clearfix">
               <strong>{{item.title}}</strong>
               <el-button style="float: right; padding: 3px 0" type="text" @click="$router.push({path:'/blog/content/'+item.cid})">阅读全文</el-button>
@@ -47,11 +58,6 @@ export default {
   data() {
     return {
       loading: false,
-      inputFilterNameValue: '',
-      selection: [],
-      parent: {},
-      list: [],
-      done: [],
       table: {
         loading: false,
         data: [],
@@ -60,18 +66,24 @@ export default {
         size: 10,
         total: 0,
       },
+      category: {
+        data: [],
+        selection: [],
+      },
+      tag: {
+        data: [],
+        selection: [],
+      },
       form: new TypechoContentModel(),
-      checkedTags: [],
-      categories: [],
-      tags: [],
+      metas: [],
     };
   },
   created() {
     this.$store.dispatch('typecho/meta/selectTree', { type: 'category' }).then(res => {
-      this.categories = res.tree
+      this.category.data = res.tree
     })
     this.$store.dispatch('typecho/meta/selectList', { type: 'tag' }).then(res => {
-      this.tags = res.rows
+      this.tag.data = res.rows
     })
     this.handleSelectList();
 
@@ -88,10 +100,12 @@ export default {
     }),
     handleSelectList() {
       this.table.loading = true
+      this.metas = [...this.category.selection, ...this.tag.data.filter(v => [...new Set(this.tag.selection)].includes(v.mid))];
       this.$store.dispatch('typecho/content/selectList', {
         ...this.form,
         size: this.table.size,
         page: this.table.page,
+        mids: this.metas.map(v => v.mid).join(','),
       }).then(res => {
         this.table.data = res.rows
         this.table.total = res.total
@@ -100,12 +114,18 @@ export default {
       }).finally(() => this.table.loading = false)
     },
     handleCatagoryTreeNodeClick(data, node, ref) {
-      console.log("handleCatagoryTreeNodeClick", arguments)
-      this.form.mids = data.mid;
+      this.category.selection = [data];
       this.handleSelectList()
     },
     handleCheckedTagsChange(val) {
-      this.form.mids = val.join(',')
+      this.handleSelectList()
+    },
+    /**
+     * 关闭选中标签
+     */
+    handleCloseMeta() {
+      this.$refs.category.setCurrentKey(null)
+      this.category.selection = []
       this.handleSelectList()
     },
     handlePaginationChange(page, size) {
