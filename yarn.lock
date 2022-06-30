@@ -1062,10 +1062,10 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@langnang/vue-element-ui@^0.0.1-beta-0.4":
-  version "0.0.1-beta-0.4"
-  resolved "https://registry.yarnpkg.com/@langnang/vue-element-ui/-/vue-element-ui-0.0.1-beta-0.4.tgz#0d86bd41075ad8cc9f1fe4a83039df33f576271b"
-  integrity sha512-OLYCN0C3ULJea1563ZRpawvHqd+MPdBXlxo8EymPXDdpNvw9eIqUdWV3ub9tEowmwxy/uCLg+UFPkAiJdXOHXA==
+"@langnang/vue-element-ui@^0.0.1-beta-0.5":
+  version "0.0.1-beta-0.5"
+  resolved "https://registry.yarnpkg.com/@langnang/vue-element-ui/-/vue-element-ui-0.0.1-beta-0.5.tgz#95b4667bec3285b2452311beeea5e8a590600958"
+  integrity sha512-jnEFCzFBusiXPaUj+/mTN/Llt189PsoDwTEus5N+aYEDmgcsKFv+YCAV9foS1WOEyOAdTOgLQse4q3J+TsEnRQ==
   dependencies:
     core-js "^3.6.5"
     element-ui "^2.15.6"
