@@ -9,7 +9,8 @@ import Cookies from 'js-cookie'
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 // console.log(process.env);
 let config = {
-  baseURL: process.env.VUE_APP_API_URL || (process.env.NODE_ENV === "production" ? '/?/' : process.env.BASE_URL),
+  // baseURL: process.env.VUE_APP_API_URL || (process.env.NODE_ENV === "production" ? '/' : process.env.BASE_URL),
+  baseURL: '/api/index.php',
   timeout: 60 * 1000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };
