@@ -1,0 +1,22 @@
+.el-main {
+  padding: 10px;
+}
+
+.el-breadcrumb__inner {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.el-card {
+  &+& {
+    margin-top: 10px;
+  }
+
+  .el-card__body {
+    padding: 10px;
+  }
+}
+
+.el-select {
+  width: 100%;
+}

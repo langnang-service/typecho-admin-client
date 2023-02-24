@@ -2,15 +2,16 @@
 
 import Vue from "vue";
 import axios from "axios";
-
+import Cookies from 'js-cookie'
 // Full config:  https://github.com/axios/axios#request-config
 // axios.defaults.baseURL = process.env.baseURL || process.env.apiUrl || '';
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 // console.log(process.env);
 let config = {
-  baseURL: process.env.VUE_APP_API_URL || process.env.BASE_URL || ""
-  // timeout: 60 * 1000, // Timeout
+  // baseURL: process.env.VUE_APP_API_URL || (process.env.NODE_ENV === "production" ? '/' : process.env.BASE_URL),
+  baseURL: '/api/index.php',
+  timeout: 60 * 1000, // Timeout
   // withCredentials: true, // Check cross-site Access-Control
 };
 // Success Status
@@ -21,6 +22,9 @@ const _axios = axios.create(config);
 _axios.interceptors.request.use(
   function (config) {
     // Do something before request is sent
+    if (Cookies.get("token")) {
+      config.headers['Authorization'] = Cookies.get("token");
+    }
     return config;
   },
   function (error) {
@@ -36,6 +40,7 @@ _axios.interceptors.response.use(
     if (response.status == successStatus && response.data.status == successStatus) {
       return response.data.data;
     } else {
+      Vue.prototype.$message.error(response.data.statusText)
       return Promise.reject(response);
     }
   },

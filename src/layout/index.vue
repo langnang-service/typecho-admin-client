@@ -1,77 +1,119 @@
 <template>
-  <div id="app">
-    <el-scrollbar ref="scroll" style="height: 100vh">
-      <el-header style="height: 61px; border-bottom: solid 1px #e6e6e6">
-        <el-menu
-          :default-active="activeIndex"
-          router
-          class="el-menu-demo"
-          mode="horizontal"
-          @select="handleSelect"
-          style="border-bottom: unset"
-        >
-          <el-menu-item index="/">首页</el-menu-item>
-          <el-submenu index="list">
-            <template slot="title">列表</template>
-            <el-menu-item index="list">清单列表</el-menu-item>
-            <el-menu-item index="todolist">代办事项列表</el-menu-item>
-          </el-submenu>
-          <el-submenu index="5">
-            <template slot="title">
-              <el-avatar size="large"></el-avatar>
-            </template>
-            <el-menu-item index="login">登录</el-menu-item>
-            <el-menu-item index="admin">后台管理</el-menu-item>
-            <el-menu-item index="logout">登出</el-menu-item>
-          </el-submenu>
-        </el-menu>
-      </el-header>
-      <el-main>
-        <router-view> </router-view>
+  <el-container id="app">
+    <el-header class="layout-header" style="padding:0 10px;height: 61px; border-bottom: solid 1px #e6e6e6;">
+      <el-row :gutter="10">
+        <el-col :span="24">
+          <LayoutHeaderMenu />
+          <el-menu class="hidden-sm-and-down" v-if="layout.menu.visible" :default-active="layout.menu.active" router mode="horizontal" :style="{borderBottom: 'unset',display:'inline-block'}">
+            <el-menu-item index="/">首页</el-menu-item>
+            <el-menu-item index="/entry">Entry</el-menu-item>
+            <el-menu-item index="/blog">Blog</el-menu-item>
+            <el-menu-item index="/todo">ToDoList</el-menu-item>
+            <el-submenu index="typecho">
+              <template slot="title">Typecho</template>
+              <el-menu-item index="/typecho">Admin</el-menu-item>
+              <el-menu-item index="/template">Template</el-menu-item>
+              <el-menu-item index="/navigation">Navigation</el-menu-item>
+              <el-menu-item index="/public-api">Public APIs</el-menu-item>
+              <el-menu-item index="/snippet">Snippet</el-menu-item>
+              <el-menu-item index="/novel">Novel</el-menu-item>
+            </el-submenu>
+            <el-submenu index="langnang">
+              <template slot="title">Langnang</template>
+
+              <el-menu-item
+                v-for="(href,key) in {
+              Home:'https://langnang.github.io/',
+              VuePress:'https://langnang.github.io/langnang/',
+              Toolkit:'https://langnang.github.io/toolkit/',
+              'Typecho Web':'https://langnang.github.io/typecho-web/',
+              Card:'https://langnang.github.io/card/',
+              'Audio Player':'https://langnang.github.io/simple-audio-player/',
+              Bookmark:'https://langnang.github.io/simple-bookmark/',
+              Question:'https://langnang.github.io/QuestionAwesome/',
+              ToDoList:'https://langnang.github.io/ToDoList/',
+              Palette:'https://langnang.github.io/Palette/',
+            }"
+                :key="key"
+                :index="key"
+              >
+                <el-link target="_blank" :href="href">{{key}}</el-link>
+              </el-menu-item>
+            </el-submenu>
+            <el-menu-item>理论</el-menu-item>
+            <el-menu-item>实践</el-menu-item>
+            <el-menu-item>工具</el-menu-item>
+            <el-menu-item>资源</el-menu-item>
+          </el-menu>
+          <span v-if="layout.toolbar.visible" :style="{ 
+            float: 'right' ,
+            height:'60px',
+            lineHeight:'60px',
+            marginLeft:'20px'
+          }">
+            <el-button size="small" type="primary" @click="$router.push('/signup')">Sign Up</el-button>
+            <el-button size="small" type="primary" @click="$router.push('/signin')">Sign In</el-button>
+          </span>
+        </el-col>
+      </el-row>
+    </el-header>
+    <el-scrollbar ref="scroll" style="height: calc(100vh - 61px)">
+      <el-main class="layout-main" :style="{
+        padding:'10px'
+      }">
+        <LayoutRouterView />
       </el-main>
     </el-scrollbar>
-  </div>
+  </el-container>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import LayoutRouterView from "./router-view.vue";
+import LayoutHeaderMenu from './components/header-menu.vue'
 export default {
+  name: "Layout",
+  components: {
+    LayoutHeaderMenu,
+    LayoutRouterView,
+  },
   data() {
     return {
       activeIndex: "/",
+      searchInputValue: '',
+      menu: [],
     };
   },
+  computed: {
+    ...mapState({
+      layout: 'layout'
+    })
+  },
+  created() {
+    this.$store.dispatch('typecho/content/selectItem', { type: 'branch', slug: 'default' })
+      .then(res => {
+        // this.menu = res.tree
+      })
+  },
   methods: {
-    handleSelect(key, keyPath) {
-      console.log(key, keyPath);
-    },
   },
 };
 </script>
 
 <style lang="scss">
-body {
-  margin: 0;
-  padding: 0;
-}
-a {
-  text-decoration: none;
-}
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 .el-header {
   .el-menu.el-menu--horizontal {
-    float: right;
+    // float: right;
     .el-avatar + .el-submenu__icon-arrow {
       display: none;
     }
   }
 }
-.el-scrollbar__wrap {
+#app .el-scrollbar__wrap {
   overflow-x: hidden !important;
+}
+
+.layout-main > .el-row > .el-col {
+  // margin-top: 10px;
 }
 </style>
